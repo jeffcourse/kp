@@ -22,6 +22,35 @@ class MasterController extends Controller
         return view('master.master',compact('master','divisi','gudang','jenis','type'));
     }
 
+    public function create()
+    {
+        $divisi = Divisi::all();
+        $gudang = Gudang::all();
+        $jenis = Jenis::all();
+        $type = Type::all();
+
+        return view('master.formmaster',compact('divisi','gudang','jenis','type'));
+    }
+
+    public function store(Request $request)
+    {
+        //
+        $data = new Master();
+        $data->kode_brg = $request->get('kode_brg');
+        $data->nama_brg = $request->get('nama_brg');
+        $data->kode_divisi = $request->get('select_divisi');
+        $data->kode_jenis = $request->get('select_jenis');
+        $data->kode_type = $request->get('select_type');
+        $data->packing = $request->get('packing');
+        $data->quantity = $request->get('quantity');
+        $data->hrg_jual = $request->get('hrg_jual');
+        $data->hrg_jual_total = $request->get('hrg_jual_total');
+        $data->kode_gudang = $request->get('select_gudang');
+        $data->keterangan = $request->get('keterangan');
+        $data->save();
+        return redirect()->route('master')->with('status','Hooray!! Your new item is already inserted');
+    }
+
     public function edit($kode_brg)
     {
         //

@@ -3,7 +3,6 @@
 @section('content')
 
 <head>
-  <title>Product Data</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
@@ -12,13 +11,16 @@
 </head>
 
 <div class="mt-5">
-<h3 style="margin-left: 40px;">Master Table</h3><br>
+<div style="margin-left: 40px;">
+    <h3 style="display: inline-block; margin-right: 20px;">Master Table</h3>
+    <a href="{{route('master.create')}}" class="btn btn-success">Tambah Barang</a><br>
+</div><br>
 
 @if(session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 
-<table class="table" style="margin-left: 40px;">
+<table class="table" style="margin-left: 40px; margin-right: 80px;">
     <thead>
       <tr>
         <th>Kode Barang</th>
