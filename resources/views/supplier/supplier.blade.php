@@ -35,6 +35,7 @@
         <th>No Telp</th>
         <th>Email</th>
         <th>Saldo</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
