@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\SupplierController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,13 +31,12 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('master',MasterController::class);
     Route::get('/master', [MasterController::class, 'master'])->name('master');
 
+    Route::resource('supplier',SupplierController::class);
+    Route::get('/supplier', [SupplierController::class, 'supplier'])->name('supplier');
+
     Route::get('/transactions', function(){
         return "Ini transaksi";
     })->name('transactions');
-
-    Route::get('/supplier', function(){
-        return "Ini supplier";
-    })->name('supplier');
 
     Route::get('/customer', function(){
         return "Ini customer";
