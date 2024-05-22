@@ -57,7 +57,7 @@
     </select>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
+    <label for="exampleInputHargaJual">Harga Jual Per Unit</label>
     <input type="number" name="hrg_jual" class="form-control" id="hrg_jual" placeholder="Masukkan Harga Jual" required>
   </div><br>
   <div class="form-group">
