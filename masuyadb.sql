@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 06, 2024 at 09:36 AM
+-- Generation Time: May 22, 2024 at 07:49 AM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -32,12 +32,21 @@ CREATE TABLE `beli` (
   `tanggal` datetime DEFAULT NULL,
   `kode_supp` varchar(45) NOT NULL,
   `mata_uang` varchar(45) DEFAULT NULL,
+  `kirim_gudang` varchar(45) NOT NULL,
   `sub_total` float DEFAULT NULL,
   `persen_ppn` int DEFAULT NULL,
   `total` float DEFAULT NULL,
-  `lunas` tinyint(1) DEFAULT NULL,
+  `lunas` varchar(45) DEFAULT NULL,
+  `status` varchar(45) DEFAULT NULL,
   `create_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `beli`
+--
+
+INSERT INTO `beli` (`no_bukti`, `tanggal`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
+('BL24-00001', '2024-05-22 13:30:10', 'ANEKA', 'IDR', 'M', 1204000, 10, 1324400, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:30:10');
 
 -- --------------------------------------------------------
 
@@ -51,9 +60,19 @@ CREATE TABLE `beli_dtl` (
   `kode_brg` varchar(255) DEFAULT NULL,
   `nama_brg` varchar(255) DEFAULT NULL,
   `qty_order` int DEFAULT NULL,
+  `id_satuan` int NOT NULL,
   `hrg_per_unit` float DEFAULT NULL,
   `hrg_total` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `beli_dtl`
+--
+
+INSERT INTO `beli_dtl` (`no_bukti`, `line`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
+('BL24-00001', '432137', 'WY100000002A', 'SRM Bread Sub Roll Wheat', 40, 4, 20000, 800000),
+('BL24-00001', '432138', 'WY100000005', 'SRM Cookies Chocolate Chips', 11, 4, 14000, 154000),
+('BL24-00001', '432139', 'WY100000112A', 'SRM Mushroom Soup(30x350G)', 10, 4, 25000, 250000);
 
 -- --------------------------------------------------------
 
@@ -83,8 +102,8 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`kode_cust`, `nama_cust`, `type_cust`, `alm_1`, `alm_2`, `alm_3`, `kota`, `kontak`, `no_telp`, `email`, `saldo`, `kode_sales`, `create_time`) VALUES
 ('07AM', '07AM BAKERS CLUB', 'BAKERY', 'JL. BUMBAK DAUH NO.88', 'KEROBOKAN, KUTA UTARA', 'BADUNG BALI', 'KEROBOKAN', 'AYU SUARTINI', '0812 37047789', '-', 0, '16', NULL),
-('104BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR - BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', 0, '18', NULL),
-('11MART', '11 MART', 'MINI MARKET', 'JL. PULAU BELITUNG NO. 9', 'PEDUNGAN, DENPASAR SELATAN', 'DENPASAR (n-FP)/DPS1/SN', 'DENPASAR', 'IBU RISMA', '0813 38628808', '-', 0, '16', NULL);
+('104 BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR - BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', 0, '18', NULL),
+('88SUNARI', '88 SUNARI', 'MINI MARKET', 'BJ. DINAS BANYUALIT', 'KALIBUKBUK BULELENG', 'BALI', 'SINGARAJA', 'BPK. YOGA', '08193 6501871', NULL, 216000, '15', NULL);
 
 -- --------------------------------------------------------
 
@@ -186,6 +205,7 @@ CREATE TABLE `invmaster` (
   `kode_type` varchar(45) NOT NULL,
   `packing` varchar(45) NOT NULL,
   `quantity` int NOT NULL,
+  `id_satuan` int NOT NULL,
   `hrg_jual` float NOT NULL,
   `hrg_jual_total` float DEFAULT NULL,
   `kode_gudang` varchar(45) NOT NULL,
@@ -196,10 +216,12 @@ CREATE TABLE `invmaster` (
 -- Dumping data for table `invmaster`
 --
 
-INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `hrg_jual`, `hrg_jual_total`, `kode_gudang`, `keterangan`) VALUES
-('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55 PCS/7,5KG', 274, 28990, 1594450, 'M', '-'),
-('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6X1,6LTR', 3038, 99099, 594594, 'A', '23,6CMX33,5CMX31CM'),
-('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6X1KG', 120, 263964, 1583780, 'K', '-');
+INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `hrg_jual_total`, `kode_gudang`, `keterangan`) VALUES
+('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '7,5KG', 274, 1, 28990, 1594450, 'M', '-'),
+('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '1,6LTR', 3038, 1, 99099, 594594, 'A', '23,6CMX33,5CMX31CM'),
+('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '1KG', 120, 2, 263964, 1583780, 'K', '-'),
+('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '1KG', 10, 1, 65000, 650000, 'M', '-'),
+('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '150ML', 12, 1, 30631, 367572, 'M', '15,5CM X 20,5CM X 18CM');
 
 -- --------------------------------------------------------
 
@@ -234,12 +256,21 @@ CREATE TABLE `jual` (
   `tanggal` datetime DEFAULT NULL,
   `kode_cust` varchar(45) NOT NULL,
   `kode_sales` varchar(45) NOT NULL,
+  `mata_uang` varchar(45) DEFAULT NULL,
   `sub_total` float DEFAULT NULL,
   `persen_ppn` int DEFAULT NULL,
   `total` float DEFAULT NULL,
-  `lunas` tinyint(1) DEFAULT NULL,
+  `lunas` varchar(45) DEFAULT NULL,
+  `status` varchar(45) NOT NULL,
   `create_time` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `jual`
+--
+
+INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `kode_sales`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
+('JL24-00001', '2024-05-22 13:33:10', '07AM', '16', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:33:10');
 
 -- --------------------------------------------------------
 
@@ -253,9 +284,18 @@ CREATE TABLE `jual_dtl` (
   `kode_brg` varchar(255) DEFAULT NULL,
   `nama_brg` varchar(255) DEFAULT NULL,
   `qty_order` int DEFAULT NULL,
+  `id_satuan` int NOT NULL,
   `hrg_per_unit` float DEFAULT NULL,
   `hrg_total` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `jual_dtl`
+--
+
+INSERT INTO `jual_dtl` (`no_bukti`, `line`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
+('JL24-00001', '3182356', 'WY100000005', 'SRM Cookies Chocolate Chips', 2, 4, 18000, 36000),
+('JL24-00001', '3182357', 'WY100000085', 'SRM Slice Black Olives Greci I', 1, 4, 5000, 5000);
 
 -- --------------------------------------------------------
 
@@ -316,6 +356,27 @@ INSERT INTO `sales_person` (`kode_sales`, `nama_sales`, `divisi`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `satuan`
+--
+
+CREATE TABLE `satuan` (
+  `id` int NOT NULL,
+  `satuan` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `satuan`
+--
+
+INSERT INTO `satuan` (`id`, `satuan`) VALUES
+(1, 'PCE'),
+(2, 'PCK'),
+(3, 'KG'),
+(4, 'CTN');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `supplier`
 --
 
@@ -339,9 +400,9 @@ CREATE TABLE `supplier` (
 --
 
 INSERT INTO `supplier` (`kode_supp`, `nama_supp`, `acc_bank`, `alm_1`, `alm_2`, `kota`, `negara`, `kontak`, `jabatan`, `no_telp`, `email`, `saldo`) VALUES
-('AKSI', 'PT. ANEKA KONSUMSI SELERA INTERNASIONAL (Big Farm)', '0189977788', 'KOMPLEKS PERGUDANGAN DAN INDUSTRI SAFE N LOCK G NO. 1570-1571', 'RANGKAHKIDUL, SIDOARJO - JAWA TIMUR', 'SIDOARJO', 'INDONESIA', 'BENNY', '-', '-', 'benyfirman@kansasid.com', 4760390),
 ('AMBICO', 'AMBICO/PT', '4683801553', 'JL. DINOYO 35', 'SURABAYA, JAWA TIMUR 60265', 'SURABAYA', 'INDONESIA', 'IBU NATICA', '-', '0315675547', 'natica@ptambico.com', 45259600),
-('BANGAU', 'PT. BANGAU SARI MEGA JAYA', '1086788889', 'JL. PEMBANGUNAN I NO. 9 - KP CIKAHURIPAN', 'SEWAN TANGGA ASEM', 'TANGERANG', 'INDONESIA', '08161888896', 'DIREKTUR', '08129909033', 'kokpinlan@yahoo.com', 64857000);
+('ANEKA', 'PT. ANEKA KONSUMSI SELERA INTERNASIONAL (Big Farm)', '0189977788', 'KOMPLEKS PERGUDANGAN DAN INDUSTRI SAFE N LOCK G NO. 1570-1571', 'RANGKAHKIDUL, SIDOARJO - JAWA TIMUR', 'SIDOARJO', 'INDONESIA', 'BENNY', '-', '-', 'benyfirman@kansasid.com', 4760390),
+('CLEANBEE', 'PT. PASTI KLIN INDONESIA', '4706558888', 'JALA KALIMAS BARAT NOMOR 57A RT.003 RW 009', 'KREMBANGAN UTARA, PABEAN CANTIAN', 'SURABAYA', 'INDONESIA', 'Pak Stanford', '-', '081999090333', 'pastiklin@gmail.com', 0);
 
 -- --------------------------------------------------------
 
@@ -376,13 +437,15 @@ INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `re
 --
 ALTER TABLE `beli`
   ADD PRIMARY KEY (`no_bukti`),
-  ADD KEY `fk_beli_supplier1_idx` (`kode_supp`);
+  ADD KEY `fk_beli_supplier1_idx` (`kode_supp`),
+  ADD KEY `fk_beli_invgudang1_idx` (`kirim_gudang`);
 
 --
 -- Indexes for table `beli_dtl`
 --
 ALTER TABLE `beli_dtl`
-  ADD KEY `fk_beli_dtl_beli1_idx` (`no_bukti`);
+  ADD KEY `fk_beli_dtl_beli1_idx` (`no_bukti`),
+  ADD KEY `fk_beli_dtl_satuan1_idx` (`id_satuan`);
 
 --
 -- Indexes for table `customer`
@@ -424,7 +487,8 @@ ALTER TABLE `invmaster`
   ADD KEY `fk_invmaster_invdivisi1_idx` (`kode_divisi`),
   ADD KEY `fk_invmaster_invtype1_idx` (`kode_type`),
   ADD KEY `fk_invmaster_invjenis1_idx` (`kode_jenis`),
-  ADD KEY `fk_invmaster_invgudang1_idx` (`kode_gudang`);
+  ADD KEY `fk_invmaster_invgudang1_idx` (`kode_gudang`),
+  ADD KEY `fk_invmaster_satuan1_idx` (`id_satuan`);
 
 --
 -- Indexes for table `invtype`
@@ -444,7 +508,8 @@ ALTER TABLE `jual`
 -- Indexes for table `jual_dtl`
 --
 ALTER TABLE `jual_dtl`
-  ADD KEY `fk_jual_dtl_jual1_idx` (`no_bukti`);
+  ADD KEY `fk_jual_dtl_jual1_idx` (`no_bukti`),
+  ADD KEY `fk_jual_dtl_satuan1_idx` (`id_satuan`);
 
 --
 -- Indexes for table `migrations`
@@ -463,6 +528,12 @@ ALTER TABLE `password_resets`
 --
 ALTER TABLE `sales_person`
   ADD PRIMARY KEY (`kode_sales`);
+
+--
+-- Indexes for table `satuan`
+--
+ALTER TABLE `satuan`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `supplier`
@@ -494,6 +565,12 @@ ALTER TABLE `migrations`
   MODIFY `id` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `satuan`
+--
+ALTER TABLE `satuan`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
@@ -507,13 +584,15 @@ ALTER TABLE `users`
 -- Constraints for table `beli`
 --
 ALTER TABLE `beli`
+  ADD CONSTRAINT `fk_beli_invgudang1` FOREIGN KEY (`kirim_gudang`) REFERENCES `invgudang` (`kode`),
   ADD CONSTRAINT `fk_beli_supplier1` FOREIGN KEY (`kode_supp`) REFERENCES `supplier` (`kode_supp`);
 
 --
 -- Constraints for table `beli_dtl`
 --
 ALTER TABLE `beli_dtl`
-  ADD CONSTRAINT `fk_beli_dtl_beli1` FOREIGN KEY (`no_bukti`) REFERENCES `beli` (`no_bukti`);
+  ADD CONSTRAINT `fk_beli_dtl_beli1` FOREIGN KEY (`no_bukti`) REFERENCES `beli` (`no_bukti`),
+  ADD CONSTRAINT `fk_beli_dtl_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
 
 --
 -- Constraints for table `customer`
@@ -528,7 +607,8 @@ ALTER TABLE `invmaster`
   ADD CONSTRAINT `fk_invmaster_invdivisi1` FOREIGN KEY (`kode_divisi`) REFERENCES `invdivisi` (`kode`),
   ADD CONSTRAINT `fk_invmaster_invgudang1` FOREIGN KEY (`kode_gudang`) REFERENCES `invgudang` (`kode`),
   ADD CONSTRAINT `fk_invmaster_invjenis1` FOREIGN KEY (`kode_jenis`) REFERENCES `invjenis` (`kode`),
-  ADD CONSTRAINT `fk_invmaster_invtype1` FOREIGN KEY (`kode_type`) REFERENCES `invtype` (`kode`);
+  ADD CONSTRAINT `fk_invmaster_invtype1` FOREIGN KEY (`kode_type`) REFERENCES `invtype` (`kode`),
+  ADD CONSTRAINT `fk_invmaster_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
 
 --
 -- Constraints for table `jual`
@@ -541,7 +621,8 @@ ALTER TABLE `jual`
 -- Constraints for table `jual_dtl`
 --
 ALTER TABLE `jual_dtl`
-  ADD CONSTRAINT `fk_jual_dtl_jual1` FOREIGN KEY (`no_bukti`) REFERENCES `jual` (`no_bukti`);
+  ADD CONSTRAINT `fk_jual_dtl_jual1` FOREIGN KEY (`no_bukti`) REFERENCES `jual` (`no_bukti`),
+  ADD CONSTRAINT `fk_jual_dtl_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
