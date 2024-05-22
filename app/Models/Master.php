@@ -36,4 +36,8 @@ class Master extends Model
     public function type(){
         return $this->belongsTo(Type::class,'kode_type');
     }
+
+    public function satuan(){
+        return $this->belongsTo(Satuan::class,'id_satuan');
+    }
 }

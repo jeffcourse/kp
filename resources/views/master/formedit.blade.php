@@ -50,6 +50,14 @@
     <input type="number" name="quantity" class="form-control" id="quantity" value="{{$data->quantity}}" placeholder="Masukkan Kuantitas Barang">
   </div><br>
   <div class="form-group">
+    <label for="exampleInputSatuanBarang">Satuan</label>
+    <select class="form-control" name="select_satuan">
+        @foreach($satuan as $s)
+        <option value="{{$s->id}}" @if($s->id == $data->id_satuan) selected @endif>{{$s->satuan}}</option>
+        @endforeach
+    </select>
+  </div><br>
+  <div class="form-group">
     <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
     <input type="number" name="hrg_jual" class="form-control" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual">
   </div><br>

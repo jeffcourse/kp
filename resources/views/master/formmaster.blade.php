@@ -49,6 +49,14 @@
     <input type="number" name="quantity" class="form-control" id="quantity" placeholder="Masukkan Kuantitas Barang" required>
   </div><br>
   <div class="form-group">
+    <label for="exampleInputSatuanBarang">Satuan</label>
+    <select class="form-control" name="select_satuan">
+        @foreach($satuan as $s)
+        <option value="{{$s->id}}">{{$s->satuan}}</option>
+        @endforeach
+    </select>
+  </div><br>
+  <div class="form-group">
     <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
     <input type="number" name="hrg_jual" class="form-control" id="hrg_jual" placeholder="Masukkan Harga Jual" required>
   </div><br>

@@ -7,6 +7,7 @@ use App\Models\Divisi;
 use App\Models\Gudang;
 use App\Models\Jenis;
 use App\Models\Type;
+use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
@@ -18,8 +19,9 @@ class MasterController extends Controller
         $gudang = Gudang::all();
         $jenis = Jenis::all();
         $type = Type::all();
+        $satuan = Satuan::all();
 
-        return view('master.master',compact('master','divisi','gudang','jenis','type'));
+        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan'));
     }
 
     public function create()
@@ -28,8 +30,9 @@ class MasterController extends Controller
         $gudang = Gudang::all();
         $jenis = Jenis::all();
         $type = Type::all();
+        $satuan = Satuan::all();
 
-        return view('master.formmaster',compact('divisi','gudang','jenis','type'));
+        return view('master.formmaster',compact('divisi','gudang','jenis','type','satuan'));
     }
 
     public function store(Request $request)
@@ -43,6 +46,7 @@ class MasterController extends Controller
         $data->kode_type = $request->get('select_type');
         $data->packing = $request->get('packing');
         $data->quantity = $request->get('quantity');
+        $data->id_satuan = $request->get('select_satuan'); 
         $data->hrg_jual = $request->get('hrg_jual');
         $data->hrg_jual_total = $request->get('hrg_jual_total');
         $data->kode_gudang = $request->get('select_gudang');
@@ -59,9 +63,10 @@ class MasterController extends Controller
         $gudang = Gudang::all();
         $jenis = Jenis::all();
         $type = Type::all();
+        $satuan = Satuan::all();
 
         $data = $objMaster;
-        return view('master.formedit',compact('data','divisi','gudang','jenis','type'));
+        return view('master.formedit',compact('data','divisi','gudang','jenis','type','satuan'));
     }
 
     public function update(Request $request, $kode_brg)
@@ -75,6 +80,7 @@ class MasterController extends Controller
         $objMaster->kode_type = $request->get('select_type');
         $objMaster->packing = $request->get('packing');
         $objMaster->quantity = $request->get('quantity');
+        $objMaster->id_satuan = $request->get('select_satuan');
         $objMaster->hrg_jual = $request->get('hrg_jual');
         $objMaster->hrg_jual_total = $request->get('hrg_jual_total');
         $objMaster->kode_gudang = $request->get('select_gudang');

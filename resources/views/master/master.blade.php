@@ -30,7 +30,8 @@
         <th>Tipe Barang</th>
         <th>Packing</th>
         <th>Quantity</th>
-        <th>Harga Jual Per Pack</th>
+        <th>Satuan</th>
+        <th>Harga Jual Per Unit</th>
         <th>Harga Jual Total</th>
         <th>Gudang</th>
         <th>Keterangan</th>
@@ -47,6 +48,7 @@
                 <td>{{$m->type->type}}</td>
                 <td>{{$m->packing}}</td>
                 <td>{{$m->quantity}}</td>
+                <td>{{$m->satuan->satuan}}</td>
                 <td>{{$m->hrg_jual}}</td>
                 <td>{{$m->hrg_jual_total}}</td>
                 <td>{{$m->gudang->nama}}</td>
