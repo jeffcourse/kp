@@ -13,7 +13,15 @@
 <div class="mt-5">
 <div style="margin-left: 40px;">
     <h3 style="display: inline-block; margin-right: 20px;">Master Table</h3>
-    <a href="{{route('master.create')}}" class="btn btn-success">Tambah Barang</a><br>
+    <a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-success">Tambah Barang</a>
+    <h4 style="display: inline-block;">Filter berdasarkan gudang:</h4>
+    <select id="filterGudang" class="form-control" style="width: 150px; display: inline-block;">
+      <option value="All">All</option>
+        @foreach($gudang as $gd)
+            <option value="{{$gd->nama}}">{{$gd->nama}}</option>
+        @endforeach
+    </select>
+    <input style="width: 150px; display: inline-block; margin-left: 10px;" type="text" id="searchItem" class="form-control" placeholder="Cari nama barang">
 </div><br>
 
 @if(session('status'))
@@ -49,20 +57,72 @@
                 <td>{{$m->packing}}</td>
                 <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
-                <td>{{$m->hrg_jual}}</td>
-                <td>{{$m->hrg_jual_total}}</td>
+                <td>Rp. {{number_format($m->hrg_jual, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format($m->hrg_jual_total, 0, ',', '.')}}</td>
                 <td>{{$m->gudang->nama}}</td>
                 <td>{{$m->keterangan}}</td>
-                <td><a class='btn btn-xs btn-info' href="{{route('master.edit',$m->kode_brg)}}">Update</a>
-                <br><br><form method="POST" action="{{route('master.destroy',$m->kode_brg)}}">
-                    @csrf
-                    @method('DELETE')
-                    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">
-                  </form>
+                <td>
+                  <div class="btn-group-vertical" role="group" aria-label="Actions">
+                    <a class='btn btn-info' href="{{route('master.edit',$m->kode_brg)}}">Update</a>
+                    <form method="POST" action="{{route('master.destroy', $m->kode_brg)}}">
+                      @csrf
+                      @method('DELETE')
+                      <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>
+                    </form>
+                  </div>
                 </td>
             </tr>
         @endforeach
     </tbody>
   </table>
+  <div class="text-center">
+    @if($master->hasPages())
+      <ul class="pagination">
+        {{-- Previous Page Link --}}
+        @if($master->onFirstPage())
+            <li class="disabled"><span>&laquo;</span></li>
+        @else
+            <li><a href="{{$master->previousPageUrl()}}" rel="prev">&laquo;</a></li>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @for($i = 1; $i <= $master->lastPage(); $i++)
+            @if($i >= $master->currentPage() - 2 && $i <= $master->currentPage() + 2)
+                @if($i == $master->currentPage())
+                    <li class="active"><span>{{$i}}</span></li>
+                @else
+                    <li><a href="{{$master->url($i)}}">{{$i}}</a></li>
+                @endif
+            @endif
+        @endfor
+
+        {{-- Next Page Link --}}
+        @if($master->hasMorePages())
+            <li><a href="{{$master->nextPageUrl()}}" rel="next">&raquo;</a></li>
+        @else
+            <li class="disabled"><span>&raquo;</span></li>
+        @endif
+      </ul>
+    @endif
+  </div><br><br>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $('#filterGudang, #searchItem').on('change keyup', function(){
+        var selectedGudang = $('#filterGudang').val();
+        var searchText = $('#searchItem').val();
+
+        $.ajax({
+            url: "{{route('master')}}",
+            type: "GET",
+            data: {gudang: selectedGudang, search: searchText},
+            success: function(data){
+              $('.table tbody').html($(data).find('.table tbody').html());
+              $('.text-center').html($(data).find('.text-center').html());
+            }
+        });
+    });
+  });
+</script>
 @endsection

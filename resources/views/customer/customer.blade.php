@@ -49,18 +49,51 @@
                 <td>{{$c->kota}}</td>
                 <td>{{$c->kontak}}</td>
                 <td>{{$c->no_telp}}</td>
-                <td>{{$c->saldo}}</td>
+                <td>Rp. {{number_format($c->saldo, 0, ',', '.')}}</td>
                 <td>{{$c->salesPerson->nama_sales}}</td>
-                <td><a class='btn btn-xs btn-info' href="{{route('customer.edit',$c->kode_cust)}}">Update</a>
-                <br><br><form method="POST" action="{{route('customer.destroy',$c->kode_cust)}}">
-                    @csrf
-                    @method('DELETE')
-                    <input type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$c->kode_cust}} - {{$c->nama_cust}} ?');">
-                  </form>
+                <td>
+                  <div class="btn-group-vertical" role="group" aria-label="Actions">
+                    <a class='btn btn-info' href="{{route('customer.edit',$c->kode_cust)}}">Update</a>
+                    <form method="POST" action="{{route('customer.destroy',$c->kode_cust)}}">
+                      @csrf
+                      @method('DELETE')
+                      <input style="width: 75px;" type="submit" value="Delete" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$c->kode_cust}} - {{$c->nama_cust}} ?');">
+                    </form>
+                  </div>
                 </td>
             </tr>
         @endforeach
     </tbody>
   </table>
+  <div class="text-center">
+    @if ($customer->hasPages())
+      <ul class="pagination">
+        {{-- Previous Page Link --}}
+        @if($customer->onFirstPage())
+            <li class="disabled"><span>&laquo;</span></li>
+        @else
+            <li><a href="{{$customer->previousPageUrl()}}" rel="prev">&laquo;</a></li>
+        @endif
+
+        {{-- Pagination Elements --}}
+        @for($i = 1; $i <= $customer->lastPage(); $i++)
+            @if($i >= $customer->currentPage() - 2 && $i <= $customer->currentPage() + 2)
+                @if($i == $customer->currentPage())
+                    <li class="active"><span>{{$i}}</span></li>
+                @else
+                    <li><a href="{{$customer->url($i)}}">{{$i}}</a></li>
+                @endif
+            @endif
+        @endfor
+
+        {{-- Next Page Link --}}
+        @if($customer->hasMorePages())
+            <li><a href="{{$customer->nextPageUrl()}}" rel="next">&raquo;</a></li>
+        @else
+            <li class="disabled"><span>&raquo;</span></li>
+        @endif
+      </ul>
+    @endif
+  </div><br><br>
 </div>
 @endsection

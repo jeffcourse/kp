@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class SupplierController extends Controller
 {
     public function supplier(){
-        $supplier = Supplier::all();
+        $supplier = Supplier::paginate(5);
 
         return view('supplier.supplier',compact('supplier'));
     }

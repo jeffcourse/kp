@@ -13,15 +13,31 @@ use Illuminate\Http\Request;
 
 class MasterController extends Controller
 {
-    public function master(){
-        $master = Master::all();
+    public function master(Request $request){
+        $selectedGudang = $request->get('gudang');
+        $search = $request->get('search');
+
+        $query = Master::query();
+
+        if($selectedGudang && $selectedGudang != 'All'){
+            $query->whereHas('gudang', function ($q) use ($selectedGudang) {
+                $q->where('nama', $selectedGudang);
+            });
+        }
+
+        if($search){
+            $query->where('nama_brg', 'like', '%'.$search.'%');
+        }
+
+        $master = $query->paginate(5);
+
         $divisi = Divisi::all();
         $gudang = Gudang::all();
         $jenis = Jenis::all();
         $type = Type::all();
         $satuan = Satuan::all();
 
-        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan'));
+        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan','selectedGudang','search'));
     }
 
     public function create()

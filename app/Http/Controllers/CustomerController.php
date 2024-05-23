@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 class CustomerController extends Controller
 {
     public function customer(){
-        $customer = Customer::all();
+        $customer = Customer::paginate(5);
         $salesPerson = SalesPerson::all();
 
         return view('customer.customer',compact('customer','salesPerson'));
