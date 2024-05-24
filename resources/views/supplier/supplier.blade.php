@@ -11,9 +11,10 @@
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;">
-    <h3 style="display: inline-block; margin-right: 20px;">Supplier Table</h3>
-    <a href="{{route('supplier.create')}}" class="btn btn-success">Tambah Supplier</a><br>
+<div style="margin-left: 40px;" class="col">
+  <h3 style="display: inline-block; margin-right: 20px;">Supplier Table</h3>
+  <a href="{{route('supplier.create')}}" class="btn btn-success">Tambah Supplier</a>
+  <input style="width: 150px; display: inline-block; margin-left: 20px;" type="text" id="searchItem" class="form-control" placeholder="Cari nama supplier">
 </div><br>
 
 @if(session('status'))
@@ -24,7 +25,7 @@
     <thead>
       <tr>
         <th>Kode Supplier</th>
-        <th>Nama Barang</th>
+        <th>Nama Supplier</th>
         <th>Bank Account</th>
         <th>Alamat 1</th>
         <th>Alamat 2</th>
@@ -98,4 +99,22 @@
     @endif
   </div><br><br>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $('#searchItem').on('change keyup', function(){
+        var searchText = $('#searchItem').val();
+
+        $.ajax({
+            url: "{{route('supplier')}}",
+            type: "GET",
+            data: {search: searchText},
+            success: function(data){
+              $('.table tbody').html($(data).find('.table tbody').html());
+              $('.text-center').html($(data).find('.text-center').html());
+            }
+        });
+    });
+  });
+</script>
 @endsection

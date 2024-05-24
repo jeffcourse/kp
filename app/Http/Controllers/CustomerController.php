@@ -9,11 +9,19 @@ use Illuminate\Http\Request;
 
 class CustomerController extends Controller
 {
-    public function customer(){
-        $customer = Customer::paginate(5);
+    public function customer(Request $request){
+        $search = $request->get('search');
+
+        $query = Customer::query();
+
+        if($search){
+            $query->where('nama_cust', 'like', '%'.$search.'%');
+        }
+
+        $customer = $query->paginate(5);
         $salesPerson = SalesPerson::all();
 
-        return view('customer.customer',compact('customer','salesPerson'));
+        return view('customer.customer',compact('customer','salesPerson','search'));
     }
 
     public function create()

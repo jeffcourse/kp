@@ -11,9 +11,10 @@
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;">
+<div style="margin-left: 40px;" class="col">
     <h3 style="display: inline-block; margin-right: 20px;">Customer Table</h3>
-    <a href="{{route('customer.create')}}" class="btn btn-success">Tambah Customer</a><br>
+    <a href="{{ route('customer.create') }}" class="btn btn-success" style="margin-right: 20px;">Tambah Customer</a>
+    <input style="width: 170px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama customer">
 </div><br>
 
 @if(session('status'))
@@ -96,4 +97,22 @@
     @endif
   </div><br><br>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $('#searchItem').on('change keyup', function(){
+        var searchText = $('#searchItem').val();
+
+        $.ajax({
+            url: "{{route('customer')}}",
+            type: "GET",
+            data: {search: searchText},
+            success: function(data){
+              $('.table tbody').html($(data).find('.table tbody').html());
+              $('.text-center').html($(data).find('.text-center').html());
+            }
+        });
+    });
+  });
+</script>
 @endsection

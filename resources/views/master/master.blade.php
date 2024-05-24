@@ -77,7 +77,7 @@
   </table>
   <div class="text-center">
     @if($master->hasPages())
-      <ul class="pagination">
+      <ul id="pagination" class="pagination">
         {{-- Previous Page Link --}}
         @if($master->onFirstPage())
             <li class="disabled"><span>&laquo;</span></li>
@@ -109,20 +109,54 @@
 
 <script>
   $(document).ready(function(){
-    $('#filterGudang, #searchItem').on('change keyup', function(){
+    function loadFilters(){
+        var filterGudangValue = sessionStorage.getItem('filterGudang');
+        var searchItemValue = sessionStorage.getItem('searchItem');
+        if (filterGudangValue) {
+            $('#filterGudang').val(filterGudangValue);
+        }
+        if (searchItemValue) {
+            $('#searchItem').val(searchItemValue);
+        }
+    }
+
+    loadFilters();
+
+    function saveFilters(){
+        var selectedGudang = $('#filterGudang').val();
+        var searchText = $('#searchItem').val();
+
+        sessionStorage.setItem('filterGudang', selectedGudang);
+        sessionStorage.setItem('searchItem', searchText);
+    }
+
+    function updateTableData(page){
         var selectedGudang = $('#filterGudang').val();
         var searchText = $('#searchItem').val();
 
         $.ajax({
             url: "{{route('master')}}",
             type: "GET",
-            data: {gudang: selectedGudang, search: searchText},
+            data: {gudang: selectedGudang, search: searchText, page: page},
             success: function(data){
-              $('.table tbody').html($(data).find('.table tbody').html());
-              $('.text-center').html($(data).find('.text-center').html());
+                $('.table tbody').html($(data).find('.table tbody').html());
+                $('.text-center').html($(data).find('.text-center').html());
             }
         });
+    }
+
+    $('#filterGudang, #searchItem').on('change keyup', function(){
+        saveFilters();
+        updateTableData(1);
     });
+
+    $(document).on('click', '.pagination a', function(e){
+        e.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        updateTableData(page);
+    });
+
+    updateTableData(1);
   });
 </script>
 @endsection

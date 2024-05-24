@@ -8,10 +8,18 @@ use Illuminate\Http\Request;
 
 class SupplierController extends Controller
 {
-    public function supplier(){
-        $supplier = Supplier::paginate(5);
+    public function supplier(Request $request){
+        $search = $request->get('search');
 
-        return view('supplier.supplier',compact('supplier'));
+        $query = Supplier::query();
+
+        if($search){
+            $query->where('nama_supp', 'like', '%'.$search.'%');
+        }
+
+        $supplier = $query->paginate(5);
+
+        return view('supplier.supplier',compact('supplier','search'));
     }
 
     public function create()
