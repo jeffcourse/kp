@@ -100,19 +100,46 @@
 
 <script>
   $(document).ready(function(){
-    $('#searchItem').on('change keyup', function(){
+    function loadFilters(){
+        var searchItemValue = sessionStorage.getItem('searchCustomer');
+        if (searchItemValue) {
+            $('#searchItem').val(searchItemValue);
+        }
+    }
+
+    loadFilters();
+
+    function saveFilters(){
+        var searchText = $('#searchItem').val();
+        sessionStorage.setItem('searchCustomer', searchText);
+    }
+
+    function updateTableData(page){
         var searchText = $('#searchItem').val();
 
         $.ajax({
             url: "{{route('customer')}}",
             type: "GET",
-            data: {search: searchText},
+            data: {search: searchText, page: page},
             success: function(data){
-              $('.table tbody').html($(data).find('.table tbody').html());
-              $('.text-center').html($(data).find('.text-center').html());
+                $('.table tbody').html($(data).find('.table tbody').html());
+                $('.text-center').html($(data).find('.text-center').html());
             }
         });
+    }
+
+    $('#searchItem').on('change keyup', function(){
+        saveFilters();
+        updateTableData(1);
     });
+
+    $(document).on('click', '.pagination a', function(e){
+        e.preventDefault();
+        var page = $(this).attr('href').split('page=')[1];
+        updateTableData(page);
+    });
+
+    updateTableData(1);
   });
 </script>
 @endsection
