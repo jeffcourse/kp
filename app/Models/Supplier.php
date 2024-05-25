@@ -20,4 +20,8 @@ class Supplier extends Model
 
     // Indicate that the primary key is not an integer
     protected $keyType = 'string';
+
+    public function beli(){
+        return $this->hasMany(Beli::class,'kode_supp');
+    }
 }

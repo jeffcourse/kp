@@ -5,15 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Customer extends Model
+class Jual extends Model
 {
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = "customer";
+    protected $table = "jual";
 
     // Specify the primary key column
-    protected $primaryKey = 'kode_cust';
+    protected $primaryKey = 'no_bukti';
 
     // Disable auto-incrementing on the primary key
     public $incrementing = false;
@@ -21,11 +21,11 @@ class Customer extends Model
     // Indicate that the primary key is not an integer
     protected $keyType = 'string';
 
-    public function salesPerson(){
-        return $this->belongsTo(SalesPerson::class,'kode_sales');
+    public function jualDetail(){
+        return $this->hasMany(JualDetail::class,'no_bukti');
     }
 
-    public function jual(){
-        return $this->hasMany(Jual::class,'kode_cust');
+    public function customer(){
+        return $this->belongsTo(Customer::class,'kode_cust');
     }
 }

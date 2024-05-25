@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 22, 2024 at 07:49 AM
+-- Generation Time: May 25, 2024 at 08:42 AM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -220,6 +220,7 @@ INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `k
 ('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '7,5KG', 274, 1, 28990, 1594450, 'M', '-'),
 ('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '1,6LTR', 3038, 1, 99099, 594594, 'A', '23,6CMX33,5CMX31CM'),
 ('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '1KG', 120, 2, 263964, 1583780, 'K', '-'),
+('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '1,8LTR', 2186, 1, 125225, 751351, 'M', '-'),
 ('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '1KG', 10, 1, 65000, 650000, 'M', '-'),
 ('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '150ML', 12, 1, 30631, 367572, 'M', '15,5CM X 20,5CM X 18CM');
 
@@ -255,7 +256,6 @@ CREATE TABLE `jual` (
   `no_bukti` varchar(45) NOT NULL,
   `tanggal` datetime DEFAULT NULL,
   `kode_cust` varchar(45) NOT NULL,
-  `kode_sales` varchar(45) NOT NULL,
   `mata_uang` varchar(45) DEFAULT NULL,
   `sub_total` float DEFAULT NULL,
   `persen_ppn` int DEFAULT NULL,
@@ -269,8 +269,8 @@ CREATE TABLE `jual` (
 -- Dumping data for table `jual`
 --
 
-INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `kode_sales`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('JL24-00001', '2024-05-22 13:33:10', '07AM', '16', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:33:10');
+INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
+('JL24-00001', '2024-05-22 13:33:10', '07AM', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:33:10');
 
 -- --------------------------------------------------------
 
@@ -501,8 +501,7 @@ ALTER TABLE `invtype`
 --
 ALTER TABLE `jual`
   ADD PRIMARY KEY (`no_bukti`),
-  ADD KEY `fk_jual_customer1_idx` (`kode_cust`),
-  ADD KEY `fk_jual_sales_person1_idx` (`kode_sales`);
+  ADD KEY `fk_jual_customer1_idx` (`kode_cust`);
 
 --
 -- Indexes for table `jual_dtl`
@@ -614,8 +613,7 @@ ALTER TABLE `invmaster`
 -- Constraints for table `jual`
 --
 ALTER TABLE `jual`
-  ADD CONSTRAINT `fk_jual_customer1` FOREIGN KEY (`kode_cust`) REFERENCES `customer` (`kode_cust`),
-  ADD CONSTRAINT `fk_jual_sales_person1` FOREIGN KEY (`kode_sales`) REFERENCES `sales_person` (`kode_sales`);
+  ADD CONSTRAINT `fk_jual_customer1` FOREIGN KEY (`kode_cust`) REFERENCES `customer` (`kode_cust`);
 
 --
 -- Constraints for table `jual_dtl`
