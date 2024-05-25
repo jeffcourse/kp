@@ -26,23 +26,9 @@
                 <a class="nav-link" href="{{ route('master') }}">Master</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="transactionsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transaksi</a>
-              <div class="dropdown-menu" aria-labelledby="transactionsDropdown">
-                <a class="dropdown-item" href="#">Pembelian</a>
-                <a class="dropdown-item" href="#">Penjualan</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="pembayaranDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status Pembayaran</a>
+              <a class="nav-link dropdown-toggle" href="#" id="pembayaranDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transaksi</a>
               <div class="dropdown-menu" aria-labelledby="pembayaranDropdown">
-                <a class="dropdown-item" href="#">Pembelian</a>
-                <a class="dropdown-item" href="#">Penjualan</a>
-              </div>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="pengirimanDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Status Pengiriman</a>
-              <div class="dropdown-menu" aria-labelledby="pengirimanDropdown">
-                <a class="dropdown-item" href="#">Pembelian</a>
+                <a class="dropdown-item" href="{{ route('pembelian') }}">Pembelian</a>
                 <a class="dropdown-item" href="#">Penjualan</a>
               </div>
             </li>

@@ -24,4 +24,8 @@ class Gudang extends Model
     public function master(){
         return $this->hasMany(Master::class,'kode_gudang');
     }
+
+    public function beli(){
+        return $this->hasMany(Beli::class,'kirim_gudang');
+    }
 }

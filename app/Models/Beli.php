@@ -28,4 +28,8 @@ class Beli extends Model
     public function supplier(){
         return $this->belongsTo(Supplier::class,'kode_supp');
     }
+
+    public function gudang(){
+        return $this->belongsTo(Gudang::class,'kirim_gudang');
+    }
 }

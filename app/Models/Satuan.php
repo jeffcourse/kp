@@ -24,4 +24,12 @@ class Satuan extends Model
     public function master(){
         return $this->hasMany(Master::class,'id_satuan');
     }
+
+    public function beliDetail(){
+        return $this->hasMany(BeliDetail::class, 'id_satuan');
+    }
+
+    public function jualDetail(){
+        return $this->hasMany(JualDetail::class, 'id_satuan');
+    }
 }

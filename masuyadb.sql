@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2024 at 08:42 AM
+-- Generation Time: May 25, 2024 at 05:57 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `beli` (
   `no_bukti` varchar(45) NOT NULL,
-  `tanggal` datetime DEFAULT NULL,
+  `tanggal` varchar(45) DEFAULT NULL,
   `kode_supp` varchar(45) NOT NULL,
   `mata_uang` varchar(45) DEFAULT NULL,
   `kirim_gudang` varchar(45) NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE `beli` (
 --
 
 INSERT INTO `beli` (`no_bukti`, `tanggal`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('BL24-00001', '2024-05-22 13:30:10', 'ANEKA', 'IDR', 'M', 1204000, 10, 1324400, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:30:10');
+('BL24-00001', '22-05-2024', 'ANEKA', 'IDR', 'M', 1204000, 10, 1324400, 'Lunas', 'Belum Terkirim', '2024-05-22 13:30:10');
 
 -- --------------------------------------------------------
 
@@ -254,7 +254,7 @@ INSERT INTO `invtype` (`kode`, `type`) VALUES
 
 CREATE TABLE `jual` (
   `no_bukti` varchar(45) NOT NULL,
-  `tanggal` datetime DEFAULT NULL,
+  `tanggal` varchar(45) DEFAULT NULL,
   `kode_cust` varchar(45) NOT NULL,
   `mata_uang` varchar(45) DEFAULT NULL,
   `sub_total` float DEFAULT NULL,
@@ -270,7 +270,7 @@ CREATE TABLE `jual` (
 --
 
 INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('JL24-00001', '2024-05-22 13:33:10', '07AM', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:33:10');
+('JL24-00001', '22-05-2024', '07AM', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:33:10');
 
 -- --------------------------------------------------------
 

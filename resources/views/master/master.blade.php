@@ -43,7 +43,7 @@
         <th>Harga Jual Total</th>
         <th>Gudang</th>
         <th>Keterangan</th>
-        <th>Action</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>

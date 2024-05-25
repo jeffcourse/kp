@@ -5,6 +5,8 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\JualController;
+use App\Http\Controllers\BeliController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +40,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::resource('customer',CustomerController::class);
     Route::get('/customer', [CustomerController::class, 'customer'])->name('customer');
 
-    Route::get('/transactions', function(){
-        return "Ini transaksi";
-    })->name('transactions');
+    Route::resource('beli',BeliController::class);
+    Route::get('/pembelian', [BeliController::class, 'beli'])->name('pembelian');
+    Route::get('/updateBayar/{no_bukti}', [BeliController::class, 'updateBayar'])->name('UpdateBayar');
+    Route::get('/updateKirim/{no_bukti}', [BeliController::class, 'updateKirim'])->name('UpdateKirim');
+
 });

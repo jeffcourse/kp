@@ -35,7 +35,7 @@
         <th>No Telp</th>
         <th>Saldo</th>
         <th>Nama Sales</th>
-        <th>Action</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
