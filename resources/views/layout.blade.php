@@ -29,7 +29,7 @@
               <a class="nav-link dropdown-toggle" href="#" id="pembayaranDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transaksi</a>
               <div class="dropdown-menu" aria-labelledby="pembayaranDropdown">
                 <a class="dropdown-item" href="{{ route('pembelian') }}">Pembelian</a>
-                <a class="dropdown-item" href="#">Penjualan</a>
+                <a class="dropdown-item" href="{{ route('penjualan') }}">Penjualan</a>
               </div>
             </li>
             <li class="nav-item">

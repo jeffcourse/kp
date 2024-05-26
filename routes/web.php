@@ -45,4 +45,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/updateBayar/{no_bukti}', [BeliController::class, 'updateBayar'])->name('UpdateBayar');
     Route::get('/updateKirim/{no_bukti}', [BeliController::class, 'updateKirim'])->name('UpdateKirim');
 
+    Route::resource('jual',JualController::class);
+    Route::get('/penjualan', [JualController::class, 'jual'])->name('penjualan');
+    Route::get('/updateBayarJual/{no_bukti}', [JualController::class, 'updateBayar'])->name('UpdateBayarJual');
+    Route::get('/updateKirimJual/{no_bukti}', [JualController::class, 'updateKirim'])->name('UpdateKirimJual');
+
 });
