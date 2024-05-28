@@ -13,7 +13,7 @@
 <div class="mt-5">
 <div style="margin-left: 40px;">
     <h3 style="display: inline-block; margin-right: 20px;">Master Table</h3>
-    <a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-success">Tambah Barang</a>
+    <a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-info">Tambah Barang</a>
     <h4 style="display: inline-block;">Filter berdasarkan gudang:</h4>
     <select id="filterGudang" class="form-control" style="width: 150px; display: inline-block;">
       <option value="All">All</option>
@@ -39,7 +39,7 @@
         <th>Packing</th>
         <th>Quantity</th>
         <th>Satuan</th>
-        <th>Harga Jual Per Unit</th>
+        <th>Harga Jual Per Pack</th>
         <th>Harga Jual Total</th>
         <th>Gudang</th>
         <th>Keterangan</th>
@@ -63,7 +63,7 @@
                 <td>{{$m->keterangan}}</td>
                 <td>
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('master.edit',$m->kode_brg)}}">Update</a>
+                    <a class='btn btn-info' href="{{route('master.edit',$m->kode_brg)}}">Edit</a>
                     <form method="POST" action="{{route('master.destroy', $m->kode_brg)}}">
                       @csrf
                       @method('DELETE')

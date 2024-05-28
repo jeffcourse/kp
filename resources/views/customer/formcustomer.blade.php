@@ -45,10 +45,6 @@
     <input type="text" name="no_telp" class="form-control" id="no_telp" placeholder="Masukkan No Telp" required>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputSaldo">Saldo</label>
-    <input type="number" name="saldo" class="form-control" id="saldo" placeholder="Masukkan Saldo" required>
-  </div><br>
-  <div class="form-group">
     <label for="exampleInputNamaSales">Nama Sales</label>
     <select class="form-control" name="select_sales">
         @foreach($salesPerson as $s)

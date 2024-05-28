@@ -13,7 +13,7 @@
 <div class="mt-5">
 <div style="margin-left: 40px;" class="col">
     <h3 style="display: inline-block; margin-right: 20px;">Customer Table</h3>
-    <a href="{{ route('customer.create') }}" class="btn btn-success" style="margin-right: 20px;">Tambah Customer</a>
+    <a href="{{ route('customer.create') }}" class="btn btn-info" style="margin-right: 20px;">Tambah Customer</a>
     <input style="width: 170px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama customer">
 </div><br>
 
@@ -33,7 +33,6 @@
         <th>Kota</th>
         <th>Kontak</th>
         <th>No Telp</th>
-        <th>Saldo</th>
         <th>Nama Sales</th>
         <th>Actions</th>
       </tr>
@@ -50,11 +49,10 @@
                 <td>{{$c->kota}}</td>
                 <td>{{$c->kontak}}</td>
                 <td>{{$c->no_telp}}</td>
-                <td>Rp. {{number_format($c->saldo, 0, ',', '.')}}</td>
                 <td>{{$c->salesPerson->nama_sales}}</td>
                 <td>
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('customer.edit',$c->kode_cust)}}">Update</a>
+                    <a class='btn btn-info' href="{{route('customer.edit',$c->kode_cust)}}">Edit</a>
                     <form method="POST" action="{{route('customer.destroy',$c->kode_cust)}}">
                       @csrf
                       @method('DELETE')

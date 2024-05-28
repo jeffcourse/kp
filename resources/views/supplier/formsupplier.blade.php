@@ -52,10 +52,6 @@
     <label for="exampleInputEmail">Email</label>
     <input type="email" name="email" class="form-control" id="email" placeholder="Masukkan Email" required>
   </div><br>
-  <div class="form-group">
-    <label for="exampleInputSaldo">Saldo</label>
-    <input type="number" name="saldo" class="form-control" id="saldo" placeholder="Masukkan Saldo" required>
-  </div><br>
   <div class="form-group row">
     <div class="col-12">
       <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">Submit</button>

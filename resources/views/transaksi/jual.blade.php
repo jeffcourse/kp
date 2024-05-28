@@ -13,7 +13,7 @@
 <div class="mt-5">
 <div style="margin-left: 40px;">
     <h3 style="display: inline-block; margin-right: 20px;">Daftar Penjualan</h3>
-    <a style="margin-right: 20px;" href="#" class="btn btn-success">Tambah Transaksi</a>
+    <a style="margin-right: 20px;" href="#" class="btn btn-info">Tambah Transaksi</a>
     <h4 style="display: inline-block;">Filter berdasarkan tanggal:</h4>
     <input type="text" id="datepicker" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;" placeholder="dd-mm-yyyy">
     <button id="allDates" class="btn btn-primary" style="margin-left: 10px;">All Dates</button>

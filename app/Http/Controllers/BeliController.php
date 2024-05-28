@@ -83,6 +83,60 @@ class BeliController extends Controller
         return redirect()->route('pembelian')->with('status','Hooray!! Your new transaction is already inserted');
     }
 
+    public function edit($no_bukti)
+    {
+        //
+        $objBeli = Beli::find($no_bukti);
+        $objDetailBeli = BeliDetail::where('no_bukti', $no_bukti)->get();
+        $supplier = Supplier::all();
+        $gudang = Gudang::all();
+        $satuan = Satuan::all();
+
+        $data = $objBeli;
+        $dataDetail = $objDetailBeli;
+        return view('transaksi.formeditbeli',compact('data','dataDetail','supplier','gudang','satuan'));
+    }
+
+    public function update(Request $request, $no_bukti)
+    {
+        BeliDetail::where('no_bukti', $no_bukti)->delete();
+
+        $objBeli = Beli::find($no_bukti);
+        $objBeli->no_bukti = $request->get('no_bukti');
+        $objBeli->tanggal = $request->get('datepicker');
+        $objBeli->kode_supp = $request->get('select_supplier');
+        $objBeli->mata_uang = $request->get('mata_uang');
+        $objBeli->kirim_gudang = $request->get('select_gudang');
+        $objBeli->sub_total = $request->get('sub_total');
+        $objBeli->persen_ppn = $request->get('persen_ppn');
+        $objBeli->total = $request->get('total');
+        $objBeli->lunas = $request->get('select_lunas');
+        $objBeli->status = $request->get('select_status');
+        $objBeli->create_time = Carbon::now()->format('d-m-Y');
+        $objBeli->save();
+
+        $kode_brg = $request->get('kode_brg');
+        $nama_brg = $request->get('nama_brg');
+        $qty_order = $request->get('qty_order');
+        $id_satuan = $request->get('select_satuan');
+        $hrg_per_unit = $request->get('hrg_per_unit');
+        $hrg_total = $request->get('hrg_total');
+
+        foreach($kode_brg as $key => $value) {
+            $objDetail = new BeliDetail();
+            $objDetail->no_bukti = $objBeli->no_bukti;
+            $objDetail->kode_brg = $kode_brg[$key];
+            $objDetail->nama_brg = $nama_brg[$key];
+            $objDetail->qty_order = $qty_order[$key];
+            $objDetail->id_satuan = $id_satuan[$key];
+            $objDetail->hrg_per_unit = $hrg_per_unit[$key];
+            $objDetail->hrg_total = $hrg_total[$key];
+            $objDetail->save();
+        }
+
+        return redirect()->route('pembelian')->with('status','Your transaction is up-to-date');
+    }
+
     public function updateBayar($no_bukti)
     {
         $beli = Beli::where('no_bukti', $no_bukti)->firstOrFail();
@@ -99,5 +153,12 @@ class BeliController extends Controller
         $beli->save();
 
         return redirect()->route('pembelian')->with('status','Sukses update status pengiriman');
+    }
+
+    public function showDetail($no_bukti){
+        $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
+        $satuan = Satuan::all();
+
+        return view('transaksi.belidetail', compact('beliDetail','satuan','no_bukti'));
     }
 }

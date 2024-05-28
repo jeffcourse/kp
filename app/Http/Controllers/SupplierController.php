@@ -42,7 +42,6 @@ class SupplierController extends Controller
         $data->jabatan = $request->get('jabatan');
         $data->no_telp = $request->get('no_telp');
         $data->email = $request->get('email');
-        $data->saldo = $request->get('saldo');
         $data->save();
         return redirect()->route('supplier')->with('status','Hooray!! Your new item is already inserted');
     }
@@ -71,7 +70,6 @@ class SupplierController extends Controller
         $objSupplier->jabatan = $request->get('jabatan');
         $objSupplier->no_telp = $request->get('no_telp');
         $objSupplier->email = $request->get('email');
-        $objSupplier->saldo = $request->get('saldo');
         $objSupplier->save();
         return redirect()->route('supplier')->with('status','Your item is up-to-date');
     }

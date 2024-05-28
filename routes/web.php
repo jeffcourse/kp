@@ -44,6 +44,7 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/pembelian', [BeliController::class, 'beli'])->name('pembelian');
     Route::get('/updateBayar/{no_bukti}', [BeliController::class, 'updateBayar'])->name('UpdateBayar');
     Route::get('/updateKirim/{no_bukti}', [BeliController::class, 'updateKirim'])->name('UpdateKirim');
+    Route::get('/beliDetail/{no_bukti}', [BeliController::class, 'showDetail'])->name('BeliDetail');
 
     Route::resource('jual',JualController::class);
     Route::get('/penjualan', [JualController::class, 'jual'])->name('penjualan');

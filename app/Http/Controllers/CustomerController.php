@@ -44,7 +44,6 @@ class CustomerController extends Controller
         $data->kota = $request->get('kota');
         $data->kontak = $request->get('kontak');
         $data->no_telp = $request->get('no_telp');
-        $data->saldo = $request->get('saldo');
         $data->kode_sales = $request->get('select_sales');
         $data->save();
         return redirect()->route('customer')->with('status','Hooray!! Your new item is already inserted');
@@ -73,7 +72,6 @@ class CustomerController extends Controller
         $objCustomer->kota = $request->get('kota');
         $objCustomer->kontak = $request->get('kontak');
         $objCustomer->no_telp = $request->get('no_telp');
-        $objCustomer->saldo = $request->get('saldo');
         $objCustomer->kode_sales = $request->get('select_sales');
         $objCustomer->save();
         return redirect()->route('customer')->with('status','Your item is up-to-date');

@@ -13,7 +13,7 @@
 <div class="mt-5">
 <div style="margin-left: 40px;" class="col">
   <h3 style="display: inline-block; margin-right: 20px;">Supplier Table</h3>
-  <a href="{{route('supplier.create')}}" class="btn btn-success">Tambah Supplier</a>
+  <a href="{{route('supplier.create')}}" class="btn btn-info">Tambah Supplier</a>
   <input style="width: 150px; display: inline-block; margin-left: 20px;" type="text" id="searchItem" class="form-control" placeholder="Cari nama supplier">
 </div><br>
 
@@ -35,7 +35,6 @@
         <th>Jabatan</th>
         <th>No Telp</th>
         <th>Email</th>
-        <th>Saldo</th>
         <th>Actions</th>
       </tr>
     </thead>
@@ -53,10 +52,9 @@
                 <td>{{$s->jabatan}}</td>
                 <td>{{$s->no_telp}}</td>
                 <td>{{$s->email}}</td>
-                <td>Rp. {{number_format($s->saldo, 0, ',', '.')}}</td>
                 <td>
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('supplier.edit',$s->kode_supp)}}">Update</a>
+                    <a class='btn btn-info' href="{{route('supplier.edit',$s->kode_supp)}}">Edit</a>
                     <form method="POST" action="{{route('supplier.destroy',$s->kode_supp)}}">
                       @csrf
                       @method('DELETE')

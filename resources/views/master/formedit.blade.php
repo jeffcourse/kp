@@ -2,7 +2,7 @@
 
 @section('title','Item Edit Page')
 @section('content')
-<div class="container"> <!-- Wrap the content in a container -->
+<div class="container">
 <div class="mt-2"></div>
 <h3 style="margin-left: auto; margin-right: auto; text-align: center;">Edit Barang</h3><br>
 
@@ -47,7 +47,7 @@
   </div><br>
   <div class="form-group">
     <label for="exampleInputQuantity">Quantity</label>
-    <input type="number" name="quantity" class="form-control" id="quantity" value="{{$data->quantity}}" placeholder="Masukkan Kuantitas Barang">
+    <input type="number" name="quantity" class="form-control quantity" id="quantity" value="{{$data->quantity}}" placeholder="Masukkan Kuantitas Barang">
   </div><br>
   <div class="form-group">
     <label for="exampleInputSatuanBarang">Satuan</label>
@@ -58,12 +58,12 @@
     </select>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputHargaJual">Harga Jual Per Unit</label>
-    <input type="number" name="hrg_jual" class="form-control" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual">
+    <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
+    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual">
   </div><br>
   <div class="form-group">
     <label for="exampleInputHargaJualTotal">Harga Jual Total</label>
-    <input type="number" name="hrg_jual_total" class="form-control" id="hrg_jual_total" value="{{$data->hrg_jual_total}}" placeholder="Masukkan Harga Jual Total">
+    <input type="number" name="hrg_jual_total" class="form-control" id="hrg_jual_total" value="{{$data->hrg_jual_total}}" placeholder="Masukkan Harga Jual Total" readonly>
   </div><br>
   <div class="form-group">
     <label for="exampleInputGudangBarang">Gudang</label>
@@ -83,4 +83,22 @@
     </div>
   </div><br><br>
 </form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script>
+  $(document).ready(function (){
+        function calculateHargaTotal(){
+            var qty = $('#quantity').val();
+            var hrgPerPack = $('#hrg_jual').val();
+            var hargaTotal = qty * hrgPerPack;
+            $('#hrg_jual_total').val(hargaTotal);
+        }
+
+        calculateHargaTotal();
+
+        $(document).on('input', '.quantity, .hrg_jual', function (){
+            calculateHargaTotal();
+        });
+  });
+</script>
 @endsection
