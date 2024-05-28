@@ -58,7 +58,7 @@
                 <td>
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('beli.edit',$b->no_bukti)}}">Edit</a>
-                    <form method="POST" action="#">
+                    <form method="POST" action="{{route('beli.destroy', $b->no_bukti)}}">
                       @csrf
                       @method('DELETE')
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$b->no_bukti}} - {{$b->tanggal}} ?');">Delete</button>

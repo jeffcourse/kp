@@ -137,6 +137,20 @@ class BeliController extends Controller
         return redirect()->route('pembelian')->with('status','Your transaction is up-to-date');
     }
 
+    public function destroy($no_bukti)
+    {
+        try{
+            BeliDetail::where('no_bukti', $no_bukti)->delete();
+            $objBeli = Beli::find($no_bukti);
+            $objBeli->delete();
+            return redirect()->route('pembelian')->with('status','Deleted Successfully');
+        }
+        catch(\PDOException $ex){
+            $msg = "Delete data failed. Make sure there is no correlated data before deleting!";
+            return redirect()->route('pembelian')->with('status',$msg);
+        }
+    }
+
     public function updateBayar($no_bukti)
     {
         $beli = Beli::where('no_bukti', $no_bukti)->firstOrFail();
