@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 25, 2024 at 05:57 PM
+-- Generation Time: May 28, 2024 at 02:53 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -38,7 +38,7 @@ CREATE TABLE `beli` (
   `total` float DEFAULT NULL,
   `lunas` varchar(45) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
-  `create_time` datetime DEFAULT NULL
+  `create_time` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -46,7 +46,9 @@ CREATE TABLE `beli` (
 --
 
 INSERT INTO `beli` (`no_bukti`, `tanggal`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('BL24-00001', '22-05-2024', 'ANEKA', 'IDR', 'M', 1204000, 10, 1324400, 'Lunas', 'Belum Terkirim', '2024-05-22 13:30:10');
+('BL24-00001', '22-05-2024', 'ANEKA', 'IDR', 'M', 1212000, 10, 1333200, 'Belum Lunas', 'Belum Terkirim', '28-05-2024'),
+('BL24-00002', '28-05-2024', 'CLEANBEE', 'IDR', 'M', 728000, 10, 800800, 'Belum Lunas', 'Belum Terkirim', '28-05-2024'),
+('BL24-00003', '28-05-2024', 'ANEKA', 'IDR', 'M', 1080000, 10, 1188000, 'Belum Lunas', 'Belum Terkirim', '28-05-2024');
 
 -- --------------------------------------------------------
 
@@ -56,7 +58,6 @@ INSERT INTO `beli` (`no_bukti`, `tanggal`, `kode_supp`, `mata_uang`, `kirim_guda
 
 CREATE TABLE `beli_dtl` (
   `no_bukti` varchar(45) NOT NULL,
-  `line` varchar(45) DEFAULT NULL,
   `kode_brg` varchar(255) DEFAULT NULL,
   `nama_brg` varchar(255) DEFAULT NULL,
   `qty_order` int DEFAULT NULL,
@@ -69,10 +70,17 @@ CREATE TABLE `beli_dtl` (
 -- Dumping data for table `beli_dtl`
 --
 
-INSERT INTO `beli_dtl` (`no_bukti`, `line`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
-('BL24-00001', '432137', 'WY100000002A', 'SRM Bread Sub Roll Wheat', 40, 4, 20000, 800000),
-('BL24-00001', '432138', 'WY100000005', 'SRM Cookies Chocolate Chips', 11, 4, 14000, 154000),
-('BL24-00001', '432139', 'WY100000112A', 'SRM Mushroom Soup(30x350G)', 10, 4, 25000, 250000);
+INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
+('BL24-00003', 'WY100000002A', 'SRM Bread Sub Roll Wheat', 40, 4, 16000, 640000),
+('BL24-00003', 'WY100000005', 'SRM Cookies Chocolate Chips', 11, 4, 20000, 220000),
+('BL24-00003', 'WY10000000112A', 'SRM Mushroom Soup(30x350G)', 10, 4, 22000, 220000),
+('BL24-00001', 'WY100000002A', 'SRM Bread Sub Roll Wheat', 40, 4, 15000, 600000),
+('BL24-00001', 'WY100000005', 'SRM Cookies Chocolate Chips', 11, 4, 22000, 242000),
+('BL24-00001', 'WY10000000112A', 'SRM Mushroom Soup(30x350G)', 10, 4, 22000, 220000),
+('BL24-00001', 'WY1000000085', 'SRM Slice Black Olives Greci I', 5, 4, 30000, 150000),
+('BL24-00002', 'WY5000000133', 'Garbage Bag Black 90cmX120', 33, 4, 14000, 462000),
+('BL24-00002', 'WY5000000132', 'Garbage Bag Black 50cmX75', 2, 4, 16000, 32000),
+('BL24-00002', 'WY5000000123', 'Wrapping Film 12', 13, 4, 18000, 234000);
 
 -- --------------------------------------------------------
 
@@ -91,19 +99,17 @@ CREATE TABLE `customer` (
   `kontak` varchar(45) DEFAULT NULL,
   `no_telp` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
-  `saldo` float DEFAULT NULL,
-  `kode_sales` varchar(45) NOT NULL,
-  `create_time` datetime DEFAULT NULL
+  `kode_sales` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`kode_cust`, `nama_cust`, `type_cust`, `alm_1`, `alm_2`, `alm_3`, `kota`, `kontak`, `no_telp`, `email`, `saldo`, `kode_sales`, `create_time`) VALUES
-('07AM', '07AM BAKERS CLUB', 'BAKERY', 'JL. BUMBAK DAUH NO.88', 'KEROBOKAN, KUTA UTARA', 'BADUNG BALI', 'KEROBOKAN', 'AYU SUARTINI', '0812 37047789', '-', 0, '16', NULL),
-('104 BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR - BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', 0, '18', NULL),
-('88SUNARI', '88 SUNARI', 'MINI MARKET', 'BJ. DINAS BANYUALIT', 'KALIBUKBUK BULELENG', 'BALI', 'SINGARAJA', 'BPK. YOGA', '08193 6501871', NULL, 216000, '15', NULL);
+INSERT INTO `customer` (`kode_cust`, `nama_cust`, `type_cust`, `alm_1`, `alm_2`, `alm_3`, `kota`, `kontak`, `no_telp`, `email`, `kode_sales`) VALUES
+('07AM', '07AM BAKERS CLUB', 'BAKERY', 'JL. BUMBAK DAUH NO.88', 'KEROBOKAN, KUTA UTARA', 'BADUNG BALI', 'KEROBOKAN', 'AYU SUARTINI', '0812 37047789', '-', '16'),
+('104 BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR - BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', '18'),
+('88SUNARI', '88 SUNARI', 'MINI MARKET', 'BJ. DINAS BANYUALIT', 'KALIBUKBUK BULELENG', 'BALI', 'SINGARAJA', 'BPK. YOGA', '08193 6501871', NULL, '15');
 
 -- --------------------------------------------------------
 
@@ -207,7 +213,7 @@ CREATE TABLE `invmaster` (
   `quantity` int NOT NULL,
   `id_satuan` int NOT NULL,
   `hrg_jual` float NOT NULL,
-  `hrg_jual_total` float DEFAULT NULL,
+  `hrg_jual_total` decimal(18,2) DEFAULT NULL,
   `kode_gudang` varchar(45) NOT NULL,
   `keterangan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -217,12 +223,12 @@ CREATE TABLE `invmaster` (
 --
 
 INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `hrg_jual_total`, `kode_gudang`, `keterangan`) VALUES
-('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '7,5KG', 274, 1, 28990, 1594450, 'M', '-'),
-('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '1,6LTR', 3038, 1, 99099, 594594, 'A', '23,6CMX33,5CMX31CM'),
-('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '1KG', 120, 2, 263964, 1583780, 'K', '-'),
-('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '1,8LTR', 2186, 1, 125225, 751351, 'M', '-'),
-('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '1KG', 10, 1, 65000, 650000, 'M', '-'),
-('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '150ML', 12, 1, 30631, 367572, 'M', '15,5CM X 20,5CM X 18CM');
+('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 300, 1, 1594450, '478335000.00', 'M', '-'),
+('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 3038, 1, 594594, '1806376572.00', 'A', '23,6CMX33,5CMX31CM'),
+('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 120, 2, 1583780, '190053600.00', 'K', '-'),
+('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 2186, 1, 751351, '1642453286.00', 'M', '-'),
+('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 10, 1, 650000, '6500000.00', 'M', '-'),
+('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 12, 1, 367572, '4410864.00', 'M', '15,5CM X 20,5CM X 18CM');
 
 -- --------------------------------------------------------
 
@@ -262,7 +268,7 @@ CREATE TABLE `jual` (
   `total` float DEFAULT NULL,
   `lunas` varchar(45) DEFAULT NULL,
   `status` varchar(45) NOT NULL,
-  `create_time` datetime DEFAULT NULL
+  `create_time` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
@@ -270,7 +276,7 @@ CREATE TABLE `jual` (
 --
 
 INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('JL24-00001', '22-05-2024', '07AM', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '2024-05-22 13:33:10');
+('JL24-00001', '22-05-2024', '07AM', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '22-05-2024');
 
 -- --------------------------------------------------------
 
@@ -280,7 +286,6 @@ INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `mata_uang`, `sub_total`
 
 CREATE TABLE `jual_dtl` (
   `no_bukti` varchar(45) NOT NULL,
-  `line` varchar(45) DEFAULT NULL,
   `kode_brg` varchar(255) DEFAULT NULL,
   `nama_brg` varchar(255) DEFAULT NULL,
   `qty_order` int DEFAULT NULL,
@@ -293,9 +298,9 @@ CREATE TABLE `jual_dtl` (
 -- Dumping data for table `jual_dtl`
 --
 
-INSERT INTO `jual_dtl` (`no_bukti`, `line`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
-('JL24-00001', '3182356', 'WY100000005', 'SRM Cookies Chocolate Chips', 2, 4, 18000, 36000),
-('JL24-00001', '3182357', 'WY100000085', 'SRM Slice Black Olives Greci I', 1, 4, 5000, 5000);
+INSERT INTO `jual_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
+('JL24-00001', 'WY100000005', 'SRM Cookies Chocolate Chips', 2, 4, 18000, 36000),
+('JL24-00001', 'WY100000085', 'SRM Slice Black Olives Greci I', 1, 4, 5000, 5000);
 
 -- --------------------------------------------------------
 
@@ -391,18 +396,17 @@ CREATE TABLE `supplier` (
   `kontak` varchar(45) DEFAULT NULL,
   `jabatan` varchar(45) DEFAULT NULL,
   `no_telp` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `saldo` float DEFAULT NULL
+  `email` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `supplier`
 --
 
-INSERT INTO `supplier` (`kode_supp`, `nama_supp`, `acc_bank`, `alm_1`, `alm_2`, `kota`, `negara`, `kontak`, `jabatan`, `no_telp`, `email`, `saldo`) VALUES
-('AMBICO', 'AMBICO/PT', '4683801553', 'JL. DINOYO 35', 'SURABAYA, JAWA TIMUR 60265', 'SURABAYA', 'INDONESIA', 'IBU NATICA', '-', '0315675547', 'natica@ptambico.com', 45259600),
-('ANEKA', 'PT. ANEKA KONSUMSI SELERA INTERNASIONAL (Big Farm)', '0189977788', 'KOMPLEKS PERGUDANGAN DAN INDUSTRI SAFE N LOCK G NO. 1570-1571', 'RANGKAHKIDUL, SIDOARJO - JAWA TIMUR', 'SIDOARJO', 'INDONESIA', 'BENNY', '-', '-', 'benyfirman@kansasid.com', 4760390),
-('CLEANBEE', 'PT. PASTI KLIN INDONESIA', '4706558888', 'JALA KALIMAS BARAT NOMOR 57A RT.003 RW 009', 'KREMBANGAN UTARA, PABEAN CANTIAN', 'SURABAYA', 'INDONESIA', 'Pak Stanford', '-', '081999090333', 'pastiklin@gmail.com', 0);
+INSERT INTO `supplier` (`kode_supp`, `nama_supp`, `acc_bank`, `alm_1`, `alm_2`, `kota`, `negara`, `kontak`, `jabatan`, `no_telp`, `email`) VALUES
+('AMBICO', 'AMBICO/PT', '4683801553', 'JL. DINOYO 35', 'SURABAYA, JAWA TIMUR 60265', 'SURABAYA', 'INDONESIA', 'IBU NATICA', '-', '0315675547', 'natica@ptambico.com'),
+('ANEKA', 'PT. ANEKA KONSUMSI SELERA INTERNASIONAL (Big Farm)', '0189977788', 'KOMPLEKS PERGUDANGAN DAN INDUSTRI SAFE N LOCK G NO. 1570-1571', 'RANGKAHKIDUL, SIDOARJO - JAWA TIMUR', 'SIDOARJO', 'INDONESIA', 'BENNY', '-', '-', 'benyfirman@kansasid.com'),
+('CLEANBEE', 'PT. PASTI KLIN INDONESIA', '4706558888', 'JALA KALIMAS BARAT NOMOR 57A RT.003 RW 009', 'KREMBANGAN UTARA, PABEAN CANTIAN', 'SURABAYA', 'INDONESIA', 'Pak Stanford', '-', '081999090333', 'pastiklin@gmail.com');
 
 -- --------------------------------------------------------
 

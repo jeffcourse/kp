@@ -23,10 +23,13 @@
       <div class="offcanvas-body">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
+                <a class="nav-link" href="{{ route('home') }}">Home</a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="{{ route('master') }}">Master</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="pembayaranDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transaksi</a>
+              <a class="nav-link dropdown-toggle" id="pembayaranDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transaksi</a>
               <div class="dropdown-menu" aria-labelledby="pembayaranDropdown">
                 <a class="dropdown-item" href="{{ route('pembelian') }}">Pembelian</a>
                 <a class="dropdown-item" href="{{ route('penjualan') }}">Penjualan</a>
