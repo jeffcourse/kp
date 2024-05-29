@@ -47,7 +47,7 @@
   </div><br>
   <div class="form-group">
     <label for="exampleInputNamaSales">Nama Sales</label>
-    <select class="form-control" name="select_sales">
+    <select class="form-control" name="select_sales" required>
         @foreach($salesPerson as $s)
         <option value="{{$s->kode_sales}}" @if($s->kode_sales == $data->kode_sales) selected @endif>{{$s->nama_sales}}</option>
         @endforeach

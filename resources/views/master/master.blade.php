@@ -39,6 +39,7 @@
         <th>Packing</th>
         <th>Quantity</th>
         <th>Satuan</th>
+        <th>Harga Jual Per Item</th>
         <th>Harga Jual Per Pack</th>
         <th>Harga Jual Total</th>
         <th>Gudang</th>
@@ -57,6 +58,7 @@
                 <td>{{$m->packing}}</td>
                 <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
+                <td>Rp. {{number_format($m->hrg_jual_item, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($m->hrg_jual, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($m->hrg_jual_total, 0, ',', '.')}}</td>
                 <td>{{$m->gudang->nama}}</td>

@@ -42,7 +42,7 @@
   </div><br>
   <div class="form-group">
     <label for="exampleInputPacking">Packing</label>
-    <input type="text" name="packing" class="form-control" id="packing" placeholder="Masukkan Data Packing" required>
+    <input type="text" name="packing" class="form-control packing" id="packing" placeholder="Masukkan Data Packing" required>
   </div><br>
   <div class="form-group">
     <label for="exampleInputQuantity">Quantity</label>
@@ -57,8 +57,12 @@
     </select>
   </div><br>
   <div class="form-group">
+    <label for="exampleInputHargaJualItem">Harga Jual Per Item</label>
+    <input type="number" name="hrg_jual_item" class="form-control hrg_jual_item" id="hrg_jual_item" placeholder="Masukkan Harga Jual Per Item" required>
+  </div><br>
+  <div class="form-group">
     <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
-    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" placeholder="Masukkan Harga Jual" required>
+    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" placeholder="Masukkan Harga Jual Per Pack" readonly>
   </div><br>
   <div class="form-group">
     <label for="exampleInputHargaJualTotal">Harga Jual Total</label>
@@ -86,6 +90,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
   $(document).ready(function (){
+        function calculateHargaPack(){
+            var packing = $('#packing').val();
+            var packNum = parseInt(packing.split('x')[0]);
+            var hrgPerItem = $('#hrg_jual_item').val();
+            var hargaPack = packNum * hrgPerItem;
+            $('#hrg_jual').val(hargaPack);
+        }
+
         function calculateHargaTotal(){
             var qty = $('#quantity').val();
             var hrgPerPack = $('#hrg_jual').val();
@@ -93,9 +105,14 @@
             $('#hrg_jual_total').val(hargaTotal);
         }
 
+        calculateHargaPack();
         calculateHargaTotal();
 
-        $(document).on('input', '.quantity, .hrg_jual', function (){
+        $(document).on('input', '.packing, .hrg_jual_item', function (){
+            calculateHargaPack();
+        });
+
+        $(document).on('input', '.packing, .quantity, .hrg_jual_item', function (){
             calculateHargaTotal();
         });
   });
