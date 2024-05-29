@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\MasterController;
 use App\Http\Controllers\SupplierController;
@@ -27,10 +28,8 @@ Route::get('/register', [LoginController::class, 'register'])->name('register');
 Route::post('/register', [LoginController::class, 'registerPost'])->name('register.post');
 
 Route::group(['middleware' => 'auth'], function(){
-    Route::get('/', function () {
-        return view('welcome');
-    })->name('home');
-    
+    Route::get('/', [HomeController::class, 'welcome'])->name('home');
+
     Route::resource('master',MasterController::class);
     Route::get('/master', [MasterController::class, 'master'])->name('master');
 

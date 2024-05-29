@@ -44,4 +44,11 @@ class JualController extends Controller
 
         return redirect()->route('penjualan')->with('status','Sukses update status pengiriman');
     }
+
+    public function welcomeJual(){
+        $query = Jual::query();
+        $transLunasJual = $query->where('lunas', 'Belum Lunas')->count();
+        $transStatusJual = $query->where('status', 'Belum Terkirim')->count();
+        return view('welcome', compact('transLunasJual', 'transStatusJual'));
+    }
 }

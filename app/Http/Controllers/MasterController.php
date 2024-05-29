@@ -118,4 +118,13 @@ class MasterController extends Controller
             return redirect()->route('master')->with('status',$msg);
         }
     }
+
+    public function welcome()
+    {
+        $totalProducts = Master::count();
+        
+        $totalPrice = Master::sum('hrg_jual_total');
+
+        return view('welcome', compact('totalProducts', 'totalPrice'));
+    }
 }

@@ -175,4 +175,11 @@ class BeliController extends Controller
 
         return view('transaksi.belidetail', compact('beliDetail','satuan','no_bukti'));
     }
+
+    public function welcomeBeli(){
+        $query = Beli::query();
+        $transLunas = $query->where('lunas', 'Belum Lunas')->count();
+        $transStatus = $query->where('status', 'Belum Terkirim')->count();
+        return view('welcome', compact('transLunas', 'transStatus'));
+    }
 }
