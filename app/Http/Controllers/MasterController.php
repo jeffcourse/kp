@@ -129,4 +129,21 @@ class MasterController extends Controller
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
     }
+
+    public function updateQuantity(Request $request)
+    {
+        $id = $request->input('id');
+        $quantity = $request->input('quantity');
+
+        $master = Master::findOrFail($id);
+
+        $master->quantity = $quantity;
+        $master->hrg_jual_total = $quantity * $master->hrg_jual;
+        $master->save();
+
+        return response()->json([
+            'success' => true,
+            'hrg_jual_total' => $master->hrg_jual_total
+        ]);
+    }
 }

@@ -56,11 +56,21 @@
                 <td>{{$m->jenis->jenis}}</td>
                 <td>{{$m->type->type}}</td>
                 <td>{{$m->packing}}</td>
-                <td>{{$m->quantity}}</td>
+                <td>
+                  <div class="input-group">
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-minus" data-id="{{$m->kode_brg}}">-</button>
+                    </span>
+                    <input type="text" class="form-control input-quantity" value="{{$m->quantity}}" readonly>
+                    <span class="input-group-btn">
+                      <button type="button" class="btn btn-default btn-plus" data-id="{{$m->kode_brg}}">+</button>
+                    </span>
+                  </div>
+                </td>
                 <td>{{$m->satuan->satuan}}</td>
                 <td>Rp. {{number_format($m->hrg_jual_item, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($m->hrg_jual, 0, ',', '.')}}</td>
-                <td>Rp. {{number_format($m->hrg_jual_total, 0, ',', '.')}}</td>
+                <td class="hrg_jual_total">Rp. {{number_format($m->hrg_jual_total, 0, ',', '.')}}</td>
                 <td>{{$m->gudang->nama}}</td>
                 <td>{{$m->keterangan}}</td>
                 <td>
@@ -159,6 +169,40 @@
     });
 
     updateTableData(1);
+        
+    function updateQuantity(id, increment){
+      var quantityInput = $('#tr_' + id + ' .input-quantity');
+      var currentQuantity = parseInt(quantityInput.val());
+      var newQuantity = currentQuantity + increment;
+          
+      quantityInput.val(newQuantity);
+
+      $.ajax({
+        url: "{{route('UpdateQuantity')}}",
+        type: "POST",
+        data: {
+          _token: "{{csrf_token()}}",
+          id: id,
+          quantity: newQuantity
+        },
+        success: function(response){
+          $('#tr_' + id + ' .hrg_jual_total').text('Rp. ' + response.hrg_jual_total.toLocaleString('id-ID'));
+        },
+        error: function(xhr, status, error){
+          console.error(error);
+        }
+      });
+    }
+
+    $(document).on('click', '.btn-minus', function(){
+      var id = $(this).data('id');
+      updateQuantity(id, -1);
+    });
+
+    $(document).on('click', '.btn-plus', function(){
+      var id = $(this).data('id');
+      updateQuantity(id, 1);
+    });
   });
 </script>
 @endsection

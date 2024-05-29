@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('master',MasterController::class);
     Route::get('/master', [MasterController::class, 'master'])->name('master');
+    Route::post('/updateQuantity',[MasterController::class, 'updateQuantity'])->name('UpdateQuantity');
 
     Route::resource('supplier',SupplierController::class);
     Route::get('/supplier', [SupplierController::class, 'supplier'])->name('supplier');
