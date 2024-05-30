@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
@@ -13,7 +14,7 @@
 <div class="mt-5">
 <div style="margin-left: 40px;">
     <h3 style="display: inline-block; margin-right: 20px;">Daftar Penjualan</h3>
-    <a style="margin-right: 20px;" href="#" class="btn btn-info">Tambah Transaksi</a>
+    <a style="margin-right: 20px;" href="{{route('jual.create')}}" class="btn btn-info">Tambah Transaksi</a>
     <h4 style="display: inline-block;">Filter berdasarkan tanggal:</h4>
     <input type="text" id="datepicker" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;" placeholder="dd-mm-yyyy">
     <button id="allDates" class="btn btn-primary" style="margin-left: 10px;">All Dates</button>
@@ -28,7 +29,7 @@
       <tr>
         <th>Nomor Nota</th>
         <th>Tanggal</th>
-        <th>Nama Supplier</th>
+        <th>Nama Customer</th>
         <th>Mata Uang</th>
         <th>Harga Sub Total</th>
         <th>PPN</th>
@@ -51,11 +52,11 @@
                 <td>Rp. {{number_format($j->total, 0, ',', '.')}}</td>
                 <td><a class='btn {{$j->lunas == "Belum Lunas" ? "btn-danger" : "btn-success"}} btn-update-bayar' href="{{route('UpdateBayarJual',$j->no_bukti)}}" @if($j->lunas == "Lunas") style="pointer-events: none; cursor: default;" @endif>{{$j->lunas}}</a></td>
                 <td><a class='btn {{$j->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirimJual',$j->no_bukti)}}" @if($j->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$j->status}}</a></td>
-                <td><a class='btn btn-info' href="#">Details</a></td>
+                <td><a class='btn btn-info' href="{{route('JualDetail',$j->no_bukti)}}">Details</a></td>
                 <td>
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="#">Update</a>
-                    <form method="POST" action="#">
+                    <a class='btn btn-info' href="{{route('jual.edit',$j->no_bukti)}}">Edit</a>
+                    <form method="POST" action="{{route('jual.destroy',$j->no_bukti)}}">
                       @csrf
                       @method('DELETE')
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$j->no_bukti}} - {{$j->tanggal}} ?');">Delete</button>
@@ -99,18 +100,10 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
-    $(function() {
-        $("#datepicker").datepicker({
-            dateFormat: 'dd-mm-yy',
-            changeMonth: true,
-            changeYear: true,
-            yearRange: "-30:+0",
-            onClose: function(selectedDate){
-                
-            }
-        });
+    flatpickr("#datepicker", {
+        dateFormat: "d-m-Y",
     });
 
   $(document).ready(function(){

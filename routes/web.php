@@ -50,5 +50,6 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/penjualan', [JualController::class, 'jual'])->name('penjualan');
     Route::get('/updateBayarJual/{no_bukti}', [JualController::class, 'updateBayar'])->name('UpdateBayarJual');
     Route::get('/updateKirimJual/{no_bukti}', [JualController::class, 'updateKirim'])->name('UpdateKirimJual');
+    Route::get('/jualDetail/{no_bukti}', [JualController::class, 'showDetail'])->name('JualDetail');
 
 });
