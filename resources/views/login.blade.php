@@ -6,29 +6,37 @@
     @if($errors->any())
         <div class="col-12">
             @foreach($errors->all() as $error)
-                <div class="alert-danger">{{$error}}</div>
+                <div class="alert alert-danger">{{$error}}</div>
             @endforeach
         </div>
     @endif
 
     @if(session()->has('error'))
-        <div class="alert-danger">{{session('error')}}</div>
+        <div class="alert alert-danger">{{session('error')}}</div>
     @endif
     @if(session()->has('success'))
-        <div class="alert-success">{{session('success')}}</div>
+        <div class="alert alert-success">{{session('success')}}</div>
     @endif
 </div>
-<form action="{{route('login.post')}}" method="POST" class="ms-auto me-auto mt-auto" style="width: 500px">
+<form action="{{route('login.post')}}" method="POST" class="d-flex flex-column align-items-center" style="max-width: 500px; margin: auto;">
   @csrf
-  <div class="mb-3">
+  <div class="mb-3 row">
     <label for="name" class="form-label">Username</label>
-    <input type="text" class="form-control" name="name">
+    <div class="col-sm-12">
+      <input type="text" class="form-control" name="name">
+    </div>
   </div>
-  <div class="mb-3">
+  <div class="mb-3 row">
     <label for="password" class="form-label">Password</label>
-    <input type="password" class="form-control" name="password">
+    <div class="col-sm-12">
+      <input type="password" class="form-control" name="password">
+    </div>
   </div>
-  <button type="submit" class="btn btn-primary">Login</button>
+  <div class="mb-3 row">
+    <div class="col-sm-12">
+      <button type="submit" class="btn btn-primary">Login</button>
+    </div>
+  </div>
 </form>
 </div>
 @endsection
