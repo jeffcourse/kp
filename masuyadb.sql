@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2024 at 02:53 PM
+-- Generation Time: May 31, 2024 at 12:46 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -46,7 +46,7 @@ CREATE TABLE `beli` (
 --
 
 INSERT INTO `beli` (`no_bukti`, `tanggal`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('BL24-00001', '22-05-2024', 'ANEKA', 'IDR', 'M', 1212000, 10, 1333200, 'Belum Lunas', 'Belum Terkirim', '28-05-2024'),
+('BL24-00001', '22-05-2024', 'ANEKA', 'IDR', 'M', 1212000, 10, 1333200, 'Lunas', 'Belum Terkirim', '28-05-2024'),
 ('BL24-00002', '28-05-2024', 'CLEANBEE', 'IDR', 'M', 728000, 10, 800800, 'Belum Lunas', 'Belum Terkirim', '28-05-2024'),
 ('BL24-00003', '28-05-2024', 'ANEKA', 'IDR', 'M', 1080000, 10, 1188000, 'Belum Lunas', 'Belum Terkirim', '28-05-2024');
 
@@ -108,7 +108,7 @@ CREATE TABLE `customer` (
 
 INSERT INTO `customer` (`kode_cust`, `nama_cust`, `type_cust`, `alm_1`, `alm_2`, `alm_3`, `kota`, `kontak`, `no_telp`, `email`, `kode_sales`) VALUES
 ('07AM', '07AM BAKERS CLUB', 'BAKERY', 'JL. BUMBAK DAUH NO.88', 'KEROBOKAN, KUTA UTARA', 'BADUNG BALI', 'KEROBOKAN', 'AYU SUARTINI', '0812 37047789', '-', '16'),
-('104 BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR - BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', '18'),
+('104 BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR, BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', '18'),
 ('88SUNARI', '88 SUNARI', 'MINI MARKET', 'BJ. DINAS BANYUALIT', 'KALIBUKBUK BULELENG', 'BALI', 'SINGARAJA', 'BPK. YOGA', '08193 6501871', NULL, '15');
 
 -- --------------------------------------------------------
@@ -212,6 +212,7 @@ CREATE TABLE `invmaster` (
   `packing` varchar(45) NOT NULL,
   `quantity` int NOT NULL,
   `id_satuan` int NOT NULL,
+  `hrg_jual_item` float NOT NULL,
   `hrg_jual` float NOT NULL,
   `hrg_jual_total` decimal(18,2) DEFAULT NULL,
   `kode_gudang` varchar(45) NOT NULL,
@@ -222,13 +223,13 @@ CREATE TABLE `invmaster` (
 -- Dumping data for table `invmaster`
 --
 
-INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `hrg_jual_total`, `kode_gudang`, `keterangan`) VALUES
-('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 300, 1, 1594450, '478335000.00', 'M', '-'),
-('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 3038, 1, 594594, '1806376572.00', 'A', '23,6CMX33,5CMX31CM'),
-('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 120, 2, 1583780, '190053600.00', 'K', '-'),
-('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 2186, 1, 751351, '1642453286.00', 'M', '-'),
-('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 10, 1, 650000, '6500000.00', 'M', '-'),
-('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 12, 1, 367572, '4410864.00', 'M', '15,5CM X 20,5CM X 18CM');
+INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual_item`, `hrg_jual`, `hrg_jual_total`, `kode_gudang`, `keterangan`) VALUES
+('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 300, 1, 28990, 1594450, '478335000.00', 'M', '-'),
+('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 3038, 1, 99099, 594594, '1806376572.00', 'A', '23,6CMX33,5CMX31CM'),
+('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 120, 2, 263963, 1583780, '190053360.00', 'K', '-'),
+('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 2186, 1, 125225, 751350, '1642451100.00', 'M', '-'),
+('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 10, 1, 65000, 650000, '6500000.00', 'M', '-'),
+('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 12, 1, 30631, 367572, '4410864.00', 'M', '15,5CM X 20,5CM X 18CM');
 
 -- --------------------------------------------------------
 
@@ -276,7 +277,7 @@ CREATE TABLE `jual` (
 --
 
 INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('JL24-00001', '22-05-2024', '07AM', 'IDR', 41000, 10, 45100, 'Belum Lunas', 'Belum Terkirim', '22-05-2024');
+('JL24-00001', '22-05-2024', '07AM', 'IDR', 41000, 10, 45100, 'Lunas', 'Belum Terkirim', '22-05-2024');
 
 -- --------------------------------------------------------
 
@@ -430,7 +431,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(2, 'admin', 'admin@gmail.com', NULL, '$2y$10$USpx3P1NqC/fM3K73jgK8.lkvYTaqRe03.mXYn8.BQhBe/yLdT56G', NULL, '2024-05-04 18:49:44', '2024-05-04 18:49:44');
+(2, 'Admin', 'admin@gmail.com', NULL, '$2y$10$USpx3P1NqC/fM3K73jgK8.lkvYTaqRe03.mXYn8.BQhBe/yLdT56G', NULL, '2024-05-04 18:49:44', '2024-05-04 18:49:44'),
+(3, 'Daniel', 'daniel@gmail.com', NULL, '$2y$10$Bq3mqP6bbcp2NgpQqVzLA.kGO5QwK7FFiBBQEEPMgmD9JYHh0e1ie', NULL, '2024-05-31 04:09:29', '2024-05-31 04:09:29');
 
 --
 -- Indexes for dumped tables
@@ -577,7 +579,7 @@ ALTER TABLE `satuan`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
