@@ -21,7 +21,7 @@ class JualController extends Controller
             $query->where('tanggal', $selectedDate);
         }
 
-        $jual = $query->paginate(5);
+        $jual = $query->orderBy('tanggal', 'desc')->paginate(5);
 
         $customer = Customer::all();
 
@@ -173,7 +173,25 @@ class JualController extends Controller
     public function welcomeJual(){
         $query = Jual::query();
         $transLunasJual = $query->where('lunas', 'Belum Lunas')->count();
-        $transStatusJual = $query->where('status', 'Belum Terkirim')->count();
+
+        $query2 = Jual::query();
+        $transStatusJual = $query2->where('status', 'Belum Terkirim')->count();
         return view('welcome', compact('transLunasJual', 'transStatusJual'));
+    }
+
+    public function belumLunasReport()
+    {
+        $lunas = Jual::where('lunas', 'Belum Lunas')->orderBy('tanggal', 'desc')->paginate(5);
+        $customer = Customer::all();
+
+        return view('report.jualLunas', compact('lunas','customer'));
+    }
+
+    public function belumKirimReport()
+    {
+        $kirim = Jual::where('status', 'Belum Terkirim')->orderBy('tanggal', 'desc')->paginate(5);
+        $customer = Customer::all();
+
+        return view('report.jualKirim', compact('kirim','customer'));
     }
 }

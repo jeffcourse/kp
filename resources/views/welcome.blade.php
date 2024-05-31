@@ -45,7 +45,12 @@
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 text-center">
-                    <div class="card-body">
+                    <div class="card-body" 
+                        @if($transLunas == 0)
+                            style="cursor: not-allowed; pointer-events: none;"
+                        @else
+                            onclick="window.location='{{route('BeliLunas')}}';" style="cursor:pointer;"
+                        @endif>
                         <i class="fas fa-money-bill-alt fa-3x mb-2"></i>
                         <h5 class="card-title">Transaksi Pembelian Belum Lunas</h5>
                         <p class="card-text">{{$transLunas}}</p>
@@ -54,7 +59,12 @@
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 text-center">
-                    <div class="card-body">
+                    <div class="card-body" 
+                        @if($transStatus == 0)
+                            style="cursor: not-allowed; pointer-events: none;"
+                        @else
+                            onclick="window.location='{{route('BeliKirim')}}';" style="cursor:pointer;"
+                        @endif>
                         <i class="fas fa-truck fa-3x mb-2"></i>
                         <h5 class="card-title">Transaksi Pembelian Belum Terkirim</h5>
                         <p class="card-text">{{$transStatus}}</p>
@@ -63,7 +73,12 @@
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 text-center">
-                    <div class="card-body">
+                    <div class="card-body" 
+                        @if($transLunasJual == 0)
+                            style="cursor: not-allowed; pointer-events: none;"
+                        @else
+                            onclick="window.location='{{route('JualLunas')}}';" style="cursor:pointer;"
+                        @endif>
                         <i class="fas fa-hand-holding-usd fa-3x mb-2"></i>
                         <h5 class="card-title">Transaksi Penjualan Belum Lunas</h5>
                         <p class="card-text">{{$transLunasJual}}</p>
@@ -72,7 +87,12 @@
             </div>
             <div class="col-md-4">
                 <div class="card mb-4 text-center">
-                    <div class="card-body">
+                    <div class="card-body" 
+                        @if($transStatusJual == 0)
+                            style="cursor: not-allowed; pointer-events: none;"
+                        @else
+                            onclick="window.location='{{route('JualKirim')}}';" style="cursor:pointer;"
+                        @endif>
                         <i class="fas fa-shipping-fast fa-3x mb-2"></i>
                         <h5 class="card-title">Transaksi Penjualan Belum Terkirim</h5>
                         <p class="card-text">{{$transStatusJual}}</p>
@@ -110,15 +130,6 @@
                     <div class="card-body">
                         <p class="card-text">Kelola transaksi penjualan anda.</p>
                         <a href="{{ route('penjualan') }}" class="btn btn-primary">Manage</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="card mb-4 text-center">
-                    <h5 class="card-header">Reports</h5>
-                    <div class="card-body">
-                        <p class="card-text">Generate reports to analyze your business performance.</p>
-                        <a href="#" class="btn btn-primary">Learn More</a>
                     </div>
                 </div>
             </div>

@@ -52,4 +52,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/updateKirimJual/{no_bukti}', [JualController::class, 'updateKirim'])->name('UpdateKirimJual');
     Route::get('/jualDetail/{no_bukti}', [JualController::class, 'showDetail'])->name('JualDetail');
 
+    Route::get('/report/beliLunas', [BeliController::class, 'belumLunasReport'])->name('BeliLunas');
+    Route::get('/report/beliKirim', [BeliController::class, 'belumKirimReport'])->name('BeliKirim');
+    Route::get('/report/jualLunas', [JualController::class, 'belumLunasReport'])->name('JualLunas');
+    Route::get('/report/jualKirim', [JualController::class, 'belumKirimReport'])->name('JualKirim');
+
 });

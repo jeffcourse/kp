@@ -30,6 +30,7 @@
         <th>Nomor Nota</th>
         <th>Tanggal</th>
         <th>Nama Customer</th>
+        <th>Alamat Kirim</th>
         <th>Mata Uang</th>
         <th>Harga Sub Total</th>
         <th>PPN</th>
@@ -46,6 +47,7 @@
                 <td>{{$j->no_bukti}}</td>
                 <td>{{$j->tanggal}}</td>
                 <td>{{$j->customer->nama_cust}}</td>
+                <td>{{$j->customer->alm_1}}, {{$j->customer->alm_2}}, {{$j->customer->alm_3}}</td>
                 <td>{{$j->mata_uang}}</td>
                 <td>Rp. {{number_format($j->sub_total, 0, ',', '.')}}</td>
                 <td>{{$j->persen_ppn}}%</td>

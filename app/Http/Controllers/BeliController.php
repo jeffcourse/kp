@@ -22,7 +22,7 @@ class BeliController extends Controller
             $query->where('tanggal', $selectedDate);
         }
 
-        $beli = $query->paginate(5);
+        $beli = $query->orderBy('tanggal', 'desc')->paginate(5);
 
         $supplier = Supplier::all();
         $gudang = Gudang::all();
@@ -179,7 +179,27 @@ class BeliController extends Controller
     public function welcomeBeli(){
         $query = Beli::query();
         $transLunas = $query->where('lunas', 'Belum Lunas')->count();
-        $transStatus = $query->where('status', 'Belum Terkirim')->count();
-        return view('welcome', compact('transLunas', 'transStatus'));
+
+        $query2 = Beli::query();
+        $transStatus = $query2->where('status', 'Belum Terkirim')->count();
+        return view('welcome', compact('transLunas','transStatus'));
+    }
+
+    public function belumLunasReport()
+    {
+        $lunas = Beli::where('lunas', 'Belum Lunas')->orderBy('tanggal', 'desc')->paginate(5);
+        $supplier = Supplier::all();
+        $gudang = Gudang::all();
+
+        return view('report.beliLunas', compact('lunas','supplier','gudang'));
+    }
+
+    public function belumKirimReport()
+    {
+        $kirim = Beli::where('status', 'Belum Terkirim')->orderBy('tanggal', 'desc')->paginate(5);
+        $supplier = Supplier::all();
+        $gudang = Gudang::all();
+
+        return view('report.beliKirim', compact('kirim','supplier','gudang'));
     }
 }
