@@ -8,27 +8,43 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .table {
+      border: 2px solid #000000;
+    }
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>thead>tr>th {
+      border: 2px solid black !important;
+    }
+  </style>
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;">
-    <h3 style="display: inline-block; margin-right: 20px;">Master Table</h3>
-    <a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-info">Tambah Barang</a>
-    <h4 style="display: inline-block;">Filter berdasarkan gudang:</h4>
-    <select id="filterGudang" class="form-control" style="width: 150px; display: inline-block;">
-      <option value="All">All</option>
-        @foreach($gudang as $gd)
+<div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
+    <div class="d-flex justify-content-left align-items-center">
+      <h4 style="display: inline-block; margin-right: 20px;">Master Table</h4>
+      <a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-info">Tambah Barang</a>
+    </div>
+    <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
+      <h4 style="display: inline-block;">Filter berdasarkan gudang:</h4>
+      <select id="filterGudang" class="form-control" style="width: 150px; display: inline-block;">
+        <option value="All">All</option>
+          @foreach($gudang as $gd)
             <option value="{{$gd->nama}}">{{$gd->nama}}</option>
-        @endforeach
-    </select>
-    <input style="width: 150px; display: inline-block; margin-left: 10px;" type="text" id="searchItem" class="form-control" placeholder="Cari nama barang">
+          @endforeach
+      </select>
+    </div>
+    <input style="width: 150px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama barang">
 </div><br>
 
 @if(session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 
-<table class="table" style="margin-left: 40px; margin-right: 80px;">
+<div class="table-responsive" style="margin-left: 20px; margin-right: 20px;">
+  <table class="table table-striped table-bordered" style="margin-right: 20px;">
     <thead>
       <tr>
         <th>Kode Barang</th>
@@ -57,13 +73,13 @@
                 <td>{{$m->type->type}}</td>
                 <td>{{$m->packing}}</td>
                 <td>
-                  <div class="input-group">
+                  <div class="input-group" style="width: 100px;">
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-minus" data-id="{{$m->kode_brg}}">-</button>
+                      <button type="button" style="background-color: red; font-weight: bold;" class="btn btn-default btn-minus" data-id="{{$m->kode_brg}}">-</button>
                     </span>
-                    <input type="text" class="form-control input-quantity" value="{{$m->quantity}}" readonly>
+                    <input type="text" style="width: 70px; background-color: yellow;" class="form-control input-quantity" value="{{$m->quantity}}" readonly>
                     <span class="input-group-btn">
-                      <button type="button" class="btn btn-default btn-plus" data-id="{{$m->kode_brg}}">+</button>
+                      <button type="button" style="background-color: blue; font-weight: bold;" class="btn btn-default btn-plus" data-id="{{$m->kode_brg}}">+</button>
                     </span>
                   </div>
                 </td>
@@ -73,7 +89,7 @@
                 <td class="hrg_jual_total">Rp. {{number_format($m->hrg_jual_total, 0, ',', '.')}}</td>
                 <td>{{$m->gudang->nama}}</td>
                 <td>{{$m->keterangan}}</td>
-                <td>
+                <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('master.edit',$m->kode_brg)}}">Edit</a>
                     <form method="POST" action="{{route('master.destroy', $m->kode_brg)}}">
@@ -87,6 +103,7 @@
         @endforeach
     </tbody>
   </table>
+</div>
   <div class="text-center">
     @if($master->hasPages())
       <ul id="pagination" class="pagination">

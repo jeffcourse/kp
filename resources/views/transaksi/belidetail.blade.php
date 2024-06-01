@@ -8,14 +8,26 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .table {
+      border: 2px solid #000000;
+    }
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>thead>tr>th {
+      border: 2px solid black !important;
+    }
+  </style>
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;">
+<div style="margin-left: 20px;">
     <h3 style="display: inline-block; margin-right: 20px;">Detail Pembelian - {{$no_bukti}}</h3>
 </div><br>
 
-<table class="table" style="margin-left: 40px; margin-right: 80px;">
+<div class="table-responsive" style="margin-left: 20px; margin-right: 20px;">
+  <table class="table table-striped table-bordered" style="margin-right: 20px;">
     <thead>
       <tr>
         <th>Kode Barang</th>
@@ -39,5 +51,6 @@
         @endforeach
     </tbody>
   </table>
+</div>
 </div>
 @endsection

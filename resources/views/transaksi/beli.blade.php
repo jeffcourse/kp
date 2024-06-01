@@ -9,22 +9,38 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .table {
+      border: 2px solid #000000;
+    }
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>thead>tr>th {
+      border: 2px solid black !important;
+    }
+  </style>
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;">
-    <h3 style="display: inline-block; margin-right: 20px;">Daftar Pembelian</h3>
-    <a style="margin-right: 20px;" href="{{route('beli.create')}}" class="btn btn-info">Tambah Transaksi</a>
-    <h4 style="display: inline-block;">Filter berdasarkan tanggal:</h4>
-    <input type="text" id="datepicker" class="form-control" style="width: 200px; display: inline-block; margin-left: 10px;" placeholder="dd-mm-yyyy">
-    <button id="allDates" class="btn btn-primary" style="margin-left: 10px;">All Dates</button>
+<div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
+    <div class="d-flex justify-content-left align-items-center">
+        <h4 style="display: inline-block; margin-right: 20px;">Daftar Pembelian</h4>
+        <a style="margin-right: 20px;" href="{{route('beli.create')}}" class="btn btn-info">Tambah Transaksi</a>
+    </div>
+    <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
+        <h4 style="display: inline-block;">Filter berdasarkan tanggal:</h4>
+        <input type="text" id="datepicker" class="form-control" style="width: 150px; display: inline-block; margin-left: 10px;" placeholder="dd-mm-yyyy">
+        <button id="allDates" class="btn btn-primary" style="margin-left: 10px;">All Dates</button>
+    </div>
 </div><br>
 
 @if(session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 
-<table class="table" style="margin-left: 40px; margin-right: 80px;">
+<div class="table-responsive" style="margin-left: 20px; margin-right: 20px;">
+  <table class="table table-striped table-bordered" style="margin-right: 20px;">
     <thead>
       <tr>
         <th>Nomor Nota</th>
@@ -52,10 +68,10 @@
                 <td>Rp. {{number_format($b->sub_total, 0, ',', '.')}}</td>
                 <td>{{$b->persen_ppn}}%</td>
                 <td>Rp. {{number_format($b->total, 0, ',', '.')}}</td>
-                <td><a class='btn {{$b->lunas == "Belum Lunas" ? "btn-danger" : "btn-success"}} btn-update-bayar' href="{{route('UpdateBayar',$b->no_bukti)}}" @if($b->lunas == "Lunas") style="pointer-events: none; cursor: default;" @endif>{{$b->lunas}}</a></td>
-                <td><a class='btn {{$b->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirim',$b->no_bukti)}}" @if($b->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$b->status}}</a></td>
-                <td><a class='btn btn-info' href="{{route('BeliDetail',$b->no_bukti)}}">Details</a></td>
-                <td>
+                <td style="text-align: center;"><a class='btn {{$b->lunas == "Belum Lunas" ? "btn-danger" : "btn-success"}} btn-update-bayar' href="{{route('UpdateBayar',$b->no_bukti)}}" @if($b->lunas == "Lunas") style="pointer-events: none; cursor: default;" @endif>{{$b->lunas}}</a></td>
+                <td style="text-align: center;"><a class='btn {{$b->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirim',$b->no_bukti)}}" @if($b->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$b->status}}</a></td>
+                <td style="text-align: center;"><a class='btn btn-info' href="{{route('BeliDetail',$b->no_bukti)}}">Details</a></td>
+                <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('beli.edit',$b->no_bukti)}}">Edit</a>
                     <form method="POST" action="{{route('beli.destroy', $b->no_bukti)}}">
@@ -69,6 +85,7 @@
         @endforeach
     </tbody>
   </table>
+</div>
   <div class="text-center">
     @if($beli->hasPages())
       <ul id="pagination" class="pagination">

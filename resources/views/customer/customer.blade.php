@@ -8,20 +8,34 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .table {
+      border: 2px solid #000000;
+    }
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>thead>tr>th {
+      border: 2px solid black !important;
+    }
+  </style>
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;" class="col">
-    <h3 style="display: inline-block; margin-right: 20px;">Customer Table</h3>
-    <a href="{{ route('customer.create') }}" class="btn btn-info" style="margin-right: 20px;">Tambah Customer</a>
+<div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
+  <div class="d-flex justify-content-left align-items-center">
+    <h4 style="display: inline-block; margin-right: 20px;">Customer Table</h4>
+    <a href="{{ route('customer.create') }}" class="btn btn-info" style="margin-right: 10px;">Tambah Customer</a>
     <input style="width: 170px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama customer">
+  </div>
 </div><br>
 
 @if(session('status'))
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 
-<table class="table" style="margin-left: 40px; margin-right: 80px;">
+<div class="table-responsive" style="margin-left: 20px; margin-right: 20px;">
+  <table class="table table-striped table-bordered" style="margin-right: 20px;">
     <thead>
       <tr>
         <th>Kode Customer</th>
@@ -50,7 +64,7 @@
                 <td>{{$c->kontak}}</td>
                 <td>{{$c->no_telp}}</td>
                 <td>{{$c->salesPerson->nama_sales}}</td>
-                <td>
+                <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('customer.edit',$c->kode_cust)}}">Edit</a>
                     <form method="POST" action="{{route('customer.destroy',$c->kode_cust)}}">
@@ -64,6 +78,7 @@
         @endforeach
     </tbody>
   </table>
+</div>
   <div class="text-center">
     @if ($customer->hasPages())
       <ul class="pagination">

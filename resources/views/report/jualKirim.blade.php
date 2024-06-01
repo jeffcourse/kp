@@ -8,10 +8,21 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+    .table {
+      border: 2px solid #000000;
+    }
+    .table-bordered>tbody>tr>td,
+    .table-bordered>tbody>tr>th,
+    .table-bordered>thead>tr>td,
+    .table-bordered>thead>tr>th {
+      border: 2px solid black !important;
+    }
+  </style>
 </head>
 
 <div class="mt-5">
-<div style="margin-left: 40px;">
+<div style="margin-left: 20px;">
     <h3 style="display: inline-block; margin-right: 20px;">Daftar Penjualan Belum Terkirim</h3>
 </div><br>
 
@@ -19,7 +30,8 @@
 <div class="alert alert-success">{{session('status')}}</div>
 @endif
 
-<table class="table" style="margin-left: 40px; margin-right: 80px;">
+<div class="table-responsive" style="margin-left: 20px; margin-right: 20px;">
+  <table class="table table-striped table-bordered" style="margin-right: 20px;">
     <thead>
       <tr>
         <th>Nomor Nota</th>
@@ -45,12 +57,13 @@
                 <td>Rp. {{number_format($k->sub_total, 0, ',', '.')}}</td>
                 <td>{{$k->persen_ppn}}%</td>
                 <td>Rp. {{number_format($k->total, 0, ',', '.')}}</td>
-                <td><a class='btn btn-info' href="{{route('JualDetail',$k->no_bukti)}}">Details</a></td>
-                <td><a class='btn {{$k->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirimJual',$k->no_bukti)}}" @if($k->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$k->status}}</a></td>
+                <td style="text-align: center;"><a class='btn btn-info' href="{{route('JualDetail',$k->no_bukti)}}">Details</a></td>
+                <td style="text-align: center;"><a class='btn {{$k->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirimJual',$k->no_bukti)}}" @if($k->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$k->status}}</a></td>
             </tr>
         @endforeach
     </tbody>
   </table>
+</div>
   <div class="text-center">
     @if($kirim->hasPages())
       <ul id="pagination" class="pagination">
