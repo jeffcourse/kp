@@ -19,6 +19,9 @@
     .table-bordered>thead>tr>th {
       border: 2px solid black !important;
     }
+    th{
+        text-align: center;
+    } 
   </style>
 </head>
 
@@ -55,6 +58,7 @@
         <th>Status Pengiriman</th>
         <th>Detail Nota</th>
         <th>Actions</th>
+        <th>Faktur Beli</th>
       </tr>
     </thead>
     <tbody>
@@ -80,6 +84,9 @@
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$b->no_bukti}} - {{$b->tanggal}} ?');">Delete</button>
                     </form>
                   </div>
+                </td>
+                <td style="text-align: center;">
+                    <a class='btn btn-info' href="{{route('BeliPdf',$b->no_bukti)}}">Download</a>  
                 </td>
             </tr>
         @endforeach

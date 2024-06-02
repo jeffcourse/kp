@@ -18,7 +18,7 @@
         <div class="alert alert-success">{{session('success')}}</div>
     @endif
 </div>
-<form action="{{route('login.post')}}" method="POST" class="d-flex flex-column align-items-center" style="max-width: 500px; margin: auto;">
+<form action="{{route('login.post')}}" method="POST" class="d-flex flex-column align-items-center justify-content-center" style="max-width: 500px; margin: auto; height: 75vh;">
   @csrf
   <div class="mb-3 row">
     <label for="name" class="form-label">Username</label>

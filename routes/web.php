@@ -45,12 +45,14 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/updateBayar/{no_bukti}', [BeliController::class, 'updateBayar'])->name('UpdateBayar');
     Route::get('/updateKirim/{no_bukti}', [BeliController::class, 'updateKirim'])->name('UpdateKirim');
     Route::get('/beliDetail/{no_bukti}', [BeliController::class, 'showDetail'])->name('BeliDetail');
+    Route::get('/fakturBeli/{no_bukti}', [BeliController::class, 'cetak_pdf'])->name('BeliPdf');
 
     Route::resource('jual',JualController::class);
     Route::get('/penjualan', [JualController::class, 'jual'])->name('penjualan');
     Route::get('/updateBayarJual/{no_bukti}', [JualController::class, 'updateBayar'])->name('UpdateBayarJual');
     Route::get('/updateKirimJual/{no_bukti}', [JualController::class, 'updateKirim'])->name('UpdateKirimJual');
     Route::get('/jualDetail/{no_bukti}', [JualController::class, 'showDetail'])->name('JualDetail');
+    Route::get('/invoice/{no_bukti}', [JualController::class, 'cetak_pdf'])->name('JualPdf');
 
     Route::get('/report/beliLunas', [BeliController::class, 'belumLunasReport'])->name('BeliLunas');
     Route::get('/report/beliKirim', [BeliController::class, 'belumKirimReport'])->name('BeliKirim');

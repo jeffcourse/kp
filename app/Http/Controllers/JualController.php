@@ -9,6 +9,7 @@ use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use PDF;
 
 class JualController extends Controller
 {
@@ -193,5 +194,20 @@ class JualController extends Controller
         $customer = Customer::all();
 
         return view('report.jualKirim', compact('kirim','customer'));
+    }
+
+    public function cetak_pdf($no_bukti)
+    {
+        $jual = Jual::find($no_bukti);
+        $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
+        $customer = Customer::all();
+        $satuan = Satuan::all();
+ 
+        $data = $jual;
+        $dataDetail = $jualDetail;
+
+    	$pdf = PDF::loadview('transaksi.jualpdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer, 'satuan'=>$satuan]);
+    	$pdf->setPaper('A4', 'landscape');
+    	return $pdf->stream();
     }
 }

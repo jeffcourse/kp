@@ -18,6 +18,9 @@
     .table-bordered>thead>tr>th {
       border: 2px solid black !important;
     }
+    th{
+        text-align: center;
+    } 
   </style>
 </head>
 

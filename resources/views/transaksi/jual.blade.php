@@ -19,6 +19,9 @@
     .table-bordered>thead>tr>th {
       border: 2px solid black !important;
     }
+    th{
+        text-align: center;
+    } 
   </style>
 </head>
 
@@ -55,6 +58,7 @@
         <th>Status Pengiriman</th>
         <th>Detail Nota</th>
         <th>Actions</th>
+        <th>Invoice</th>
       </tr>
     </thead>
     <tbody>
@@ -80,6 +84,9 @@
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$j->no_bukti}} - {{$j->tanggal}} ?');">Delete</button>
                     </form>
                   </div>
+                </td>
+                <td style="text-align: center;">
+                    <a class='btn btn-info' href="{{route('JualPdf',$j->no_bukti)}}">Download</a>  
                 </td>
             </tr>
         @endforeach

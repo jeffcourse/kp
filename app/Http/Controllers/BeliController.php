@@ -10,6 +10,7 @@ use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use PDF;
 
 class BeliController extends Controller
 {
@@ -201,5 +202,21 @@ class BeliController extends Controller
         $gudang = Gudang::all();
 
         return view('report.beliKirim', compact('kirim','supplier','gudang'));
+    }
+
+    public function cetak_pdf($no_bukti)
+    {
+        $beli = Beli::find($no_bukti);
+        $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
+        $supplier = Supplier::all();
+        $gudang = Gudang::all();
+        $satuan = Satuan::all();
+
+        $data = $beli;
+        $dataDetail = $beliDetail;
+ 
+    	$pdf = PDF::loadview('transaksi.belipdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'supplier'=>$supplier, 'gudang'=>$gudang, 'satuan'=>$satuan]);
+        $pdf->setPaper('A4', 'landscape');
+    	return $pdf->stream();
     }
 }
