@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 31, 2024 at 12:46 PM
+-- Generation Time: Jun 02, 2024 at 09:00 AM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -30,6 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `beli` (
   `no_bukti` varchar(45) NOT NULL,
   `tanggal` varchar(45) DEFAULT NULL,
+  `jatuh_tempo` varchar(45) NOT NULL,
   `kode_supp` varchar(45) NOT NULL,
   `mata_uang` varchar(45) DEFAULT NULL,
   `kirim_gudang` varchar(45) NOT NULL,
@@ -38,17 +39,18 @@ CREATE TABLE `beli` (
   `total` float DEFAULT NULL,
   `lunas` varchar(45) DEFAULT NULL,
   `status` varchar(45) DEFAULT NULL,
-  `create_time` varchar(45) DEFAULT NULL
+  `create_time` varchar(45) DEFAULT NULL,
+  `author` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `beli`
 --
 
-INSERT INTO `beli` (`no_bukti`, `tanggal`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('BL24-00001', '22-05-2024', 'ANEKA', 'IDR', 'M', 1212000, 10, 1333200, 'Lunas', 'Belum Terkirim', '28-05-2024'),
-('BL24-00002', '28-05-2024', 'CLEANBEE', 'IDR', 'M', 728000, 10, 800800, 'Belum Lunas', 'Belum Terkirim', '28-05-2024'),
-('BL24-00003', '28-05-2024', 'ANEKA', 'IDR', 'M', 1080000, 10, 1188000, 'Belum Lunas', 'Belum Terkirim', '28-05-2024');
+INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`, `author`) VALUES
+('BL24-00001', '22-05-2024', '22-06-2024', 'ANEKA', 'IDR', 'M', 1212000, 10, 1333200, 'Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel'),
+('BL24-00002', '28-05-2024', '28-06-2024', 'CLEANBEE', 'IDR', 'M', 728000, 10, 800800, 'Belum Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel'),
+('BL24-00003', '28-05-2024', '28-06-2024', 'ANEKA', 'IDR', 'M', 1080000, 10, 1188000, 'Belum Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel');
 
 -- --------------------------------------------------------
 
@@ -262,6 +264,7 @@ INSERT INTO `invtype` (`kode`, `type`) VALUES
 CREATE TABLE `jual` (
   `no_bukti` varchar(45) NOT NULL,
   `tanggal` varchar(45) DEFAULT NULL,
+  `jatuh_tempo` varchar(45) NOT NULL,
   `kode_cust` varchar(45) NOT NULL,
   `mata_uang` varchar(45) DEFAULT NULL,
   `sub_total` float DEFAULT NULL,
@@ -269,15 +272,16 @@ CREATE TABLE `jual` (
   `total` float DEFAULT NULL,
   `lunas` varchar(45) DEFAULT NULL,
   `status` varchar(45) NOT NULL,
-  `create_time` varchar(45) DEFAULT NULL
+  `create_time` varchar(45) DEFAULT NULL,
+  `author` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `jual`
 --
 
-INSERT INTO `jual` (`no_bukti`, `tanggal`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`) VALUES
-('JL24-00001', '22-05-2024', '07AM', 'IDR', 41000, 10, 45100, 'Lunas', 'Belum Terkirim', '22-05-2024');
+INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`, `author`) VALUES
+('JL24-00001', '22-05-2024', '22-06-2024', '07AM', 'IDR', 41000, 10, 45100, 'Lunas', 'Belum Terkirim', '22-05-2024', 'Budi');
 
 -- --------------------------------------------------------
 

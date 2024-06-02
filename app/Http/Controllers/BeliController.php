@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use PDF;
+use Illuminate\Support\Facades\Auth;
 
 class BeliController extends Controller
 {
@@ -60,6 +61,8 @@ class BeliController extends Controller
         $data->lunas = 'Belum Lunas';
         $data->status = 'Belum Terkirim';
         $data->create_time = Carbon::now()->format('d-m-Y');
+        $data->author = auth()->user()->name;
+        $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
         $data->save();
 
         $kode_brg = $request->get('kode_brg');
@@ -114,6 +117,7 @@ class BeliController extends Controller
         $objBeli->lunas = $request->get('select_lunas');
         $objBeli->status = $request->get('select_status');
         $objBeli->create_time = Carbon::now()->format('d-m-Y');
+        $objBeli->jatuh_tempo = Carbon::parse($objBeli->tanggal)->addMonth()->format('d-m-Y');
         $objBeli->save();
 
         $kode_brg = $request->get('kode_brg');

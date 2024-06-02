@@ -57,8 +57,8 @@
         <th>Status Pembayaran</th>
         <th>Status Pengiriman</th>
         <th>Detail Nota</th>
-        <th>Actions</th>
         <th>Invoice</th>
+        <th>Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -76,6 +76,9 @@
                 <td style="text-align: center;"><a class='btn {{$j->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirimJual',$j->no_bukti)}}" @if($j->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$j->status}}</a></td>
                 <td style="text-align: center;"><a class='btn btn-info' href="{{route('JualDetail',$j->no_bukti)}}">Details</a></td>
                 <td style="text-align: center;">
+                    <a class='btn btn-info' href="{{route('JualPdf',$j->no_bukti)}}">Lihat Invoice</a>  
+                </td>
+                <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('jual.edit',$j->no_bukti)}}">Edit</a>
                     <form method="POST" action="{{route('jual.destroy',$j->no_bukti)}}">
@@ -84,9 +87,6 @@
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$j->no_bukti}} - {{$j->tanggal}} ?');">Delete</button>
                     </form>
                   </div>
-                </td>
-                <td style="text-align: center;">
-                    <a class='btn btn-info' href="{{route('JualPdf',$j->no_bukti)}}">Download</a>  
                 </td>
             </tr>
         @endforeach

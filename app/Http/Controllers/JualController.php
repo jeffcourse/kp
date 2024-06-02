@@ -56,6 +56,8 @@ class JualController extends Controller
         $data->lunas = 'Belum Lunas';
         $data->status = 'Belum Terkirim';
         $data->create_time = Carbon::now()->format('d-m-Y');
+        $data->author = auth()->user()->name;
+        $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
         $data->save();
 
         $kode_brg = $request->get('kode_brg');
@@ -108,6 +110,7 @@ class JualController extends Controller
         $objJual->lunas = $request->get('select_lunas');
         $objJual->status = $request->get('select_status');
         $objJual->create_time = Carbon::now()->format('d-m-Y');
+        $objJual->jatuh_tempo = Carbon::parse($objJual->tanggal)->addMonth()->format('d-m-Y');
         $objJual->save();
 
         $kode_brg = $request->get('kode_brg');

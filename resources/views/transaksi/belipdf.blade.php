@@ -26,14 +26,19 @@
         <td style="text-align: right;">{{$data->no_bukti}}</td> 
     </tr>    
     <tr>
-        <td>KOTA DENPASAR, BALI 80119</td>
+        <td colspan="8">KOTA DENPASAR, BALI 80119</td>
+        <td style="text-align: right;">{{$data->jatuh_tempo}}</td>
     </tr><br>
     <tr>
         <td colspan="8">
             <h4>{{$data->supplier->nama_supp}}</h4>
         </td>
+        <td style="text-align: center;">{{$data->author}}</td>
+    </tr>
+    <tr>
+        <td colspan="8"></td>
         <td style="font-weight: bold; text-align: center;">*FAKTUR BELI*</td>
-    </tr><br>
+    </tr>
     <tr class="table-tr">
     <td class="table-td" colspan="9">
     <table class="table table-bordered">
