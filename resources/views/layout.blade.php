@@ -39,6 +39,9 @@
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('master') }}">Master</a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('gudang') }}">Gudang</a>
+            </li>
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" id="pembayaranDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Transaksi</a>
               <div class="dropdown-menu" aria-labelledby="pembayaranDropdown">
@@ -51,6 +54,9 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('customer') }}">Customer</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{ route('salesPerson') }}">Sales Person</a>
             </li>
             @auth
             <li class="nav-item">

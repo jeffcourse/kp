@@ -8,6 +8,8 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\JualController;
 use App\Http\Controllers\BeliController;
+use App\Http\Controllers\SalesController;
+use App\Http\Controllers\GudangController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +41,12 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('customer',CustomerController::class);
     Route::get('/customer', [CustomerController::class, 'customer'])->name('customer');
+
+    Route::resource('salesPerson',SalesController::class);
+    Route::get('/salesPerson',[SalesController::class, 'salesPerson'])->name('salesPerson');
+
+    Route::resource('gudang',GudangController::class);
+    Route::get('/gudang',[GudangController::class, 'gudang'])->name('gudang');
 
     Route::resource('beli',BeliController::class);
     Route::get('/pembelian', [BeliController::class, 'beli'])->name('pembelian');

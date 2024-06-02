@@ -32,7 +32,7 @@
     </div>
     <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
       <h4 style="display: inline-block;">Filter berdasarkan gudang:</h4>
-      <select id="filterGudang" class="form-control" style="width: 150px; display: inline-block;">
+      <select id="filterGudang" class="form-control" style="width: 200px; display: inline-block;">
         <option value="All">All</option>
           @foreach($gudang as $gd)
             <option value="{{$gd->nama}}">{{$gd->nama}}</option>
