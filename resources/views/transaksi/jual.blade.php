@@ -48,6 +48,7 @@
       <tr>
         <th>Nomor Nota</th>
         <th>Tanggal</th>
+        <th>Jatuh Tempo</th>
         <th>Nama Customer</th>
         <th>Alamat Kirim</th>
         <th>Mata Uang</th>
@@ -66,6 +67,7 @@
             <tr id="tr_{{$j->no_bukti}}">
                 <td>{{$j->no_bukti}}</td>
                 <td>{{$j->tanggal}}</td>
+                <td>{{$j->jatuh_tempo}}</td>
                 <td>{{$j->customer->nama_cust}}</td>
                 <td>{{$j->customer->alm_1}}, {{$j->customer->alm_2}}, {{$j->customer->alm_3}}</td>
                 <td>{{$j->mata_uang}}</td>
