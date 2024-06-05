@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 02, 2024 at 09:00 AM
+-- Generation Time: Jun 05, 2024 at 06:57 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -32,7 +32,6 @@ CREATE TABLE `beli` (
   `tanggal` varchar(45) DEFAULT NULL,
   `jatuh_tempo` varchar(45) NOT NULL,
   `kode_supp` varchar(45) NOT NULL,
-  `mata_uang` varchar(45) DEFAULT NULL,
   `kirim_gudang` varchar(45) NOT NULL,
   `sub_total` float DEFAULT NULL,
   `persen_ppn` int DEFAULT NULL,
@@ -47,10 +46,10 @@ CREATE TABLE `beli` (
 -- Dumping data for table `beli`
 --
 
-INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `mata_uang`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`, `author`) VALUES
-('BL24-00001', '22-05-2024', '22-06-2024', 'ANEKA', 'IDR', 'M', 1212000, 10, 1333200, 'Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel'),
-('BL24-00002', '28-05-2024', '28-06-2024', 'CLEANBEE', 'IDR', 'M', 728000, 10, 800800, 'Belum Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel'),
-('BL24-00003', '28-05-2024', '28-06-2024', 'ANEKA', 'IDR', 'M', 1080000, 10, 1188000, 'Belum Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel');
+INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `kirim_gudang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`, `author`) VALUES
+('BL24-00001', '22-05-2024', '22-06-2024', 'ANEKA', 'M', 1212000, 10, 1333200, 'Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel'),
+('BL24-00002', '28-05-2024', '28-06-2024', 'CLEANBEE', 'M', 728000, 10, 800800, 'Belum Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel'),
+('BL24-00003', '28-05-2024', '28-06-2024', 'ANEKA', 'M', 1080000, 10, 1188000, 'Belum Lunas', 'Belum Terkirim', '28-05-2024', 'Daniel');
 
 -- --------------------------------------------------------
 
@@ -157,24 +156,26 @@ INSERT INTO `invdivisi` (`kode`, `divisi`) VALUES
 
 CREATE TABLE `invgudang` (
   `kode` varchar(45) NOT NULL,
-  `nama` varchar(45) DEFAULT NULL
+  `nama` varchar(45) DEFAULT NULL,
+  `alamat` varchar(500) NOT NULL,
+  `keterangan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `invgudang`
 --
 
-INSERT INTO `invgudang` (`kode`, `nama`) VALUES
-('A', 'BARANG BAIK'),
-('B', 'TITIP DI GUDANG LUAR'),
-('E', 'BARANG EXPIRED'),
-('F', 'BARANG FREE'),
-('K', 'GUDANG KUTA'),
-('M', 'GUDANG MAHE'),
-('S', 'SAMPLE'),
-('T', 'TOKO (NISSIN)'),
-('X', 'BARANG RUSAK/EXP'),
-('Z', 'SELISIH');
+INSERT INTO `invgudang` (`kode`, `nama`, `alamat`, `keterangan`) VALUES
+('A', 'BARANG BAIK', '-', '-'),
+('B', 'TITIP DI GUDANG LUAR', '-', '-'),
+('E', 'BARANG EXPIRED', '-', '-'),
+('F', 'BARANG FREE', '-', '-'),
+('K', 'GUDANG KUTA', '-', '-'),
+('M', 'GUDANG MAHE', 'Jl. Cargo Permai No. 22, Ubung, Denpasar Utara, Kota Denpasar', '-'),
+('S', 'SAMPLE', '-', '-'),
+('T', 'TOKO (NISSIN)', '-', '-'),
+('X', 'BARANG RUSAK/EXP', '-', '-'),
+('Z', 'SELISIH', '-', '-');
 
 -- --------------------------------------------------------
 
@@ -214,9 +215,7 @@ CREATE TABLE `invmaster` (
   `packing` varchar(45) NOT NULL,
   `quantity` int NOT NULL,
   `id_satuan` int NOT NULL,
-  `hrg_jual_item` float NOT NULL,
   `hrg_jual` float NOT NULL,
-  `hrg_jual_total` decimal(18,2) DEFAULT NULL,
   `kode_gudang` varchar(45) NOT NULL,
   `keterangan` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -225,13 +224,13 @@ CREATE TABLE `invmaster` (
 -- Dumping data for table `invmaster`
 --
 
-INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual_item`, `hrg_jual`, `hrg_jual_total`, `kode_gudang`, `keterangan`) VALUES
-('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 300, 1, 28990, 1594450, '478335000.00', 'M', '-'),
-('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 3038, 1, 99099, 594594, '1806376572.00', 'A', '23,6CMX33,5CMX31CM'),
-('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 120, 2, 263963, 1583780, '190053360.00', 'K', '-'),
-('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 2186, 1, 125225, 751350, '1642451100.00', 'M', '-'),
-('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 10, 1, 65000, 650000, '6500000.00', 'M', '-'),
-('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 12, 1, 30631, 367572, '4410864.00', 'M', '15,5CM X 20,5CM X 18CM');
+INSERT INTO `invmaster` (`kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
+('A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 300, 1, 1594450, 'M', '-'),
+('A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 3038, 1, 594594, 'A', '23,6CMX33,5CMX31CM'),
+('A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 120, 2, 1583780, 'K', '-'),
+('A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 2186, 1, 751350, 'M', '-'),
+('A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 10, 1, 650000, 'M', '-'),
+('A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 12, 1, 367572, 'M', '15,5CM X 20,5CM X 18CM');
 
 -- --------------------------------------------------------
 
@@ -266,7 +265,6 @@ CREATE TABLE `jual` (
   `tanggal` varchar(45) DEFAULT NULL,
   `jatuh_tempo` varchar(45) NOT NULL,
   `kode_cust` varchar(45) NOT NULL,
-  `mata_uang` varchar(45) DEFAULT NULL,
   `sub_total` float DEFAULT NULL,
   `persen_ppn` int DEFAULT NULL,
   `total` float DEFAULT NULL,
@@ -280,8 +278,9 @@ CREATE TABLE `jual` (
 -- Dumping data for table `jual`
 --
 
-INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `mata_uang`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`, `author`) VALUES
-('JL24-00001', '22-05-2024', '22-06-2024', '07AM', 'IDR', 41000, 10, 45100, 'Lunas', 'Belum Terkirim', '22-05-2024', 'Budi');
+INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `sub_total`, `persen_ppn`, `total`, `lunas`, `status`, `create_time`, `author`) VALUES
+('JL24-00001', '22-05-2024', '22-06-2024', '07AM', 41000, 10, 45100, 'Lunas', 'Belum Terkirim', '22-05-2024', 'Budi'),
+('JL24-00002', '05-06-2024', '05-07-2024', '07AM', 300000, 10, 330000, 'Belum Lunas', 'Belum Terkirim', '06-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -305,7 +304,9 @@ CREATE TABLE `jual_dtl` (
 
 INSERT INTO `jual_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`) VALUES
 ('JL24-00001', 'WY100000005', 'SRM Cookies Chocolate Chips', 2, 4, 18000, 36000),
-('JL24-00001', 'WY100000085', 'SRM Slice Black Olives Greci I', 1, 4, 5000, 5000);
+('JL24-00001', 'WY100000085', 'SRM Slice Black Olives Greci I', 1, 4, 5000, 5000),
+('JL24-00002', 'X005', 'XXX', 10, 1, 15000, 150000),
+('JL24-00002', 'X007', 'YYY', 10, 1, 15000, 150000);
 
 -- --------------------------------------------------------
 
@@ -436,7 +437,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
 (2, 'Admin', 'admin@gmail.com', NULL, '$2y$10$USpx3P1NqC/fM3K73jgK8.lkvYTaqRe03.mXYn8.BQhBe/yLdT56G', NULL, '2024-05-04 18:49:44', '2024-05-04 18:49:44'),
-(3, 'Daniel', 'daniel@gmail.com', NULL, '$2y$10$Bq3mqP6bbcp2NgpQqVzLA.kGO5QwK7FFiBBQEEPMgmD9JYHh0e1ie', NULL, '2024-05-31 04:09:29', '2024-05-31 04:09:29');
+(3, 'Daniel', 'daniel@gmail.com', NULL, '$2y$10$Bq3mqP6bbcp2NgpQqVzLA.kGO5QwK7FFiBBQEEPMgmD9JYHh0e1ie', NULL, '2024-05-31 04:09:29', '2024-05-31 04:09:29'),
+(4, 'Budi', 'budi@gmail.com', NULL, '$2y$10$XU.XNpeG1JU3Lg0VMd0yxOc68xszgtuNlxtRy.AIhxZvJU7g573E6', NULL, '2024-06-02 09:17:44', '2024-06-02 09:17:44');
 
 --
 -- Indexes for dumped tables
@@ -583,7 +585,7 @@ ALTER TABLE `satuan`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables

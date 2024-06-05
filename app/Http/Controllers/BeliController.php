@@ -53,7 +53,6 @@ class BeliController extends Controller
         $data->no_bukti = $request->get('no_bukti');
         $data->tanggal = $request->get('datepicker');
         $data->kode_supp = $request->get('select_supplier');
-        $data->mata_uang = $request->get('mata_uang');
         $data->kirim_gudang = $request->get('select_gudang');
         $data->sub_total = $request->get('sub_total');
         $data->persen_ppn = $request->get('persen_ppn');
@@ -109,7 +108,6 @@ class BeliController extends Controller
         $objBeli->no_bukti = $request->get('no_bukti');
         $objBeli->tanggal = $request->get('datepicker');
         $objBeli->kode_supp = $request->get('select_supplier');
-        $objBeli->mata_uang = $request->get('mata_uang');
         $objBeli->kirim_gudang = $request->get('select_gudang');
         $objBeli->sub_total = $request->get('sub_total');
         $objBeli->persen_ppn = $request->get('persen_ppn');

@@ -50,7 +50,6 @@
         <th>Tanggal</th>
         <th>Jatuh Tempo</th>
         <th>Nama Supplier</th>
-        <th>Mata Uang</th>
         <th>Kirim Gudang</th>
         <th>Harga Sub Total</th>
         <th>PPN</th>
@@ -69,7 +68,6 @@
                 <td>{{$b->tanggal}}</td>
                 <td>{{$b->jatuh_tempo}}</td>
                 <td>{{$b->supplier->nama_supp}}</td>
-                <td>{{$b->mata_uang}}</td>
                 <td>{{$b->gudang->nama}}</td>
                 <td>Rp. {{number_format($b->sub_total, 0, ',', '.')}}</td>
                 <td>{{$b->persen_ppn}}%</td>
@@ -82,7 +80,7 @@
                 </td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('beli.edit',$b->no_bukti)}}">Edit</a>
+                    {{--<a class='btn btn-info' href="{{route('beli.edit',$b->no_bukti)}}">Edit</a>--}}
                     <form method="POST" action="{{route('beli.destroy', $b->no_bukti)}}">
                       @csrf
                       @method('DELETE')

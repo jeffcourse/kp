@@ -26,6 +26,8 @@ class GudangController extends Controller
         $data = new Gudang();
         $data->kode = $request->get('kode');
         $data->nama = $request->get('nama');
+        $data->alamat = $request->get('alamat');
+        $data->keterangan = $request->get('keterangan');
         $data->save();
         return redirect()->route('gudang')->with('status','Hooray!! Your new item is already inserted');
     }
@@ -45,6 +47,8 @@ class GudangController extends Controller
         $objGudang = Gudang::find($kode);
         $objGudang->kode = $request->get('kode');
         $objGudang->nama = $request->get('nama');
+        $objGudang->alamat = $request->get('alamat');
+        $objGudang->keterangan = $request->get('keterangan');
         $objGudang->save();
         return redirect()->route('gudang')->with('status','Your item is up-to-date');
     }

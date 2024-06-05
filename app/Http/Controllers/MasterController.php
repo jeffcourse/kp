@@ -63,9 +63,7 @@ class MasterController extends Controller
         $data->packing = $request->get('packing');
         $data->quantity = $request->get('quantity');
         $data->id_satuan = $request->get('select_satuan');
-        $data->hrg_jual_item = $request->get('hrg_jual_item'); 
         $data->hrg_jual = $request->get('hrg_jual');
-        $data->hrg_jual_total = $request->get('hrg_jual_total');
         $data->kode_gudang = $request->get('select_gudang');
         $data->keterangan = $request->get('keterangan');
         $data->save();
@@ -98,9 +96,7 @@ class MasterController extends Controller
         $objMaster->packing = $request->get('packing');
         $objMaster->quantity = $request->get('quantity');
         $objMaster->id_satuan = $request->get('select_satuan');
-        $objMaster->hrg_jual_item = $request->get('hrg_jual_item');
         $objMaster->hrg_jual = $request->get('hrg_jual');
-        $objMaster->hrg_jual_total = $request->get('hrg_jual_total');
         $objMaster->kode_gudang = $request->get('select_gudang');
         $objMaster->keterangan = $request->get('keterangan');
         $objMaster->save();
@@ -125,12 +121,12 @@ class MasterController extends Controller
     {
         $totalProducts = Master::count();
 
-        $totalPrice = Master::sum('hrg_jual_total');
+        $totalPrice = Master::sum(DB::raw('hrg_jual * quantity'));
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
     }
 
-    public function updateQuantity(Request $request)
+    /*public function updateQuantity(Request $request)
     {
         $id = $request->input('id');
         $quantity = $request->input('quantity');
@@ -145,5 +141,5 @@ class MasterController extends Controller
             'success' => true,
             'hrg_jual_total' => $master->hrg_jual_total
         ]);
-    }
+    }*/
 }

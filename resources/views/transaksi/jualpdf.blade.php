@@ -49,34 +49,26 @@
         <th style="text-align: center;">Nama Barang</th>
         <th style="text-align: center;">Satuan</th>
         <th style="text-align: center;">Harga Per Unit</th>
-        <th style="text-align: center;">Diskon</th>
-        <th style="text-align: center;">Net Sales</th>
       </tr>
       @foreach($dataDetail as $detail)
       <tr>
-        <td style="width: 130px;">{{$detail->kode_brg}}</td>
-        <td>{{$detail->qty_order}}</td>
-        <td style="width: 220px;">{{$detail->nama_brg}}</td>
+        <td style="width: 180px;">{{$detail->kode_brg}}</td>
+        <td style="width: 180px;">{{$detail->qty_order}}</td>
+        <td style="width: 270px;">{{$detail->nama_brg}}</td>
         <td>{{$detail->satuan->satuan}}</td>
-        <td style="width: 150px;">Rp. {{number_format($detail->hrg_per_unit, 0, ',', '.')}}</td>
-        <td style="width: 110px;">0,00%</td>
-        <td style="width: 125px;">Rp. 0</td>
+        <td style="width: 180px;">Rp. {{number_format($detail->hrg_per_unit, 0, ',', '.')}}</td>
       </tr>
       @endforeach
       <tr>
-        <td colspan="2">Ordered by:</td>
+        <td colspan="1">Ordered by:</td>
         <td>Received by:</td>
-        <td colspan="2" rowspan="4">Penerima:</td>
+        <td colspan="1" rowspan="3">Penerima:</td>
         <td>SUBTOTAL</td>
         <td>Rp. {{number_format($data->sub_total, 0, ',', '.')}}</td>
       </tr>
       <tr>
-        <td colspan="2" rowspan="3">Disetujui:</td>
-        <td rowspan="3">Pengirim:</td>
-        <td>Disc</td>
-        <td>0,00%</td> 
-      </tr>
-      <tr>
+        <td colspan="1" rowspan="2">Disetujui:</td>
+        <td rowspan="2">Pengirim:</td>
         <td>PPN</td>
         <td>{{$data->persen_ppn}}%</td>
       </tr>

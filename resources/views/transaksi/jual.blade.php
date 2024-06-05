@@ -51,7 +51,6 @@
         <th>Jatuh Tempo</th>
         <th>Nama Customer</th>
         <th>Alamat Kirim</th>
-        <th>Mata Uang</th>
         <th>Harga Sub Total</th>
         <th>PPN</th>
         <th>Harga Total</th>
@@ -70,7 +69,6 @@
                 <td>{{$j->jatuh_tempo}}</td>
                 <td>{{$j->customer->nama_cust}}</td>
                 <td>{{$j->customer->alm_1}}, {{$j->customer->alm_2}}, {{$j->customer->alm_3}}</td>
-                <td>{{$j->mata_uang}}</td>
                 <td>Rp. {{number_format($j->sub_total, 0, ',', '.')}}</td>
                 <td>{{$j->persen_ppn}}%</td>
                 <td>Rp. {{number_format($j->total, 0, ',', '.')}}</td>
@@ -82,7 +80,7 @@
                 </td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('jual.edit',$j->no_bukti)}}">Edit</a>
+                    {{--<a class='btn btn-info' href="{{route('jual.edit',$j->no_bukti)}}">Edit</a>--}}
                     <form method="POST" action="{{route('jual.destroy',$j->no_bukti)}}">
                       @csrf
                       @method('DELETE')

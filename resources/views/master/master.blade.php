@@ -58,9 +58,7 @@
         <th>Packing</th>
         <th>Quantity</th>
         <th>Satuan</th>
-        <th>Harga Jual Per Item</th>
-        <th>Harga Jual Per Pack</th>
-        <th>Harga Jual Total</th>
+        <th>Harga Jual</th>
         <th>Gudang</th>
         <th>Keterangan</th>
         <th>Actions</th>
@@ -75,21 +73,9 @@
                 <td>{{$m->jenis->jenis}}</td>
                 <td>{{$m->type->type}}</td>
                 <td>{{$m->packing}}</td>
-                <td>
-                  <div class="input-group" style="width: 100px;">
-                    <span class="input-group-btn">
-                      <button type="button" style="background-color: red; font-weight: bold;" class="btn btn-default btn-minus" data-id="{{$m->kode_brg}}">-</button>
-                    </span>
-                    <input type="text" style="width: 70px; background-color: yellow;" class="form-control input-quantity" value="{{$m->quantity}}" readonly>
-                    <span class="input-group-btn">
-                      <button type="button" style="background-color: blue; font-weight: bold;" class="btn btn-default btn-plus" data-id="{{$m->kode_brg}}">+</button>
-                    </span>
-                  </div>
-                </td>
+                <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
-                <td>Rp. {{number_format($m->hrg_jual_item, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($m->hrg_jual, 0, ',', '.')}}</td>
-                <td class="hrg_jual_total">Rp. {{number_format($m->hrg_jual_total, 0, ',', '.')}}</td>
                 <td>{{$m->gudang->nama}}</td>
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
@@ -190,7 +176,7 @@
 
     updateTableData(1);
         
-    function updateQuantity(id, increment){
+    /*function updateQuantity(id, increment){
       var quantityInput = $('#tr_' + id + ' .input-quantity');
       var currentQuantity = parseInt(quantityInput.val());
       var newQuantity = currentQuantity + increment;
@@ -222,7 +208,7 @@
     $(document).on('click', '.btn-plus', function(){
       var id = $(this).data('id');
       updateQuantity(id, 1);
-    });
+    });*/
   });
 </script>
 @endsection

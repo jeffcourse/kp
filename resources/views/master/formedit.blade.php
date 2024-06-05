@@ -58,16 +58,8 @@
     </select>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputHargaJual">Harga Jual Per Item</label>
-    <input type="number" name="hrg_jual_item" class="form-control hrg_jual_item" id="hrg_jual_item" value="{{$data->hrg_jual_item}}" placeholder="Masukkan Harga Jual Per Item" required>
-  </div><br>
-  <div class="form-group">
     <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
-    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual Per Pack" readonly>
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputHargaJualTotal">Harga Jual Total</label>
-    <input type="number" name="hrg_jual_total" class="form-control" id="hrg_jual_total" value="{{$data->hrg_jual_total}}" placeholder="Masukkan Harga Jual Total" readonly>
+    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual" readonly>
   </div><br>
   <div class="form-group">
     <label for="exampleInputGudangBarang">Gudang</label>
@@ -90,7 +82,7 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-  $(document).ready(function (){
+  /*$(document).ready(function (){
         function calculateHargaPack(){
             var packing = $('#packing').val();
             var packNum = parseInt(packing.split('x')[0]);
@@ -116,6 +108,6 @@
         $(document).on('input', '.packing, .quantity, .hrg_jual_item', function (){
             calculateHargaTotal();
         });
-  });
+  });*/
 </script>
 @endsection

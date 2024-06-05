@@ -49,7 +49,6 @@ class JualController extends Controller
         $data->no_bukti = $request->get('no_bukti');
         $data->tanggal = $request->get('datepicker');
         $data->kode_cust = $request->get('select_customer');
-        $data->mata_uang = $request->get('mata_uang');
         $data->sub_total = $request->get('sub_total');
         $data->persen_ppn = $request->get('persen_ppn');
         $data->total = $request->get('total'); 
@@ -103,7 +102,6 @@ class JualController extends Controller
         $objJual->no_bukti = $request->get('no_bukti');
         $objJual->tanggal = $request->get('datepicker');
         $objJual->kode_cust = $request->get('select_customer');
-        $objJual->mata_uang = $request->get('mata_uang');
         $objJual->sub_total = $request->get('sub_total');
         $objJual->persen_ppn = $request->get('persen_ppn');
         $objJual->total = $request->get('total');

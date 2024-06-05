@@ -22,7 +22,7 @@
         text-align: center;
     } 
     .table-container{
-        width: 420px;
+        width: 720px;
     }
   </style>
 </head>
@@ -43,8 +43,10 @@
   <table class="table table-striped table-bordered" style="margin-right: 20px;">
     <thead>
       <tr>
-        <th style="width: 100px;">Kode</th>
-        <th style="width: 220px;">Nama</th>
+        <th style="width: 80px;">Kode</th>
+        <th style="width: 170px;">Nama</th>
+        <th style="width: 200px;">Alamat</th>
+        <th style="width: 170px;">Keterangan</th>
         <th style="width: 100px;">Actions</th>
       </tr>
     </thead>
@@ -53,6 +55,8 @@
             <tr id="tr_{{$g->kode}}">
                 <td>{{$g->kode}}</td>
                 <td>{{$g->nama}}</td>
+                <td>{{$g->alamat}}</td>
+                <td>{{$g->keterangan}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('gudang.edit',$g->kode)}}">Edit</a>
