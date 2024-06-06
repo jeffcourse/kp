@@ -39,6 +39,7 @@
         <th>Satuan</th>
         <th>Harga Per Unit</th>
         <th>Harga Total</th>
+        <th>Kirim Gudang</th>
       </tr>
     </thead>
     <tbody>
@@ -50,6 +51,7 @@
                 <td>{{$b->satuan->satuan}}</td>
                 <td>Rp. {{number_format($b->hrg_per_unit, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($b->hrg_total, 0, ',', '.')}}</td>
+                <td>{{$b->kirim_gudang}}</td>
             </tr>
         @endforeach
     </tbody>

@@ -6,7 +6,7 @@
 <div class="mt-2"></div>
 <h3 style="margin-left: auto; margin-right: auto; text-align: center;">Edit Barang</h3><br>
 
-<form method="POST" action="{{route('master.update',$data->kode_brg)}}" style="margin-left: auto; margin-right: auto; width: 50%;">
+<form method="POST" action="{{route('master.update',$data->id)}}" style="margin-left: auto; margin-right: auto; width: 50%;">
    @csrf
    @method("PUT")
   <div class="form-group">
@@ -59,7 +59,7 @@
   </div><br>
   <div class="form-group">
     <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
-    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual" readonly>
+    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual">
   </div><br>
   <div class="form-group">
     <label for="exampleInputGudangBarang">Gudang</label>

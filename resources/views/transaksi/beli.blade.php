@@ -50,7 +50,6 @@
         <th>Tanggal</th>
         <th>Jatuh Tempo</th>
         <th>Nama Supplier</th>
-        <th>Kirim Gudang</th>
         <th>Harga Sub Total</th>
         <th>PPN</th>
         <th>Harga Total</th>
@@ -68,7 +67,6 @@
                 <td>{{$b->tanggal}}</td>
                 <td>{{$b->jatuh_tempo}}</td>
                 <td>{{$b->supplier->nama_supp}}</td>
-                <td>{{$b->gudang->nama}}</td>
                 <td>Rp. {{number_format($b->sub_total, 0, ',', '.')}}</td>
                 <td>{{$b->persen_ppn}}%</td>
                 <td>Rp. {{number_format($b->total, 0, ',', '.')}}</td>

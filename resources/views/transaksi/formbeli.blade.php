@@ -48,14 +48,6 @@
     </select>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputGudang">Kirim Gudang</label>
-    <select class="form-control" name="select_gudang">
-        @foreach($gudang as $g)
-        <option value="{{$g->kode}}">{{$g->nama}}</option>
-        @endforeach
-    </select>
-  </div><br>
-  <div class="form-group">
     <label for="exampleInputHargaSubTotal">Harga Sub Total</label>
     <input type="number" name="sub_total" class="form-control" id="sub_total" placeholder="0" readonly>
   </div><br>
@@ -82,6 +74,7 @@
         <th scope="col">Satuan</th>
         <th scope="col">Harga Per Unit</th>
         <th scope="col">Harga Total</th>
+        <th scope="col">Kirim Gudang</th>
         <th scope="col">Hapus</th>
       </tr>
     </thead>
@@ -120,6 +113,15 @@
           <div class="form-group">
             <input type="number" name="hrg_total[]" class="form-control hrg_total" placeholder="0" readonly>
           </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <select class="form-control" name="select_gudang[]">
+            @foreach($gudang as $g)
+              <option value="{{$g->kode}}">{{$g->nama}}</option>
+            @endforeach
+            </select>
+          </div><br>
         </td>
         <td>
           <div class="form-group">
@@ -177,18 +179,21 @@
           let isDuplicate = false;
           let kodeBrgArray = [];
           let namaBrgArray = [];
+          let kodeGudangArray = [];
 
           $('.barang-section table tbody tr').each(function() {
             let kodeBrg = $(this).find('input[name="kode_brg[]"]').val();
             let namaBrg = $(this).find('input[name="nama_brg[]"]').val();
+            let gudangBrg = $(this).find('select[name="select_gudang[]"]').val();
 
-            if((kodeBrgArray.includes(kodeBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg))){
+            if((kodeBrgArray.includes(kodeBrg) && kodeGudangArray.includes(gudangBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && kodeGudangArray.includes(gudangBrg))){
                 isDuplicate = true;
                 return false;
             }
 
             kodeBrgArray.push(kodeBrg);
             namaBrgArray.push(namaBrg);
+            kodeGudangArray.push(gudangBrg);
           });
 
           if(isDuplicate){
@@ -250,18 +255,21 @@
         let isDuplicate = false;
         let kodeBrgArray = [];
         let namaBrgArray = [];
+        let kodeGudangArray = [];
 
         $('.barang-section table tbody tr').each(function() {
             let kodeBrg = $(this).find('input[name="kode_brg[]"]').val();
             let namaBrg = $(this).find('input[name="nama_brg[]"]').val();
+            let gudangBrg = $(this).find('select[name="select_gudang[]"]').val();
 
-            if((kodeBrgArray.includes(kodeBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg))){
+            if((kodeBrgArray.includes(kodeBrg) && kodeGudangArray.includes(gudangBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && kodeGudangArray.includes(gudangBrg))){
                 isDuplicate = true;
                 return false;
             }
 
             kodeBrgArray.push(kodeBrg);
             namaBrgArray.push(namaBrg);
+            kodeGudangArray.push(gudangBrg);
         });
 
         if(isDuplicate){

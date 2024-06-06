@@ -6,6 +6,8 @@ use App\Models\Customer;
 use App\Models\Jual;
 use App\Models\JualDetail;
 use App\Models\Satuan;
+use App\Models\Gudang;
+use App\Models\Master;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -36,10 +38,12 @@ class JualController extends Controller
         $newNoBuktiNum = $lastNoBuktiNum + 1;
         $newNoBukti = 'JL24-' . str_pad($newNoBuktiNum, 5, '0', STR_PAD_LEFT);
 
+        $master = Master::all();
         $customer = Customer::all();
         $satuan = Satuan::all();
+        $gudang = Gudang::all();
 
-        return view('transaksi.formjual',compact('customer','satuan','newNoBukti'));
+        return view('transaksi.formjual',compact('master','customer','satuan','gudang','newNoBukti'));
     }
 
     public function store(Request $request)
@@ -59,15 +63,18 @@ class JualController extends Controller
         $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
         $data->save();
 
+        $id_brg = $request->get('id_brg');
         $kode_brg = $request->get('kode_brg');
         $nama_brg = $request->get('nama_brg');
         $qty_order = $request->get('qty_order');
         $id_satuan = $request->get('select_satuan');
         $hrg_per_unit = $request->get('hrg_per_unit');
         $hrg_total = $request->get('hrg_total');
+        $kode_gudang = $request->get('select_gudang');
 
         foreach($kode_brg as $key => $value) {
             $detail = new JualDetail();
+            $detail->id_brg = $id_brg[$key];
             $detail->no_bukti = $data->no_bukti;
             $detail->kode_brg = $kode_brg[$key];
             $detail->nama_brg = $nama_brg[$key];
@@ -75,6 +82,7 @@ class JualController extends Controller
             $detail->id_satuan = $id_satuan[$key];
             $detail->hrg_per_unit = $hrg_per_unit[$key];
             $detail->hrg_total = $hrg_total[$key];
+            $detail->kode_gudang = $kode_gudang[$key];
             $detail->save();
         }
 

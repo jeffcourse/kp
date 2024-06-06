@@ -28,4 +28,8 @@ class BeliDetail extends Model
     public function satuan(){
         return $this->belongsTo(Satuan::class,'id_satuan');
     }
+
+    public function gudang(){
+        return $this->belongsTo(Gudang::class,'kirim_gudang');
+    }
 }

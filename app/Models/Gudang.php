@@ -25,7 +25,11 @@ class Gudang extends Model
         return $this->hasMany(Master::class,'kode_gudang');
     }
 
-    public function beli(){
-        return $this->hasMany(Beli::class,'kirim_gudang');
+    public function beliDetail(){
+        return $this->hasMany(BeliDetail::class,'kirim_gudang');
+    }
+
+    public function jualDetail(){
+        return $this->hasMany(JualDetail::class,'kode_gudang');
     }
 }

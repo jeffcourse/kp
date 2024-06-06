@@ -20,7 +20,13 @@
     }
     th{
         text-align: center;
-    } 
+    }
+    #kodeBarangList {
+      position: absolute;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
+    }
   </style>
 </head>
 
@@ -68,25 +74,37 @@
    <table class="table">
     <thead>
       <tr>
+        <th scope="col" style="display: none;">ID Barang</th>
         <th scope="col">Kode Barang</th>
         <th scope="col">Nama Barang</th>
         <th scope="col">Quantity Order</th>
         <th scope="col">Satuan</th>
         <th scope="col">Harga Per Unit</th>
         <th scope="col">Harga Total</th>
+        <th scope="col">Gudang</th>
         <th scope="col">Hapus</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <td>
+        <td style="display: none;">
           <div class="form-group">
-            <input type="text" name="kode_brg[]" class="form-control" placeholder="Masukkan Kode Barang" required>
+            <input type="text" name="id_brg[]" id="id_brg" class="form-control" readonly>
           </div>
         </td>
         <td>
           <div class="form-group">
-            <input type="text" name="nama_brg[]" class="form-control" placeholder="Masukkan Nama Barang" required>
+            <input list="kodeBarangList" class="form-control" id="kode_barang_input" placeholder="Masukkan Kode Barang" autocomplete="off">
+            <datalist id="kodeBarangList">
+            @foreach($master as $m)
+              <option value="{{$m->kode_brg}}">
+            @endforeach
+            </datalist>
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input type="text" name="nama_brg[]" id="nama_brg" class="form-control" required readonly>
           </div>
         </td>
         <td>
@@ -96,7 +114,7 @@
         </td>
         <td>
           <div class="form-group">
-            <select class="form-control" name="select_satuan[]">
+            <select class="form-control" name="select_satuan[]" id="satuan" readonly>
               @foreach($satuan as $s)
               <option value="{{$s->id}}">{{$s->satuan}}</option>
               @endforeach
@@ -105,12 +123,21 @@
         </td>
         <td>
           <div class="form-group">
-            <input type="number" name="hrg_per_unit[]" class="form-control hrg_per_unit" placeholder="Masukkan Harga" required>
+            <input type="number" name="hrg_per_unit[]" id="hrg_per_unit" class="form-control hrg_per_unit" required readonly>
           </div>
         </td>
         <td>
           <div class="form-group">
             <input type="number" name="hrg_total[]" class="form-control hrg_total" placeholder="0" readonly>
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <select class="form-control" name="select_gudang[]" id="gudang" style="width: 150px;" readonly>
+              @foreach($gudang as $g)
+              <option value="{{$g->kode}}">{{$g->nama}}</option>
+              @endforeach
+            </select>
           </div>
         </td>
         <td>
@@ -148,6 +175,8 @@
   $(document).ready(function (){
         $('#no_bukti').val(newNoBukti);
 
+        $('#kode_barang_input').attr('name', 'kode_brg[]');
+
         $('.barang-section table tbody tr:first .btn-delete').prop('disabled', true);
 
         $('#btnTambah').click(function (){
@@ -169,18 +198,21 @@
           let isDuplicate = false;
           let kodeBrgArray = [];
           let namaBrgArray = [];
+          let gudangBrgArray = [];
 
-          $('.barang-section table tbody tr').each(function() {
+          $('.barang-section table tbody tr').each(function(){
             let kodeBrg = $(this).find('input[name="kode_brg[]"]').val();
             let namaBrg = $(this).find('input[name="nama_brg[]"]').val();
+            let gudangBrg = $(this).find('select[name="select_gudang[]"]').val();
 
-            if((kodeBrgArray.includes(kodeBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg))){
+            if((kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && gudangBrgArray.includes(gudangBrg))){
                 isDuplicate = true;
                 return false;
             }
 
             kodeBrgArray.push(kodeBrg);
             namaBrgArray.push(namaBrg);
+            gudangBrgArray.push(gudangBrg);
           });
 
           if(isDuplicate){
@@ -196,20 +228,22 @@
           newSection.find('.hrg_total').attr('readonly', 'readonly');
           $('.barang-section table tbody').append(newSection);
 
+          barangBindings(newSection);
+
           $('.barang-section table tbody tr .btn-delete').prop('disabled', false);
           $('.barang-section table tbody tr:first .btn-delete').prop('disabled', true);
         });
 
-        function calculateHargaTotal(section) {
+        function calculateHargaTotal(section){
           var qty = $(section).find('.qty_order').val();
           var hrgPerUnit = $(section).find('.hrg_per_unit').val();
           var hargaTotal = qty * hrgPerUnit;
           $(section).find('.hrg_total').val(hargaTotal);
         }
 
-        function calculateSubTotal() {
+        function calculateSubTotal(){
           var hargaSubTotal = 0;
-          $('.barang-section table tbody tr').each(function () {
+          $('.barang-section table tbody tr').each(function (){
             var qty = $(this).find('.qty_order').val();
             var hrgPerUnit = $(this).find('.hrg_per_unit').val();
             var hargaTotal = qty * hrgPerUnit;
@@ -219,41 +253,44 @@
           $('#sub_total').val(hargaSubTotal);
         }
 
-        function calculateTotal() {
+        function calculateTotal(){
           var subTotal = parseFloat($('#sub_total').val());
           var persenPpn = parseFloat($('#persen_ppn').val());
           var hargaTotal = subTotal + ((persenPpn / 100) * subTotal);
           $('#total').val(hargaTotal);
         }
 
-        $(document).on('input', '.qty_order, .hrg_per_unit', function () {
+        $(document).on('input', '.qty_order, .hrg_per_unit', function (){
           calculateSubTotal();
           calculateTotal();
         });
 
-        $('#persen_ppn').on('input', function () {
+        $('#persen_ppn').on('input', function (){
           calculateTotal();
         });
 
         calculateSubTotal();
         calculateTotal();
 
-      $('form').submit(function(event) {
+      $('form').submit(function(event){
         let isDuplicate = false;
         let kodeBrgArray = [];
         let namaBrgArray = [];
+        let gudangBrgArray = [];
 
-        $('.barang-section table tbody tr').each(function() {
+        $('.barang-section table tbody tr').each(function(){
             let kodeBrg = $(this).find('input[name="kode_brg[]"]').val();
             let namaBrg = $(this).find('input[name="nama_brg[]"]').val();
+            let gudangBrg = $(this).find('select[name="select_gudang[]"]').val();
 
-            if((kodeBrgArray.includes(kodeBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg))){
+            if((kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && gudangBrgArray.includes(gudangBrg))){
                 isDuplicate = true;
                 return false;
             }
 
             kodeBrgArray.push(kodeBrg);
             namaBrgArray.push(namaBrg);
+            gudangBrgArray.push(gudangBrg);
         });
 
         if(isDuplicate){
@@ -267,6 +304,56 @@
       $(document).on('click', '.btn-delete', function(){
         $(this).closest('tr').remove();
       });
+
+      $('#kode_barang_input').on('focus', function(){
+        $('#kodeBarangList').css('display', 'block');
+      });
+
+      function barangBindings(section){
+        $('#kode_barang_input', section).on('input', function() {
+          var kode_barang = $(this).val();
+          var selectedMaster = {!! json_encode($master->toArray()) !!};
+          var selectedGudang = {!! json_encode($gudang->toArray()) !!};
+          var selectedSatuan = {!! json_encode($satuan->toArray()) !!};
+
+          var masterData = selectedMaster.find(function(item) {
+            return item.kode_brg == kode_barang;
+          });
+
+          if(masterData){
+            var row = $('#kode_barang_input', section).closest('tr');
+            row.find('input[name="id_brg[]"]').val(masterData.id);
+            row.find('input[name="nama_brg[]"]').val(masterData.nama_brg);
+            row.find('input[name="hrg_per_unit[]"]').val(masterData.hrg_jual);
+
+            var filteredGudang = selectedGudang.filter(function(gudang) {
+                return gudang.kode == masterData.kode_gudang;
+            });
+            var filteredSatuan = selectedSatuan.filter(function(satuan) {
+                return satuan.id == masterData.id_satuan;
+            });
+
+            var gudangDropdown = row.find('select[name="select_gudang[]"]');
+            gudangDropdown.empty();
+            filteredGudang.forEach(function(gudang){
+                gudangDropdown.append('<option value="' + gudang.kode + '">' + gudang.nama + '</option>');
+            });
+
+            var satuanDropdown = row.find('select[name="select_satuan[]"]');
+            satuanDropdown.empty();
+            filteredSatuan.forEach(function(satuan){
+                satuanDropdown.append('<option value="' + satuan.id + '">' + satuan.satuan + '</option>');
+            });
+          } else{
+            $(this).closest('tr').find('input[name="nama_brg[]"]').val('');
+            $(this).closest('tr').find('input[name="hrg_per_unit[]"]').val('');
+            $(this).closest('tr').find('select[name="select_gudang[]"]').empty();
+            $(this).closest('tr').find('select[name="select_satuan[]"]').empty();
+          }
+        });
+      }
+
+      barangBindings($('.barang-section table tbody tr:first'));
     });
 </script>
 @endsection

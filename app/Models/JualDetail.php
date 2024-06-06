@@ -28,4 +28,12 @@ class JualDetail extends Model
     public function satuan(){
         return $this->belongsTo(Satuan::class,'id_satuan');
     }
+
+    public function master(){
+        return $this->belongsTo(Master::class,'id_brg');
+    }
+
+    public function gudang(){
+        return $this->belongsTo(Gudang::class,'kode_gudang');
+    }
 }

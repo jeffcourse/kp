@@ -58,7 +58,7 @@
   </div><br>
   <div class="form-group">
     <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
-    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" placeholder="Masukkan Harga Jual" readonly>
+    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" placeholder="Masukkan Harga Jual">
   </div><br>
   <div class="form-group">
     <label for="exampleInputGudangBarang">Gudang</label>

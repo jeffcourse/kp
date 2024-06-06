@@ -66,7 +66,7 @@
     </thead>
     <tbody>
         @foreach($master as $m)
-            <tr id="tr_{{$m->kode_brg}}">
+            <tr id="tr_{{$m->id}}">
                 <td>{{$m->kode_brg}}</td>
                 <td>{{$m->nama_brg}}</td>
                 <td>{{$m->divisi->divisi}}</td>
@@ -80,8 +80,8 @@
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('master.edit',$m->kode_brg)}}">Edit</a>
-                    <form method="POST" action="{{route('master.destroy', $m->kode_brg)}}">
+                    <a class='btn btn-info' href="{{route('master.edit',$m->id)}}">Edit</a>
+                    <form method="POST" action="{{route('master.destroy', $m->id)}}">
                       @csrf
                       @method('DELETE')
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>

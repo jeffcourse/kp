@@ -70,10 +70,10 @@ class MasterController extends Controller
         return redirect()->route('master')->with('status','Hooray!! Your new item is already inserted');
     }
 
-    public function edit($kode_brg)
+    public function edit($id)
     {
         //
-        $objMaster = Master::find($kode_brg);
+        $objMaster = Master::find($id);
         $divisi = Divisi::all();
         $gudang = Gudang::all();
         $jenis = Jenis::all();
@@ -84,10 +84,10 @@ class MasterController extends Controller
         return view('master.formedit',compact('data','divisi','gudang','jenis','type','satuan'));
     }
 
-    public function update(Request $request, $kode_brg)
+    public function update(Request $request, $id)
     {
         //
-        $objMaster = Master::find($kode_brg);
+        $objMaster = Master::find($id);
         $objMaster->kode_brg = $request->get('kode_brg');
         $objMaster->nama_brg = $request->get('nama_brg');
         $objMaster->kode_divisi = $request->get('select_divisi');
@@ -103,11 +103,11 @@ class MasterController extends Controller
         return redirect()->route('master')->with('status','Your item is up-to-date');
     }
 
-    public function destroy($kode_brg)
+    public function destroy($id)
     {
         //
         try{
-            $objMaster = Master::find($kode_brg);
+            $objMaster = Master::find($id);
             $objMaster->delete();
             return redirect()->route('master')->with('status','Deleted Successfully');
         }
