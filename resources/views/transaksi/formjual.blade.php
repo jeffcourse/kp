@@ -109,7 +109,7 @@
         </td>
         <td>
           <div class="form-group">
-            <input type="number" name="qty_order[]" class="form-control qty_order" placeholder="Masukkan Quantity" required>
+            <input type="number" name="qty_order[]" id="qty_order" class="form-control qty_order" placeholder="Masukkan Quantity" required>
           </div>
         </td>
         <td>
@@ -326,10 +326,13 @@
             row.find('input[name="nama_brg[]"]').val(masterData.nama_brg);
             row.find('input[name="hrg_per_unit[]"]').val(masterData.hrg_jual);
 
-            var filteredGudang = selectedGudang.filter(function(gudang) {
+            var masterQty = masterData.quantity;
+            row.find('#qty_order').attr('max', masterQty);
+
+            var filteredGudang = selectedGudang.filter(function(gudang){
                 return gudang.kode == masterData.kode_gudang;
             });
-            var filteredSatuan = selectedSatuan.filter(function(satuan) {
+            var filteredSatuan = selectedSatuan.filter(function(satuan){
                 return satuan.id == masterData.id_satuan;
             });
 
@@ -354,6 +357,19 @@
       }
 
       barangBindings($('.barang-section table tbody tr:first'));
+
+      $(document).on('input', '.qty_order', function() {
+        var masterQty = $(this).attr('max');
+        var currentValue = $(this).val();
+        if(parseInt(currentValue) > parseInt(masterQty)) {
+          this.setCustomValidity('Kuantitas tidak boleh melebihi jumlah stok sebanyak ' + masterQty);
+        } else {
+          this.setCustomValidity('');
+        }
+
+        calculateSubTotal();
+        calculateTotal();
+      });
     });
 </script>
 @endsection
