@@ -50,15 +50,15 @@ Route::group(['middleware' => 'auth'], function(){
 
     Route::resource('beli',BeliController::class);
     Route::get('/pembelian', [BeliController::class, 'beli'])->name('pembelian');
-    Route::get('/updateBayar/{no_bukti}', [BeliController::class, 'updateBayar'])->name('UpdateBayar');
-    Route::get('/updateKirim/{no_bukti}', [BeliController::class, 'updateKirim'])->name('UpdateKirim');
+    Route::get('/updateBayar', [BeliController::class, 'updateBayar'])->name('UpdateBayar');
+    Route::get('/updateKirim', [BeliController::class, 'updateKirim'])->name('UpdateKirim');
     Route::get('/beliDetail/{no_bukti}', [BeliController::class, 'showDetail'])->name('BeliDetail');
     Route::get('/fakturBeli/{no_bukti}', [BeliController::class, 'cetak_pdf'])->name('BeliPdf');
 
     Route::resource('jual',JualController::class);
     Route::get('/penjualan', [JualController::class, 'jual'])->name('penjualan');
-    Route::get('/updateBayarJual/{no_bukti}', [JualController::class, 'updateBayar'])->name('UpdateBayarJual');
-    Route::get('/updateKirimJual/{no_bukti}', [JualController::class, 'updateKirim'])->name('UpdateKirimJual');
+    Route::get('/updateBayarJual', [JualController::class, 'updateBayar'])->name('UpdateBayarJual');
+    Route::get('/updateKirimJual', [JualController::class, 'updateKirim'])->name('UpdateKirimJual');
     Route::get('/jualDetail/{no_bukti}', [JualController::class, 'showDetail'])->name('JualDetail');
     Route::get('/invoice/{no_bukti}', [JualController::class, 'cetak_pdf'])->name('JualPdf');
 

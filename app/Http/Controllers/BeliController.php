@@ -62,6 +62,8 @@ class BeliController extends Controller
         $data->create_time = Carbon::now()->format('d-m-Y');
         $data->author = auth()->user()->name;
         $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
+        $data->tgl_lunas = '-';
+        $data->tgl_terkirim = '-';
         $data->save();
 
         $kode_brg = $request->get('kode_brg');

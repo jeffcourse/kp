@@ -61,6 +61,8 @@ class JualController extends Controller
         $data->create_time = Carbon::now()->format('d-m-Y');
         $data->author = auth()->user()->name;
         $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
+        $data->tgl_lunas = '-';
+        $data->tgl_terkirim = '-';
         $data->save();
 
         $id_brg = $request->get('id_brg');
@@ -155,22 +157,42 @@ class JualController extends Controller
         }
     }
 
-    public function updateBayar($no_bukti)
+    public function updateBayar(Request $request)
     {
+        $no_bukti = $request->input('no_bukti');
+        $tgl_lunas = $request->input('tgl_lunas');
+
         $jual = Jual::where('no_bukti', $no_bukti)->firstOrFail();
+
         $jual->lunas = 'Lunas';
+        $jual->tgl_lunas = $tgl_lunas;
         $jual->save();
 
-        return redirect()->route('penjualan')->with('status','Sukses update status pembayaran');
+        return response()->json(['success' => true]);
     }
 
-    public function updateKirim($no_bukti)
+    public function updateKirim(Request $request)
     {
+        $no_bukti = $request->input('no_bukti');
+        $tgl_terkirim = $request->input('tgl_terkirim');
+
         $jual = Jual::where('no_bukti', $no_bukti)->firstOrFail();
+
         $jual->status = 'Sudah Terkirim';
+        $jual->tgl_terkirim = $tgl_terkirim;
         $jual->save();
 
-        return redirect()->route('penjualan')->with('status','Sukses update status pengiriman');
+        $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
+
+        foreach ($jualDetail as $detail) {
+            $master = Master::find($detail->id_brg);
+            if ($master) {
+                $master->quantity -= $detail->qty_order;
+                $master->save();
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function showDetail($no_bukti){

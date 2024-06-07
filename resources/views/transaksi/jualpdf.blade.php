@@ -79,6 +79,24 @@
     </table>
     </td>
     </tr>
+    <tr>
+      <td colspan="4">Status Pembayaran: 
+        @if($data->lunas == 'Belum Lunas')
+            {{$data->lunas}}
+        @else
+            Lunas tanggal {{$data->tgl_lunas}}
+        @endif
+      </td>
+    </tr>
+    <tr>
+      <td colspan="4">Status Pengiriman: 
+        @if($data->status == 'Belum Terkirim')
+            {{$data->status}}
+        @else
+            Terkirim tanggal {{$data->tgl_terkirim}}
+        @endif
+      </td>
+    </tr>
 </table>
 </body>
 </html>
