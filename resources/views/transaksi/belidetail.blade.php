@@ -51,7 +51,7 @@
                 <td>{{$b->satuan->satuan}}</td>
                 <td>Rp. {{number_format($b->hrg_per_unit, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($b->hrg_total, 0, ',', '.')}}</td>
-                <td>{{$b->kirim_gudang}}</td>
+                <td>{{$b->gudang->nama}}</td>
             </tr>
         @endforeach
     </tbody>

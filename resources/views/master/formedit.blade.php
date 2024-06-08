@@ -11,15 +11,16 @@
    @method("PUT")
   <div class="form-group">
     <label for="exampleInputKodeBarang">Kode Barang</label>
-    <input type="text" name="kode_brg" class="form-control" id="kode_brg" value="{{$data->kode_brg}}" placeholder="Masukkan Kode Barang" required>
+    <input type="text" name="kode_brg" class="form-control" id="kode_brg" value="{{$data->kode_brg}}" placeholder="Masukkan Kode Barang" required readonly>
   </div><br>
   <div class="form-group">
     <label for="exampleInputNamaBarang">Nama Barang</label>
-    <input type="text" name="nama_brg" class="form-control" id="nama_brg"  value="{{$data->nama_brg}}" placeholder="Masukkan Nama Barang" required>
+    <input type="text" name="nama_brg" class="form-control" id="nama_brg"  value="{{$data->nama_brg}}" placeholder="Masukkan Nama Barang" required readonly>
   </div><br>
   <div class="form-group">
     <label for="exampleInputDivisiBarang">Divisi</label>
     <select class="form-control" name="select_divisi" required>
+        <option value="" @if(is_null($data->kode_divisi)) selected @endif>-</option>
         @foreach($divisi as $d)
         <option value="{{$d->kode}}" @if($d->kode == $data->kode_divisi) selected @endif>{{$d->divisi}}</option>
         @endforeach
@@ -28,6 +29,7 @@
   <div class="form-group">
     <label for="exampleInputJenisBarang">Jenis</label>
     <select class="form-control" name="select_jenis" required>
+        <option value="" @if(is_null($data->kode_jenis)) selected @endif>-</option>
         @foreach($jenis as $j)
         <option value="{{$j->kode}}" @if($j->kode == $data->kode_jenis) selected @endif>{{$j->jenis}}</option>
         @endforeach
@@ -36,30 +38,11 @@
   <div class="form-group">
     <label for="exampleInputTipeBarang">Tipe</label>
     <select class="form-control" name="select_type" required>
+        <option value="" @if(is_null($data->kode_type)) selected @endif>-</option>
         @foreach($type as $t)
         <option value="{{$t->kode}}" @if($t->kode == $data->kode_type) selected @endif>{{$t->type}}</option>
         @endforeach
     </select>
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputPacking">Packing</label>
-    <input type="text" name="packing" class="form-control packing" id="packing" value="{{$data->packing}}" placeholder="Masukkan Data Packing" required>
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputQuantity">Quantity</label>
-    <input type="number" name="quantity" class="form-control quantity" id="quantity" value="{{$data->quantity}}" placeholder="Masukkan Kuantitas Barang" required>
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputSatuanBarang">Satuan</label>
-    <select class="form-control" name="select_satuan" required>
-        @foreach($satuan as $s)
-        <option value="{{$s->id}}" @if($s->id == $data->id_satuan) selected @endif>{{$s->satuan}}</option>
-        @endforeach
-    </select>
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputHargaJual">Harga Jual Per Pack</label>
-    <input type="number" name="hrg_jual" class="form-control hrg_jual" id="hrg_jual" value="{{$data->hrg_jual}}" placeholder="Masukkan Harga Jual">
   </div><br>
   <div class="form-group">
     <label for="exampleInputGudangBarang">Gudang</label>

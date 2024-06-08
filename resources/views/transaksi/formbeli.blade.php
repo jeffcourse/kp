@@ -71,6 +71,7 @@
         <th scope="col">Kode Barang</th>
         <th scope="col">Nama Barang</th>
         <th scope="col">Quantity Order</th>
+        <th scope="col">Packing</th>
         <th scope="col">Satuan</th>
         <th scope="col">Harga Per Unit</th>
         <th scope="col">Harga Total</th>
@@ -93,6 +94,11 @@
         <td>
           <div class="form-group">
             <input type="number" name="qty_order[]" class="form-control qty_order" placeholder="Masukkan Quantity" required>
+          </div>
+        </td>
+        <td>
+          <div class="form-group">
+            <input type="text" name="packing[]" class="form-control packing" placeholder="Masukkan Packing" required>
           </div>
         </td>
         <td>

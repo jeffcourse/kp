@@ -93,10 +93,6 @@ class MasterController extends Controller
         $objMaster->kode_divisi = $request->get('select_divisi');
         $objMaster->kode_jenis = $request->get('select_jenis');
         $objMaster->kode_type = $request->get('select_type');
-        $objMaster->packing = $request->get('packing');
-        $objMaster->quantity = $request->get('quantity');
-        $objMaster->id_satuan = $request->get('select_satuan');
-        $objMaster->hrg_jual = $request->get('hrg_jual');
         $objMaster->kode_gudang = $request->get('select_gudang');
         $objMaster->keterangan = $request->get('keterangan');
         $objMaster->save();
@@ -125,21 +121,4 @@ class MasterController extends Controller
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
     }
-
-    /*public function updateQuantity(Request $request)
-    {
-        $id = $request->input('id');
-        $quantity = $request->input('quantity');
-
-        $master = Master::findOrFail($id);
-
-        $master->quantity = $quantity;
-        $master->hrg_jual_total = $quantity * $master->hrg_jual;
-        $master->save();
-
-        return response()->json([
-            'success' => true,
-            'hrg_jual_total' => $master->hrg_jual_total
-        ]);
-    }*/
 }

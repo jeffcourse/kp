@@ -70,8 +70,20 @@
                 <td>Rp. {{number_format($b->sub_total, 0, ',', '.')}}</td>
                 <td>{{$b->persen_ppn}}%</td>
                 <td>Rp. {{number_format($b->total, 0, ',', '.')}}</td>
-                <td style="text-align: center;"><a class='btn {{$b->lunas == "Belum Lunas" ? "btn-danger" : "btn-success"}} btn-update-bayar' href="{{route('UpdateBayar',$b->no_bukti)}}" @if($b->lunas == "Lunas") style="pointer-events: none; cursor: default;" @endif>{{$b->lunas}}</a></td>
-                <td style="text-align: center;"><a class='btn {{$b->status == "Belum Terkirim" ? "btn-danger" : "btn-success"}} btn-update-kirim' href="{{route('UpdateKirim',$b->no_bukti)}}" @if($b->status == "Sudah Terkirim") style="pointer-events: none; cursor: default;" @endif>{{$b->status}}</a></td>
+                <td style="text-align: center;">
+                @if($b->lunas == "Belum Lunas")
+                  <button class='btn btn-danger btn-update-bayar' data-toggle="modal" data-target="#dateModal">Belum Lunas</button>
+                @else
+                  <button class='btn btn-success btn-update-bayar' style="pointer-events: none; cursor: default;">Lunas tanggal {{$b->tgl_lunas}}</button>
+                @endif
+                </td>
+                <td style="text-align: center;">
+                @if($b->status == "Belum Terkirim")
+                  <button class='btn btn-danger btn-update-kirim' data-toggle="modal" data-target="#dateModalJual">Belum Terkirim</button>
+                @else
+                  <button class='btn btn-success btn-update-kirim' style="pointer-events: none; cursor: default;">Terkirim tanggal {{$b->tgl_terkirim}}</button>
+                @endif
+                </td>
                 <td style="text-align: center;"><a class='btn btn-info' href="{{route('BeliDetail',$b->no_bukti)}}">Details</a></td>
                 <td style="text-align: center;">
                     <a class='btn btn-info' href="{{route('BeliPdf',$b->no_bukti)}}">Lihat Faktur</a>  
@@ -125,6 +137,7 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
     flatpickr("#datepicker", {
         dateFormat: "d-m-Y",
@@ -194,17 +207,115 @@
 
     updateTableData(1);
 
-    $(document).on('click', '.btn-update-bayar', function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        updateStatus(url, "Apakah anda yakin untuk update status pembayaran pada transaksi ini?");
+    $(document).on('click', '.btn-update-bayar', function(e) {
+      e.preventDefault();
+      var trId = $(this).closest('tr').attr('id');
+      var noBukti = $(this).closest('tr').find('td:first').text();
+      $('#no-bukti').val(noBukti);
+      $('#dateModal').modal('show');
+
+      $('#simpanTanggal').click(function() {
+        var selectedDate = $('#datepicker-dialog').val();
+        var noNota = $('#no-bukti').val(); 
+        $.ajax({
+          url: "{{route('UpdateBayar')}}",
+          type: 'GET',
+          data: {no_bukti: noNota, tgl_lunas: selectedDate},
+          success: function(response) {
+            $('#' + trId + ' .btn-update-bayar').removeClass('btn-danger').addClass('btn-success').text('Lunas tanggal ' + selectedDate).css({'pointer-events': 'none', 'cursor': 'default'});
+            $('#dateModal').modal('hide');
+            $('.modal-backdrop').remove(); 
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          }
+        });
+        $('#dateModal').modal('hide');
+      });
+
+      $('#datepicker-dialog').flatpickr({
+        dateFormat: "d-m-Y",
+        defaultDate: "today"
+      });
     });
 
     $(document).on('click', '.btn-update-kirim', function(e){
         e.preventDefault();
-        var url = $(this).attr('href');
-        updateStatus(url, "Apakah anda yakin untuk update status pengiriman pada transaksi ini?");
+        var trId = $(this).closest('tr').attr('id');
+        var noBukti = $(this).closest('tr').find('td:first').text();
+        $('#no-bukti-kirim').val(noBukti);
+        $('#dateModalJual').modal('show');
+
+      $('#simpanTanggalJual').click(function() {
+        var selectedDate = $('#datepicker-dialog-kirim').val();
+        var noNota = $('#no-bukti-kirim').val(); 
+        $.ajax({
+          url: "{{route('UpdateKirim')}}",
+          type: 'GET',
+          data: {no_bukti: noNota, tgl_terkirim: selectedDate},
+          success: function(response) {
+            $('#' + trId + ' .btn-update-kirim').removeClass('btn-danger').addClass('btn-success').text('Terkirim tanggal ' + selectedDate).css({'pointer-events': 'none', 'cursor': 'default'});
+            $('#dateModalJual').modal('hide');
+            $('.modal-backdrop').remove(); 
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          }
+        });
+        $('#dateModalJual').modal('hide');
+      });
+
+      $('#datepicker-dialog-kirim').flatpickr({
+        dateFormat: "d-m-Y",
+        defaultDate: "today"
+      });
     });
   });
 </script>
+
+<div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dateModalLabel">Ubah Status Pembayaran</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Nomor Nota:</h5>
+        <input type="text" id="no-bukti" class="form-control" readonly><br>
+        <h5>Tanggal Pembayaran:</h5>
+        <input type="text" id="datepicker-dialog" class="form-control" placeholder="Pilih tanggal...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" id="simpanTanggal">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="dateModalJual" tabindex="-1" role="dialog" aria-labelledby="dateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dateModalLabel">Ubah Status Pengiriman</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Nomor Nota:</h5>
+        <input type="text" id="no-bukti-kirim" class="form-control" readonly><br>
+        <h5>Tanggal Terkirim:</h5>
+        <input type="text" id="datepicker-dialog-kirim" class="form-control" placeholder="Pilih tanggal...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" id="simpanTanggalJual">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection

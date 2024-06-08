@@ -7,6 +7,8 @@ use App\Models\Gudang;
 use App\Models\Beli;
 use App\Models\BeliDetail;
 use App\Models\Satuan;
+use App\Models\Master;
+use App\Models\MutasiStok;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -53,7 +55,6 @@ class BeliController extends Controller
         $data->no_bukti = $request->get('no_bukti');
         $data->tanggal = $request->get('datepicker');
         $data->kode_supp = $request->get('select_supplier');
-        $data->kirim_gudang = $request->get('select_gudang');
         $data->sub_total = $request->get('sub_total');
         $data->persen_ppn = $request->get('persen_ppn');
         $data->total = $request->get('total'); 
@@ -69,9 +70,11 @@ class BeliController extends Controller
         $kode_brg = $request->get('kode_brg');
         $nama_brg = $request->get('nama_brg');
         $qty_order = $request->get('qty_order');
+        $packing = $request->get('packing');
         $id_satuan = $request->get('select_satuan');
         $hrg_per_unit = $request->get('hrg_per_unit');
         $hrg_total = $request->get('hrg_total');
+        $kirim_gudang = $request->get('select_gudang');
 
         foreach($kode_brg as $key => $value) {
             $detail = new BeliDetail();
@@ -79,9 +82,11 @@ class BeliController extends Controller
             $detail->kode_brg = $kode_brg[$key];
             $detail->nama_brg = $nama_brg[$key];
             $detail->qty_order = $qty_order[$key];
+            $detail->packing = $packing[$key];
             $detail->id_satuan = $id_satuan[$key];
             $detail->hrg_per_unit = $hrg_per_unit[$key];
             $detail->hrg_total = $hrg_total[$key];
+            $detail->kirim_gudang = $kirim_gudang[$key];
             $detail->save();
         }
 
@@ -156,29 +161,100 @@ class BeliController extends Controller
         }
     }
 
-    public function updateBayar($no_bukti)
+    public function updateBayar(Request $request)
     {
+        $no_bukti = $request->input('no_bukti');
+        $tgl_lunas = $request->input('tgl_lunas');
+
         $beli = Beli::where('no_bukti', $no_bukti)->firstOrFail();
+
         $beli->lunas = 'Lunas';
+        $beli->tgl_lunas = $tgl_lunas;
         $beli->save();
 
-        return redirect()->route('pembelian')->with('status','Sukses update status pembayaran');
+        return response()->json(['success' => true]);
     }
 
-    public function updateKirim($no_bukti)
+    public function updateKirim(Request $request)
     {
+        $no_bukti = $request->input('no_bukti');
+        $tgl_terkirim = $request->input('tgl_terkirim');
+
         $beli = Beli::where('no_bukti', $no_bukti)->firstOrFail();
+
         $beli->status = 'Sudah Terkirim';
+        $beli->tgl_terkirim = $tgl_terkirim;
         $beli->save();
 
-        return redirect()->route('pembelian')->with('status','Sukses update status pengiriman');
+        $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
+
+        foreach ($beliDetail as $detail) {
+            DB::table('mutasi_stok')->insert([
+                'no_bukti' => $no_bukti,
+                'kode_brg' => $detail->kode_brg,
+                'kode_gudang' => $detail->kirim_gudang,
+                'qty_masuk' => $detail->qty_order,
+                'qty_keluar' => 0,
+            ]);
+
+            $master = DB::table('invmaster')
+                ->where('kode_brg', $detail->kode_brg)
+                ->where('nama_brg', $detail->nama_brg)
+                ->where('kode_gudang', $detail->kirim_gudang)
+                ->first();
+
+            if ($master) {
+                DB::table('invmaster')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->where('nama_brg', $detail->nama_brg)
+                    ->where('kode_gudang', $detail->kirim_gudang)
+                    ->increment('quantity', $detail->qty_order);
+            } else {
+                DB::table('invmaster')->insert([
+                    'kode_brg' => $detail->kode_brg,
+                    'nama_brg' => $detail->nama_brg,
+                    'packing' => $detail->packing,
+                    'quantity' => $detail->qty_order,
+                    'id_satuan' => $detail->id_satuan,
+                    'hrg_jual' => $detail->hrg_per_unit,
+                    'kode_gudang' => $detail->kirim_gudang,
+                    'keterangan' => '-',
+                ]);
+            }
+
+            /*$master = Master::where('kode_brg', $detail->kode_brg)
+                ->where('nama_brg', $detail->nama_brg)
+                ->where('kode_gudang', $detail->kirim_gudang)->first();
+            if ($master) {
+                $master->quantity += $detail->qty_order;
+                $master->save();
+            }else{
+
+                $data = new Master();
+                $data->kode_brg = $detail->kode_brg;
+                $data->nama_brg = $detail->nama_brg;
+                $data->kode_divisi = '-';
+                $data->kode_jenis = '-';
+                $data->kode_type = '-';
+                $data->packing = $detail->packing;
+                $data->quantity = $detail->qty_order;
+                $data->id_satuan = $detail->id_satuan;
+                $data->hrg_jual = $detail->hrg_per_unit;
+                $data->kode_gudang = $detail->kirim_gudang;
+                $data->keterangan = '-';
+                $data->save();
+            }*/
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function showDetail($no_bukti){
         $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
         $satuan = Satuan::all();
+        $gudang = Gudang::all();
 
-        return view('transaksi.belidetail', compact('beliDetail','satuan','no_bukti'));
+        return view('transaksi.belidetail', compact('beliDetail','satuan','gudang','no_bukti'));
     }
 
     public function welcomeBeli(){

@@ -39,6 +39,7 @@
         <th>Satuan</th>
         <th>Harga Per Unit</th>
         <th>Harga Total</th>
+        <th>Asal Gudang</th>
       </tr>
     </thead>
     <tbody>
@@ -50,6 +51,7 @@
                 <td>{{$j->satuan->satuan}}</td>
                 <td>Rp. {{number_format($j->hrg_per_unit, 0, ',', '.')}}</td>
                 <td>Rp. {{number_format($j->hrg_total, 0, ',', '.')}}</td>
+                <td>{{$j->gudang->nama}}</td>
             </tr>
         @endforeach
     </tbody>

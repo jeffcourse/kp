@@ -232,6 +232,7 @@
             console.error(xhr.responseText);
           }
         });
+        $('#dateModal').modal('hide');
       });
 
       $('#datepicker-dialog').flatpickr({
@@ -263,6 +264,7 @@
             console.error(xhr.responseText);
           }
         });
+        $('#dateModalJual').modal('hide');
       });
 
       $('#datepicker-dialog-kirim').flatpickr({

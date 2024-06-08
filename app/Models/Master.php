@@ -12,10 +12,23 @@ class Master extends Model
     public $timestamps = false;
     protected $table = "invmaster";
 
-    // Specify the primary key column
     protected $primaryKey = 'id';
 
     protected $keyType = 'integer';
+
+    /*protected $fillable = [
+        'kode_brg',
+        'nama_brg',
+        'kode_divisi',
+        'kode_jenis',
+        'kode_type',
+        'packing',
+        'quantity',
+        'id_satuan',
+        'hrg_jual',
+        'kode_gudang',
+        'keterangan',
+    ];*/
 
     public function divisi(){
         return $this->belongsTo(Divisi::class,'kode_divisi');

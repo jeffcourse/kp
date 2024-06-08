@@ -205,7 +205,7 @@
             let namaBrg = $(this).find('input[name="nama_brg[]"]').val();
             let gudangBrg = $(this).find('select[name="select_gudang[]"]').val();
 
-            if((kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && gudangBrgArray.includes(gudangBrg))){
+            if((kodeBrgArray.includes(kodeBrg) && kodeGudangArray.includes(gudangBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && gudangBrgArray.includes(gudangBrg))){
                 isDuplicate = true;
                 return false;
             }
@@ -283,7 +283,7 @@
             let namaBrg = $(this).find('input[name="nama_brg[]"]').val();
             let gudangBrg = $(this).find('select[name="select_gudang[]"]').val();
 
-            if((kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && gudangBrgArray.includes(gudangBrg))){
+            if((kodeBrgArray.includes(kodeBrg) && kodeGudangArray.includes(gudangBrg)) || (kodeBrgArray.includes(kodeBrg) && namaBrgArray.includes(namaBrg) && gudangBrgArray.includes(gudangBrg))){
                 isDuplicate = true;
                 return false;
             }

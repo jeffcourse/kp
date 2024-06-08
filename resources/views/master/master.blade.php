@@ -28,7 +28,7 @@
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center">
       <h4 style="display: inline-block; margin-right: 20px;">Master Table</h4>
-      <a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-info">Tambah Barang</a>
+      {{--<a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-info">Tambah Barang</a>--}}
     </div>
     <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
       <h4 style="display: inline-block;">Filter berdasarkan gudang:</h4>
@@ -69,9 +69,9 @@
             <tr id="tr_{{$m->id}}">
                 <td>{{$m->kode_brg}}</td>
                 <td>{{$m->nama_brg}}</td>
-                <td>{{$m->divisi->divisi}}</td>
-                <td>{{$m->jenis->jenis}}</td>
-                <td>{{$m->type->type}}</td>
+                <td>{{$m->divisi ? $m->divisi->divisi : '-'}}</td>
+                <td>{{$m->jenis ? $m->jenis->jenis : '-'}}</td>
+                <td>{{$m->type ? $m->type->type : '-'}}</td>
                 <td>{{$m->packing}}</td>
                 <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
@@ -125,6 +125,7 @@
   </div><br><br>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script>
   $(document).ready(function(){
     function loadFilters(){

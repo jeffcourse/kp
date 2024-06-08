@@ -8,6 +8,7 @@ use App\Models\JualDetail;
 use App\Models\Satuan;
 use App\Models\Gudang;
 use App\Models\Master;
+use App\Models\MutasiStok;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
@@ -185,6 +186,14 @@ class JualController extends Controller
         $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
 
         foreach ($jualDetail as $detail) {
+            DB::table('mutasi_stok')->insert([
+                'no_bukti' => $no_bukti,
+                'kode_brg' => $detail->kode_brg,
+                'kode_gudang' => $detail->kode_gudang,
+                'qty_masuk' => 0,
+                'qty_keluar' => $detail->qty_order,
+            ]);
+
             $master = Master::find($detail->id_brg);
             if ($master) {
                 $master->quantity -= $detail->qty_order;
@@ -198,8 +207,9 @@ class JualController extends Controller
     public function showDetail($no_bukti){
         $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
         $satuan = Satuan::all();
+        $gudang = Gudang::all();
 
-        return view('transaksi.jualdetail', compact('jualDetail','satuan','no_bukti'));
+        return view('transaksi.jualdetail', compact('jualDetail','satuan','gudang','no_bukti'));
     }
 
     public function welcomeJual(){
