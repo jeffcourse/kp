@@ -10,11 +10,11 @@
    @csrf
   <div class="form-group">
     <label for="exampleInputKodeSales">Kode Sales Person</label>
-    <input type="text" name="kode_sales" class="form-control" id="kode_sales" placeholder="Masukkan Kode Sales Person" required>
+    <input type="text" name="kode_sales" class="form-control" id="kode_sales" placeholder="Masukkan Kode Sales Person" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputNamaSales">Nama Sales Person</label>
-    <input type="text" name="nama_sales" class="form-control" id="nama_sales" placeholder="Masukkan Nama Sales Person" required>
+    <input type="text" name="nama_sales" class="form-control" id="nama_sales" placeholder="Masukkan Nama Sales Person" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="select_divisi">Divisi</label>

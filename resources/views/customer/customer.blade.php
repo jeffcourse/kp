@@ -44,9 +44,7 @@
         <th>Kode Customer</th>
         <th>Nama Customer</th>
         <th>Tipe Customer</th>
-        <th>Alamat 1</th>
-        <th>Alamat 2</th>
-        <th>Alamat 3</th>
+        <th>Alamat Customer</th>
         <th>Kota</th>
         <th>Kontak</th>
         <th>No Telp</th>
@@ -60,9 +58,7 @@
                 <td>{{$c->kode_cust}}</td>
                 <td>{{$c->nama_cust}}</td>
                 <td>{{$c->type_cust}}</td>
-                <td>{{$c->alm_1}}</td>
-                <td>{{$c->alm_2}}</td>
-                <td>{{$c->alm_3}}</td>
+                <td>{{$c->alm_1}}, {{$c->alm_2}}, {{$c->alm_3}}</td>
                 <td>{{$c->kota}}</td>
                 <td>{{$c->kontak}}</td>
                 <td>{{$c->no_telp}}</td>

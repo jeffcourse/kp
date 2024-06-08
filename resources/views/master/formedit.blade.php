@@ -45,14 +45,6 @@
     </select>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputGudangBarang">Gudang</label>
-    <select class="form-control" name="select_gudang" required>
-        @foreach($gudang as $g)
-        <option value="{{$g->kode}}" @if($g->kode == $data->kode_gudang) selected @endif>{{$g->nama}}</option>
-        @endforeach
-    </select>
-  </div><br>
-  <div class="form-group">
     <label for="exampleInputKeterangan">Keterangan</label>
     <input type="text" name="keterangan" class="form-control" id="keterangan" value="{{$data->keterangan}}" placeholder="Masukkan Keterangan" required>
   </div><br>

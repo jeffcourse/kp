@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <style>
@@ -39,9 +40,8 @@
       <tr>
         <th>Nomor Nota</th>
         <th>Tanggal</th>
+        <th>Jatuh Tempo</th>
         <th>Nama Supplier</th>
-        <th>Mata Uang</th>
-        <th>Kirim Gudang</th>
         <th>Harga Sub Total</th>
         <th>PPN</th>
         <th>Harga Total</th>
@@ -54,14 +54,19 @@
             <tr id="tr_{{$l->no_bukti}}">
                 <td>{{$l->no_bukti}}</td>
                 <td>{{$l->tanggal}}</td>
+                <td>{{$l->jatuh_tempo}}</td>
                 <td>{{$l->supplier->nama_supp}}</td>
-                <td>{{$l->mata_uang}}</td>
-                <td>{{$l->gudang->nama}}</td>
                 <td>Rp. {{number_format($l->sub_total, 0, ',', '.')}}</td>
                 <td>{{$l->persen_ppn}}%</td>
                 <td>Rp. {{number_format($l->total, 0, ',', '.')}}</td>
                 <td style="text-align: center;"><a class='btn btn-info' href="{{route('BeliDetail',$l->no_bukti)}}">Details</a></td>
-                <td style="text-align: center;"><a class='btn {{$l->lunas == "Belum Lunas" ? "btn-danger" : "btn-success"}} btn-update-bayar' href="{{route('UpdateBayar',$l->no_bukti)}}" @if($l->lunas == "Lunas") style="pointer-events: none; cursor: default;" @endif>{{$l->lunas}}</a></td>
+                <td style="text-align: center;">
+                @if($l->lunas == "Belum Lunas")
+                  <button class='btn btn-danger btn-update-bayar' data-toggle="modal" data-target="#dateModal">Belum Lunas</button>
+                @else
+                  <button class='btn btn-success btn-update-bayar' style="pointer-events: none; cursor: default;">Lunas tanggal {{$l->tgl_lunas}}</button>
+                @endif
+                </td>
             </tr>
         @endforeach
     </tbody>
@@ -100,6 +105,8 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
 
   $(document).ready(function(){
@@ -139,11 +146,60 @@
 
     updateTableData(1);
 
-    $(document).on('click', '.btn-update-bayar', function(e){
-        e.preventDefault();
-        var url = $(this).attr('href');
-        updateStatus(url, "Apakah anda yakin untuk update status pembayaran pada transaksi ini?");
+    $(document).on('click', '.btn-update-bayar', function(e) {
+      e.preventDefault();
+      var trId = $(this).closest('tr').attr('id');
+      var noBukti = $(this).closest('tr').find('td:first').text();
+      $('#no-bukti').val(noBukti);
+      $('#dateModal').modal('show');
+
+      $('#simpanTanggal').click(function() {
+        var selectedDate = $('#datepicker-dialog').val();
+        var noNota = $('#no-bukti').val(); 
+        $.ajax({
+          url: "{{route('UpdateBayar')}}",
+          type: 'GET',
+          data: {no_bukti: noNota, tgl_lunas: selectedDate},
+          success: function(response) {
+            $('#' + trId + ' .btn-update-bayar').removeClass('btn-danger').addClass('btn-success').text('Lunas tanggal ' + selectedDate).css({'pointer-events': 'none', 'cursor': 'default'});
+            $('#dateModal').modal('hide');
+            $('.modal-backdrop').remove(); 
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          }
+        });
+        $('#dateModal').modal('hide');
+      });
+
+      $('#datepicker-dialog').flatpickr({
+        dateFormat: "d-m-Y",
+        defaultDate: "today"
+      });
     });
   });
 </script>
+
+<div class="modal fade" id="dateModal" tabindex="-1" role="dialog" aria-labelledby="dateModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="dateModalLabel">Ubah Status Pembayaran</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Nomor Nota:</h5>
+        <input type="text" id="no-bukti" class="form-control" readonly><br>
+        <h5>Tanggal Pembayaran:</h5>
+        <input type="text" id="datepicker-dialog" class="form-control" placeholder="Pilih tanggal...">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" id="simpanTanggal">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection

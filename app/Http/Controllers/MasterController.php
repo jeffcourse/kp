@@ -75,13 +75,11 @@ class MasterController extends Controller
         //
         $objMaster = Master::find($id);
         $divisi = Divisi::all();
-        $gudang = Gudang::all();
         $jenis = Jenis::all();
         $type = Type::all();
-        $satuan = Satuan::all();
 
         $data = $objMaster;
-        return view('master.formedit',compact('data','divisi','gudang','jenis','type','satuan'));
+        return view('master.formedit',compact('data','divisi','jenis','type'));
     }
 
     public function update(Request $request, $id)
@@ -93,7 +91,6 @@ class MasterController extends Controller
         $objMaster->kode_divisi = $request->get('select_divisi');
         $objMaster->kode_jenis = $request->get('select_jenis');
         $objMaster->kode_type = $request->get('select_type');
-        $objMaster->kode_gudang = $request->get('select_gudang');
         $objMaster->keterangan = $request->get('keterangan');
         $objMaster->save();
         return redirect()->route('master')->with('status','Your item is up-to-date');

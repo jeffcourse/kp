@@ -83,22 +83,22 @@
       <tr>
         <td>
           <div class="form-group">
-            <input type="text" name="kode_brg[]" class="form-control" placeholder="Masukkan Kode Barang" required>
+            <input type="text" name="kode_brg[]" class="form-control" placeholder="Masukkan Kode Barang" required autocomplete="off">
           </div>
         </td>
         <td>
           <div class="form-group">
-            <input type="text" name="nama_brg[]" class="form-control" placeholder="Masukkan Nama Barang" required>
+            <input type="text" name="nama_brg[]" class="form-control" placeholder="Masukkan Nama Barang" required autocomplete="off">
           </div>
         </td>
         <td>
           <div class="form-group">
-            <input type="number" name="qty_order[]" class="form-control qty_order" placeholder="Masukkan Quantity" required>
+            <input type="number" name="qty_order[]" class="form-control qty_order" placeholder="Masukkan Quantity" required autocomplete="off">
           </div>
         </td>
         <td>
           <div class="form-group">
-            <input type="text" name="packing[]" class="form-control packing" placeholder="Masukkan Packing" required>
+            <input type="text" name="packing[]" class="form-control packing" placeholder="Masukkan Packing" required autocomplete="off">
           </div>
         </td>
         <td>
@@ -112,7 +112,7 @@
         </td>
         <td>
           <div class="form-group">
-            <input type="number" name="hrg_per_unit[]" class="form-control hrg_per_unit" placeholder="Masukkan Harga" required>
+            <input type="number" name="hrg_per_unit[]" class="form-control hrg_per_unit" placeholder="Masukkan Harga" required autocomplete="off">
           </div>
         </td>
         <td>

@@ -18,8 +18,12 @@
     <input type="text" name="nama_supp" class="form-control" id="nama_supp"  value="{{$data->nama_supp}}" placeholder="Masukkan Nama Supplier" required>
   </div><br>
   <div class="form-group">
-    <label for="exampleInputAkunBank">Akun Bank</label>
-    <input type="text" name="acc_bank" class="form-control" id="acc_bank" value="{{$data->acc_bank}}" placeholder="Masukkan Akun Bank" required>
+    <label for="exampleInputBank">Bank</label>
+    <input type="text" name="bank" class="form-control" id="bank" value="{{$data->bank}}" placeholder="Masukkan Nama Bank" required>
+  </div><br>
+  <div class="form-group">
+    <label for="exampleInputAkunBank">Nomor Rekening</label>
+    <input type="text" name="acc_bank" class="form-control" id="acc_bank" value="{{$data->acc_bank}}" placeholder="Masukkan Nomor Rekening" required>
   </div><br>
   <div class="form-group">
     <label for="exampleInputAlamat1">Alamat 1</label>

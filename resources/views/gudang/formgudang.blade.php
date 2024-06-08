@@ -10,19 +10,19 @@
    @csrf
   <div class="form-group">
     <label for="exampleInputKode">Kode Gudang</label>
-    <input type="text" name="kode" class="form-control" id="kode" placeholder="Masukkan Kode Gudang" required>
+    <input type="text" name="kode" class="form-control" id="kode" placeholder="Masukkan Kode Gudang" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputNama">Nama Gudang</label>
-    <input type="text" name="nama" class="form-control" id="nama" placeholder="Masukkan Nama Gudang" required>
+    <input type="text" name="nama" class="form-control" id="nama" placeholder="Masukkan Nama Gudang" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputAlamat">Alamat Gudang</label>
-    <input type="text" name="alamat" class="form-control" id="alamat" placeholder="Masukkan Alamat Gudang" required>
+    <input type="text" name="alamat" class="form-control" id="alamat" placeholder="Masukkan Alamat Gudang" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputKeterangan">Keterangan</label>
-    <input type="text" name="keterangan" class="form-control" id="keterangan" placeholder="Masukkan Keterangan" required>
+    <input type="text" name="keterangan" class="form-control" id="keterangan" placeholder="Masukkan Keterangan" required autocomplete="off">
   </div><br>
   <div class="form-group row">
     <div class="col-12">

@@ -33,6 +33,7 @@ class SupplierController extends Controller
         $data = new Supplier();
         $data->kode_supp = $request->get('kode_supp');
         $data->nama_supp = $request->get('nama_supp');
+        $data->bank = $request->get('bank');
         $data->acc_bank = $request->get('acc_bank');
         $data->alm_1 = $request->get('alm_1');
         $data->alm_2 = $request->get('alm_2');
@@ -61,6 +62,7 @@ class SupplierController extends Controller
         $objSupplier = Supplier::find($kode_supp);
         $objSupplier->kode_supp = $request->get('kode_supp');
         $objSupplier->nama_supp = $request->get('nama_supp');
+        $objSupplier->bank = $request->get('bank');
         $objSupplier->acc_bank = $request->get('acc_bank');
         $objSupplier->alm_1 = $request->get('alm_1');
         $objSupplier->alm_2 = $request->get('alm_2');

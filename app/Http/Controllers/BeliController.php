@@ -209,6 +209,28 @@ class BeliController extends Controller
                     ->where('nama_brg', $detail->nama_brg)
                     ->where('kode_gudang', $detail->kirim_gudang)
                     ->increment('quantity', $detail->qty_order);
+                
+                $transactions = DB::table('beli_dtl')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->get();
+
+                $totalCost = 0;
+                foreach($transactions as $transaction){
+                    $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
+                }
+
+                $currentQuantity = DB::table('invmaster')
+                ->where('kode_brg', $detail->kode_brg)
+                ->sum('quantity');
+
+                $minSellPrice = $totalCost / $currentQuantity;
+                $markup = $minSellPrice * 0.5;
+                $sellPrice = $minSellPrice + $markup;
+
+                DB::table('invmaster')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->update(['hrg_jual' => $sellPrice]);
+
             } else {
                 DB::table('invmaster')->insert([
                     'kode_brg' => $detail->kode_brg,
@@ -216,34 +238,31 @@ class BeliController extends Controller
                     'packing' => $detail->packing,
                     'quantity' => $detail->qty_order,
                     'id_satuan' => $detail->id_satuan,
-                    'hrg_jual' => $detail->hrg_per_unit,
                     'kode_gudang' => $detail->kirim_gudang,
                     'keterangan' => '-',
                 ]);
+
+                $transactions = DB::table('beli_dtl')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->get();
+
+                $totalCost = 0;
+                foreach($transactions as $transaction){
+                    $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
+                }
+
+                $currentQuantity = DB::table('invmaster')
+                ->where('kode_brg', $detail->kode_brg)
+                ->sum('quantity');
+
+                $minSellPrice = $totalCost / $currentQuantity;
+                $markup = $minSellPrice * 0.5;
+                $sellPrice = $minSellPrice + $markup;
+
+                DB::table('invmaster')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->update(['hrg_jual' => $sellPrice]);
             }
-
-            /*$master = Master::where('kode_brg', $detail->kode_brg)
-                ->where('nama_brg', $detail->nama_brg)
-                ->where('kode_gudang', $detail->kirim_gudang)->first();
-            if ($master) {
-                $master->quantity += $detail->qty_order;
-                $master->save();
-            }else{
-
-                $data = new Master();
-                $data->kode_brg = $detail->kode_brg;
-                $data->nama_brg = $detail->nama_brg;
-                $data->kode_divisi = '-';
-                $data->kode_jenis = '-';
-                $data->kode_type = '-';
-                $data->packing = $detail->packing;
-                $data->quantity = $detail->qty_order;
-                $data->id_satuan = $detail->id_satuan;
-                $data->hrg_jual = $detail->hrg_per_unit;
-                $data->kode_gudang = $detail->kirim_gudang;
-                $data->keterangan = '-';
-                $data->save();
-            }*/
         }
 
         return response()->json(['success' => true]);
