@@ -6,6 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
   <style>
@@ -39,7 +40,16 @@
           @endforeach
       </select>
     </div>
-    <input style="width: 150px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama barang">
+    <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
+      <h4 style="display: inline-block;">Filter berdasarkan jenis:</h4>
+      <select id="filterJenis" class="form-control" style="width: 200px; display: inline-block;">
+        <option value="All">All</option>
+          @foreach($jenis as $jn)
+            <option value="{{$jn->jenis}}">{{$jn->jenis}}</option>
+          @endforeach
+      </select>
+    </div>
+    <input style="width: 200px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang">
 </div><br>
 
 @if(session('status'))
@@ -62,6 +72,7 @@
         <th>Gudang</th>
         <th>Keterangan</th>
         <th>Actions</th>
+        <th>Hapus</th>
       </tr>
     </thead>
     <tbody>
@@ -80,13 +91,36 @@
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('master.edit',$m->id)}}">Edit</a>
-                    <form method="POST" action="{{route('master.destroy', $m->id)}}">
-                      @csrf
-                      @method('DELETE')
-                      <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>
-                    </form>
+                    <a class='btn btn-info' href="{{route('master.edit',$m->id)}}"
+                    @if(in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"]))
+                      style="display: none;"
+                    @endif
+                    >Edit</a>
+                    <button class='btn btn-danger btn-opname' 
+                      data-toggle="modal" 
+                      data-kode="{{$m->kode_brg}}"
+                      data-nama="{{$m->nama_brg}}"
+                      data-divisi="{{$m->kode_divisi}}"
+                      data-jenis="{{$m->kode_jenis}}"
+                      data-tipe="{{$m->kode_type}}"
+                      data-packing="{{$m->packing}}"
+                      data-quantity="{{$m->quantity}}"
+                      data-satuan="{{$m->id_satuan}}"
+                      data-gudang="{{$m->kode_gudang}}"
+                      data-toggle="modal" 
+                      data-target="#opnameModal"
+                      @if(in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"]))
+                        style="display: none;"
+                      @endif
+                      >Opname</button>
                   </div>
+                </td>
+                <td style="text-align: center;">
+                  <form method="POST" action="{{route('master.destroy', $m->id)}}">
+                    @csrf
+                    @method('DELETE')
+                    <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>
+                  </form>
                 </td>
             </tr>
         @endforeach
@@ -126,13 +160,18 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
   $(document).ready(function(){
     function loadFilters(){
         var filterGudangValue = sessionStorage.getItem('filterGudang');
+        var filterJenisValue = sessionStorage.getItem('filterJenis');
         var searchItemValue = sessionStorage.getItem('searchItem');
         if (filterGudangValue) {
             $('#filterGudang').val(filterGudangValue);
+        }
+        if (filterJenisValue) {
+            $('#filterJenis').val(filterJenisValue);
         }
         if (searchItemValue) {
             $('#searchItem').val(searchItemValue);
@@ -143,20 +182,23 @@
 
     function saveFilters(){
         var selectedGudang = $('#filterGudang').val();
+        var selectedJenis = $('#filterJenis').val();
         var searchText = $('#searchItem').val();
 
         sessionStorage.setItem('filterGudang', selectedGudang);
+        sessionStorage.setItem('filterJenis', selectedJenis);
         sessionStorage.setItem('searchItem', searchText);
     }
 
     function updateTableData(page){
         var selectedGudang = $('#filterGudang').val();
+        var selectedJenis = $('#filterJenis').val();
         var searchText = $('#searchItem').val();
 
         $.ajax({
             url: "{{route('master')}}",
             type: "GET",
-            data: {gudang: selectedGudang, search: searchText, page: page},
+            data: {gudang: selectedGudang, jenis: selectedJenis, search: searchText, page: page},
             success: function(data){
                 $('.table tbody').html($(data).find('.table tbody').html());
                 $('.text-center').html($(data).find('.text-center').html());
@@ -164,7 +206,7 @@
         });
     }
 
-    $('#filterGudang, #searchItem').on('change keyup', function(){
+    $('#filterGudang, #filterJenis, #searchItem').on('change keyup', function(){
         saveFilters();
         updateTableData(1);
     });
@@ -176,40 +218,86 @@
     });
 
     updateTableData(1);
-        
-    /*function updateQuantity(id, increment){
-      var quantityInput = $('#tr_' + id + ' .input-quantity');
-      var currentQuantity = parseInt(quantityInput.val());
-      var newQuantity = currentQuantity + increment;
-          
-      quantityInput.val(newQuantity);
 
-      $.ajax({
-        url: "{{route('UpdateQuantity')}}",
-        type: "POST",
-        data: {
-          _token: "{{csrf_token()}}",
-          id: id,
-          quantity: newQuantity
-        },
-        success: function(response){
-          $('#tr_' + id + ' .hrg_jual_total').text('Rp. ' + response.hrg_jual_total.toLocaleString('id-ID'));
-        },
-        error: function(xhr, status, error){
-          console.error(error);
-        }
+    $(document).on('click', '.btn-opname', function(e) {
+      e.preventDefault();
+      var kodeBrg = $(this).data('kode');
+      var namaBrg = $(this).data('nama');
+      var divisiBrg = $(this).data('divisi');
+      var jenisBrg = $(this).data('jenis');
+      var tipeBrg = $(this).data('tipe');
+      var packingBrg = $(this).data('packing');
+      var quantityBrg = $(this).data('quantity');
+      var satuanBrg = $(this).data('satuan');
+      var gudangBrg = $(this).data('gudang');
+
+      $('#kode-barang').val(kodeBrg);
+      $('#nama-barang').val(namaBrg);
+      $('#qty_sistem').val(quantityBrg);
+      $('#selisih').attr('max', quantityBrg);
+      $('#opnameModal').modal('show');
+
+      $('#simpanOpname').click(function() {
+        var selisih = $('#selisih').val();
+        var keterangan = $('#keterangan').val();
+        $.ajax({
+          url: "{{route('OpnameBarang')}}",
+          type: 'GET',
+          data: {kode_brg: kodeBrg, nama_brg: namaBrg, kode_divisi: divisiBrg, kode_jenis: jenisBrg, kode_type: tipeBrg, packing: packingBrg,
+            quantity: selisih, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, keterangan: keterangan},
+          success: function(response) {
+            $('#opnameModal').modal('hide');
+
+            $('#kode-barang').val('');
+            $('#nama-barang').val('');
+            $('#qty_sistem').val('');
+            $('#selisih').val('');
+            $('.modal-backdrop').remove();
+          },
+          error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+          }
+        });
+        $('#opnameModal').modal('hide');
       });
-    }
-
-    $(document).on('click', '.btn-minus', function(){
-      var id = $(this).data('id');
-      updateQuantity(id, -1);
     });
 
-    $(document).on('click', '.btn-plus', function(){
-      var id = $(this).data('id');
-      updateQuantity(id, 1);
-    });*/
+    $('#opnameModal').on('hidden.bs.modal', function (e) {
+      location.reload();
+    });
   });
 </script>
+
+<div class="modal fade" id="opnameModal" tabindex="-1" role="dialog" aria-labelledby="opnameModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="opnameModalLabel">Opname Stok</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h5>Kode Barang:</h5>
+        <input type="text" id="kode-barang" class="form-control" readonly><br>
+        <h5>Nama Barang:</h5>
+        <input type="text" id="nama-barang" class="form-control" readonly><br>
+        <h5>Kuantitas Barang:</h5>
+        <input type="number" id="qty_sistem" class="form-control" readonly><br>
+        <h5>Kuantitas Barang Rusak/EXP:</h5>
+        <input type="number" id="selisih" class="form-control" required><br>
+        <h5>Keterangan:</h5>
+        <select id="keterangan" class="form-control" style="width: 400px; display: inline-block;">
+          <option value="BARANG RUSAK">BARANG RUSAK</option>
+          <option value="BARANG EXPIRED">BARANG EXPIRED</option>
+          <option value="BARANG RUSAK & EXPIRED">BARANG RUSAK & EXPIRED</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-primary" id="simpanOpname">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
 @endsection

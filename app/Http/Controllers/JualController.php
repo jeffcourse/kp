@@ -195,6 +195,8 @@ class JualController extends Controller
             ]);
 
             $master = Master::find($detail->id_brg);
+
+            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
             if ($master) {
                 $master->quantity -= $detail->qty_order;
                 $master->save();
@@ -210,6 +212,7 @@ class JualController extends Controller
 
                 $currentQuantity = DB::table('invmaster')
                 ->where('kode_brg', $detail->kode_brg)
+                ->whereNotIn('keterangan', $keteranganArray)
                 ->sum('quantity');
 
                 $minSellPrice = $totalCost / $currentQuantity;
@@ -218,6 +221,7 @@ class JualController extends Controller
 
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
+                    ->whereNotIn('keterangan', $keteranganArray)
                     ->update(['hrg_jual' => $sellPrice]);
             }
         }

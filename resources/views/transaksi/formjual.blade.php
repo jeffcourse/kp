@@ -97,7 +97,9 @@
             <input list="kodeBarangList" class="form-control" id="kode_barang_input" placeholder="Masukkan Kode Barang" autocomplete="off">
             <datalist id="kodeBarangList">
             @foreach($master as $m)
+              @if(!Str::contains($m->keterangan, ['BARANG RUSAK', 'BARANG EXPIRED', 'BARANG RUSAK & EXPIRED']))
               <option value="{{$m->kode_brg}}">
+              @endif
             @endforeach
             </datalist>
           </div>

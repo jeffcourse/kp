@@ -15,6 +15,7 @@ class MasterController extends Controller
 {
     public function master(Request $request){
         $selectedGudang = $request->get('gudang');
+        $jenis = $request->get('jenis');
         $search = $request->get('search');
 
         $query = Master::query();
@@ -25,8 +26,17 @@ class MasterController extends Controller
             });
         }
 
+        if($jenis && $jenis != 'All'){
+            $query->whereHas('jenis', function ($j) use ($jenis){
+                $j->where('jenis',$jenis);
+            });
+        }
+
         if($search){
-            $query->where('nama_brg', 'like', '%'.$search.'%');
+            $query->where(function ($query) use ($search) {
+                $query->where('nama_brg', 'like', '%'.$search.'%')
+                      ->orWhere('kode_brg', 'like', '%'.$search.'%');
+            });
         }
 
         $master = $query->paginate(5);
@@ -37,7 +47,7 @@ class MasterController extends Controller
         $type = Type::all();
         $satuan = Satuan::all();
 
-        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan','selectedGudang','search'));
+        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan','selectedGudang','search','jenis'));
     }
 
     public function create()
@@ -117,5 +127,82 @@ class MasterController extends Controller
         $totalPrice = Master::sum(DB::raw('hrg_jual * quantity'));
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
+    }
+
+    public function opnameBarang(Request $request){
+        $kode_brg = $request->input('kode_brg');
+        $nama_brg = $request->input('nama_brg');
+        $kode_divisi = $request->input('kode_divisi');
+        $kode_jenis = $request->input('kode_jenis');
+        $kode_type = $request->input('kode_type');
+        $packing = $request->input('packing');
+        $quantity = $request->input('quantity');
+        $id_satuan = $request->input('id_satuan');
+        $hrg_jual = $request->input('hrg_jual');
+        $kode_gudang = $request->input('kode_gudang');
+        $keterangan = $request->input('keterangan');
+
+        $master = Master::where('kode_brg', $kode_brg)
+            ->where('nama_brg', $nama_brg)
+            ->where('kode_gudang', $kode_gudang)
+            ->where('keterangan', $keterangan)
+            ->first();
+                
+        if($master){
+            DB::table('invmaster')
+            ->where('kode_brg', $kode_brg)
+            ->where('nama_brg', $nama_brg)
+            ->where('kode_gudang', $kode_gudang)
+            ->where('keterangan', [$keterangan])
+            ->increment('quantity', $quantity);
+
+        }else{
+            DB::table('invmaster')->insert([
+                'kode_brg' => $kode_brg,
+                'nama_brg' => $nama_brg,
+                'kode_divisi' => $kode_divisi,
+                'kode_jenis' => $kode_jenis,
+                'kode_type' => $kode_type,
+                'packing' => $packing,
+                'quantity' => $quantity,
+                'id_satuan' => $id_satuan,
+                'hrg_jual' => $hrg_jual,
+                'kode_gudang' => $kode_gudang,
+                'keterangan' => $keterangan,
+            ]);
+        }
+        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
+         
+        DB::table('invmaster')
+            ->where('kode_brg', $kode_brg)
+            ->where('nama_brg', $nama_brg)
+            ->where('kode_gudang', $kode_gudang)
+            ->whereNotIn('keterangan', $keteranganArray)
+            ->decrement('quantity', $quantity);
+
+        $transactions = DB::table('beli_dtl')
+            ->where('kode_brg', $kode_brg)
+            ->get();
+
+        $totalCost = 0;
+        foreach($transactions as $transaction){
+            $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
+        }
+
+        $currentQuantity = DB::table('invmaster')
+            ->where('kode_brg', $kode_brg)
+            ->whereNotIn('keterangan', [$keterangan])
+            ->sum('quantity');
+
+        $minSellPrice = $totalCost / $currentQuantity;
+        $markup = $minSellPrice * 0.5;
+        $sellPrice = $minSellPrice + $markup;
+
+        DB::table('invmaster')
+            ->where('kode_brg', $kode_brg)
+            ->whereNotIn('keterangan', [$keterangan])
+            ->update(['hrg_jual' => $sellPrice]);
+
+        return response()->json(['success' => true]);
     }
 }

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 08, 2024 at 05:12 PM
+-- Generation Time: Jun 10, 2024 at 12:34 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -52,7 +52,9 @@ INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `sub_tota
 ('BL24-00002', '08-06-2024', '08-07-2024', 'ANEKA', 31889000, 10, 35077900, 'Lunas', '08-06-2024', 'Sudah Terkirim', '09-06-2024', '08-06-2024', 'Admin'),
 ('BL24-00003', '08-06-2024', '08-07-2024', 'AMBICO', 240000, 10, 264000, 'Lunas', '08-06-2024', 'Sudah Terkirim', '10-06-2024', '08-06-2024', 'Admin'),
 ('BL24-00004', '08-06-2024', '08-07-2024', 'AMBICO', 240000, 10, 264000, 'Lunas', '08-06-2024', 'Sudah Terkirim', '12-06-2024', '08-06-2024', 'Admin'),
-('BL24-00005', '08-06-2024', '08-07-2024', 'ANEKA', 1195000, 11, 1326450, 'Lunas', '09-06-2024', 'Belum Terkirim', '-', '08-06-2024', 'Admin');
+('BL24-00005', '08-06-2024', '08-07-2024', 'ANEKA', 1195000, 11, 1326450, 'Lunas', '09-06-2024', 'Belum Terkirim', '-', '08-06-2024', 'Admin'),
+('BL24-00006', '10-06-2024', '10-07-2024', 'ANEKA', 4057990000, 10, 4463790000, 'Lunas', '10-06-2024', 'Sudah Terkirim', '11-06-2024', '10-06-2024', 'Admin'),
+('BL24-00007', '10-06-2024', '10-07-2024', 'CLEANBEE', 1250000, 10, 1375000, 'Lunas', '10-06-2024', 'Sudah Terkirim', '11-06-2024', '10-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -83,7 +85,14 @@ INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `packin
 ('BL24-00003', 'A0095', 'KIKKOMAN Shoyu 2KG', 10, '15x2KG', 2, 24000, 240000, 'M'),
 ('BL24-00004', 'A0095', 'KIKKOMAN Shoyu 2KG', 10, '15x2KG', 2, 24000, 240000, 'M'),
 ('BL24-00005', 'A0096', 'KIKKOMAN Shoyu 2,5LTR', 25, '2,5LTR', 2, 32000, 800000, 'K'),
-('BL24-00005', 'A0098', 'Fresh Salmon Tasmania Headless', 10, '6x1,5KG', 1, 39500, 395000, 'K');
+('BL24-00005', 'A0098', 'Fresh Salmon Tasmania Headless', 10, '6x1,5KG', 1, 39500, 395000, 'K'),
+('BL24-00006', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2960, '6x1,6LTR', 1, 594594, 1760000000, 'M'),
+('BL24-00006', 'A0023', 'Chirimen Jako 1KG', 105, '6x1KG', 2, 1583780, 166297000, 'K'),
+('BL24-00006', 'A0012M', 'Sanma L', 300, '55x7,5KG', 1, 1594450, 478335000, 'M'),
+('BL24-00006', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 2186, '6x1,8LTR', 1, 751350, 1642450000, 'M'),
+('BL24-00006', 'A0087', 'Dorry Fillet Frozen 1KG', 10, '10x1KG', 1, 650000, 6500000, 'M'),
+('BL24-00006', 'A008M', 'KIKKOMAN Sashimi Sauce 150ML', 12, '12x150ML', 1, 367572, 4410860, 'M'),
+('BL24-00007', 'A0099M', 'Komochi Shisamo 5L (8PCE)', 25, '20x105GR', 1, 50000, 1250000, 'K');
 
 -- --------------------------------------------------------
 
@@ -187,12 +196,9 @@ CREATE TABLE `invjenis` (
 --
 
 INSERT INTO `invjenis` (`kode`, `jenis`) VALUES
-('A', 'AIRSHIP'),
-('AC', 'AC'),
 ('C', 'CHILLED'),
 ('D', 'DRY'),
-('F', 'FROZEN'),
-('O', 'OTHER');
+('F', 'FROZEN');
 
 -- --------------------------------------------------------
 
@@ -220,15 +226,19 @@ CREATE TABLE `invmaster` (
 --
 
 INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
-(1, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 300, 1, 1594450, 'M', '-'),
-(2, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 3038, 1, 594594, 'M', '23,6CMX33,5CMX31CM'),
-(3, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 105, 2, 1583780, 'K', '-'),
-(4, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 2186, 1, 751350, 'M', '-'),
-(5, 'A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 10, 1, 650000, 'M', '-'),
-(6, 'A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 12, 1, 367572, 'M', '15,5CM X 20,5CM X 18CM'),
+(1, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 600, 1, 1275560, 'M', '-'),
+(2, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 5490, 1, 480000, 'M', '23,6CMX33,5CMX31CM'),
+(3, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 210, 2, 1187840, 'K', '-'),
+(4, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 4372, 1, 563512, 'M', '-'),
+(5, 'A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 20, 1, 487500, 'M', '-'),
+(6, 'A008M', 'KIKKOMAN Sashimi Sauce 150ML', 'J', 'D', 'K18L', '12x150ML', 24, 1, 275679, 'M', '15,5CM X 20,5CM X 18CM'),
 (17, 'A0090', 'SRM Bread Sub Roll Wheat', 'L', 'D', 'PTDR', '10x1KG', 10, 4, 24000, 'M', '-'),
 (18, 'A0091', 'SRM Bread Roll Wheat', 'L', 'D', 'PTDR', '6X1KG', 15, 4, 27000, 'K', '-'),
-(20, 'A0095', 'KIKKOMAN Shoyu 2KG', NULL, NULL, NULL, '15x2KG', 15, 2, 48000, 'M', '-');
+(20, 'A0095', 'KIKKOMAN Shoyu 2KG', 'J', 'D', 'K18L', '15x2KG', 15, 2, 48000, 'M', '-'),
+(34, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 30, 1, 478260, 'M', 'BARANG RUSAK'),
+(35, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 10, 1, 480000, 'M', 'BARANG EXPIRED'),
+(36, 'A0099M', 'Komochi Shisamo 5L (8PCE)', 'J', 'F', 'JSFN', '20x105GR', 8, 1, 234375, 'K', '-'),
+(37, 'A0099M', 'Komochi Shisamo 5L (8PCE)', 'J', 'F', 'JSFN', '20x105GR', 2, 1, 0, 'K', 'BARANG RUSAK');
 
 -- --------------------------------------------------------
 
@@ -282,7 +292,9 @@ INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `sub_tota
 ('JL24-00001', '06-06-2024', '06-07-2024', '07AM', 39701200, 10, 43671300, 'Lunas', '07-06-2024', 'Sudah Terkirim', '08-06-2024', '06-06-2024', 'Admin'),
 ('JL24-00002', '08-06-2024', '08-07-2024', '88SUNARI', 15944500, 10, 17539000, 'Lunas', '08-06-2024', 'Sudah Terkirim', '09-06-2024', '08-06-2024', 'Admin'),
 ('JL24-00003', '08-06-2024', '08-07-2024', '104 BAR', 180000, 10, 198000, 'Lunas', '08-06-2024', 'Sudah Terkirim', '09-06-2024', '08-06-2024', 'Admin'),
-('JL24-00004', '08-06-2024', '08-07-2024', '07AM', 6130800, 10, 6743880, 'Lunas', '10-06-2024', 'Belum Terkirim', '-', '08-06-2024', 'Admin');
+('JL24-00004', '08-06-2024', '08-07-2024', '07AM', 6130800, 10, 6743880, 'Lunas', '10-06-2024', 'Belum Terkirim', '-', '08-06-2024', 'Admin'),
+('JL24-00005', '10-06-2024', '10-07-2024', '07AM', 750000, 10, 825000, 'Lunas', '11-06-2024', 'Sudah Terkirim', '11-06-2024', '10-06-2024', 'Admin'),
+('JL24-00006', '10-06-2024', '10-07-2024', '104 BAR', 721155, 10, 793270, 'Lunas', '12-06-2024', 'Sudah Terkirim', '12-06-2024', '10-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -312,7 +324,9 @@ INSERT INTO `jual_dtl` (`no_bukti`, `id_brg`, `kode_brg`, `nama_brg`, `qty_order
 ('JL24-00002', 1, 'A0012M', 'Sanma L', 10, 1, 1594450, 15944500, 'M'),
 ('JL24-00003', 20, 'A0095', 'KIKKOMAN Shoyu 2KG', 5, 2, 36000, 180000, 'M'),
 ('JL24-00004', 4, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 8, 1, 751350, 6010800, 'M'),
-('JL24-00004', 17, 'A0090', 'SRM Bread Sub Roll Wheat', 5, 4, 24000, 120000, 'M');
+('JL24-00004', 17, 'A0090', 'SRM Bread Sub Roll Wheat', 5, 4, 24000, 120000, 'M'),
+('JL24-00005', 36, 'A0099M', 'Komochi Shisamo 5L (8PCE)', 10, 1, 75000, 750000, 'K'),
+('JL24-00006', 36, 'A0099M', 'Komochi Shisamo 5L (8PCE)', 5, 1, 144231, 721155, 'K');
 
 -- --------------------------------------------------------
 
@@ -360,7 +374,16 @@ INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `kode_brg`, `kode_gudang`, `qty_mas
 (9, 'BL24-00002', 'A0012M', 'M', 20, 0),
 (12, 'BL24-00003', 'A0095', 'M', 10, 0),
 (13, 'JL24-00003', 'A0095', 'M', 0, 5),
-(14, 'BL24-00004', 'A0095', 'M', 10, 0);
+(14, 'BL24-00004', 'A0095', 'M', 10, 0),
+(15, 'BL24-00006', 'A001M', 'M', 2960, 0),
+(16, 'BL24-00006', 'A0023', 'K', 105, 0),
+(17, 'BL24-00006', 'A0012M', 'M', 300, 0),
+(18, 'BL24-00006', 'A004M', 'M', 2186, 0),
+(19, 'BL24-00006', 'A0087', 'M', 10, 0),
+(20, 'BL24-00006', 'A008M', 'M', 12, 0),
+(21, 'BL24-00007', 'A0099M', 'K', 25, 0),
+(22, 'JL24-00005', 'A0099M', 'K', 0, 10),
+(23, 'JL24-00006', 'A0099M', 'K', 0, 5);
 
 -- --------------------------------------------------------
 
@@ -615,7 +638,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `invmaster`
 --
 ALTER TABLE `invmaster`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -627,7 +650,7 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mutasi_stok`
 --
 ALTER TABLE `mutasi_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `satuan`
