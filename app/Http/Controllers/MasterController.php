@@ -191,7 +191,7 @@ class MasterController extends Controller
 
         $currentQuantity = DB::table('invmaster')
             ->where('kode_brg', $kode_brg)
-            ->whereNotIn('keterangan', [$keterangan])
+            ->whereNotIn('keterangan', $keteranganArray)
             ->sum('quantity');
 
         $minSellPrice = $totalCost / $currentQuantity;
@@ -200,7 +200,7 @@ class MasterController extends Controller
 
         DB::table('invmaster')
             ->where('kode_brg', $kode_brg)
-            ->whereNotIn('keterangan', [$keterangan])
+            ->whereNotIn('keterangan', $keteranganArray)
             ->update(['hrg_jual' => $sellPrice]);
 
         return response()->json(['success' => true]);
