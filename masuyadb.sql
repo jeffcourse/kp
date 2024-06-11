@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 10, 2024 at 12:34 PM
+-- Generation Time: Jun 11, 2024 at 01:27 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -227,7 +227,7 @@ CREATE TABLE `invmaster` (
 
 INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
 (1, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 600, 1, 1275560, 'M', '-'),
-(2, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 5490, 1, 480000, 'M', '23,6CMX33,5CMX31CM'),
+(2, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 5460, 1, 483516, 'M', '23,6CMX33,5CMX31CM'),
 (3, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6x1KG', 210, 2, 1187840, 'K', '-'),
 (4, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', '6x1,8LTR', 4372, 1, 563512, 'M', '-'),
 (5, 'A0087', 'Dorry Fillet Frozen 1KG', 'W', 'F', 'PTDR', '10x1KG', 20, 1, 487500, 'M', '-'),
@@ -235,8 +235,8 @@ INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jeni
 (17, 'A0090', 'SRM Bread Sub Roll Wheat', 'L', 'D', 'PTDR', '10x1KG', 10, 4, 24000, 'M', '-'),
 (18, 'A0091', 'SRM Bread Roll Wheat', 'L', 'D', 'PTDR', '6X1KG', 15, 4, 27000, 'K', '-'),
 (20, 'A0095', 'KIKKOMAN Shoyu 2KG', 'J', 'D', 'K18L', '15x2KG', 15, 2, 48000, 'M', '-'),
-(34, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 30, 1, 478260, 'M', 'BARANG RUSAK'),
-(35, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 10, 1, 480000, 'M', 'BARANG EXPIRED'),
+(34, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 50, 1, 0, 'M', 'BARANG RUSAK'),
+(35, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6x1,6LTR', 20, 1, 0, 'M', 'BARANG EXPIRED'),
 (36, 'A0099M', 'Komochi Shisamo 5L (8PCE)', 'J', 'F', 'JSFN', '20x105GR', 8, 1, 234375, 'K', '-'),
 (37, 'A0099M', 'Komochi Shisamo 5L (8PCE)', 'J', 'F', 'JSFN', '20x105GR', 2, 1, 0, 'K', 'BARANG RUSAK');
 
