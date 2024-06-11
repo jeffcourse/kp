@@ -203,11 +203,13 @@ class BeliController extends Controller
                 ->where('kode_gudang', $detail->kirim_gudang)
                 ->first();
 
+            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
             if ($master) {
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
                     ->where('nama_brg', $detail->nama_brg)
                     ->where('kode_gudang', $detail->kirim_gudang)
+                    ->whereNotIn('keterangan', $keteranganArray)
                     ->increment('quantity', $detail->qty_order);
                 
                 $transactions = DB::table('beli_dtl')
@@ -215,20 +217,18 @@ class BeliController extends Controller
                     ->get();
 
                 $totalCost = 0;
+                $currentQuantity = 0;
                 foreach($transactions as $transaction){
-                    $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
+                    $totalCost += $transaction->hrg_total;
+                    $currentQuantity += $transaction->qty_order;
                 }
 
-                $currentQuantity = DB::table('invmaster')
-                ->where('kode_brg', $detail->kode_brg)
-                ->sum('quantity');
-
                 $minSellPrice = $totalCost / $currentQuantity;
-                $markup = $minSellPrice * 0.5;
-                $sellPrice = $minSellPrice + $markup;
+                $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
 
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
+                    ->whereNotIn('keterangan', $keteranganArray)
                     ->update(['hrg_jual' => $sellPrice]);
 
             } else {
@@ -247,17 +247,14 @@ class BeliController extends Controller
                     ->get();
 
                 $totalCost = 0;
+                $currentQuantity = 0;
                 foreach($transactions as $transaction){
-                    $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
+                    $totalCost += $transaction->hrg_total;
+                    $currentQuantity += $transaction->qty_order;
                 }
 
-                $currentQuantity = DB::table('invmaster')
-                ->where('kode_brg', $detail->kode_brg)
-                ->sum('quantity');
-
                 $minSellPrice = $totalCost / $currentQuantity;
-                $markup = $minSellPrice * 0.5;
-                $sellPrice = $minSellPrice + $markup;
+                $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
 
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
