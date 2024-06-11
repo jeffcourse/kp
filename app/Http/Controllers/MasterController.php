@@ -180,29 +180,6 @@ class MasterController extends Controller
             ->whereNotIn('keterangan', $keteranganArray)
             ->decrement('quantity', $quantity);
 
-        $transactions = DB::table('beli_dtl')
-            ->where('kode_brg', $kode_brg)
-            ->get();
-
-        $totalCost = 0;
-        foreach($transactions as $transaction){
-            $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
-        }
-
-        $currentQuantity = DB::table('invmaster')
-            ->where('kode_brg', $kode_brg)
-            ->whereNotIn('keterangan', $keteranganArray)
-            ->sum('quantity');
-
-        $minSellPrice = $totalCost / $currentQuantity;
-        $markup = $minSellPrice * 0.5;
-        $sellPrice = $minSellPrice + $markup;
-
-        DB::table('invmaster')
-            ->where('kode_brg', $kode_brg)
-            ->whereNotIn('keterangan', $keteranganArray)
-            ->update(['hrg_jual' => $sellPrice]);
-
         return response()->json(['success' => true]);
     }
 }

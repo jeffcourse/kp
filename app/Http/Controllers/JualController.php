@@ -196,33 +196,9 @@ class JualController extends Controller
 
             $master = Master::find($detail->id_brg);
 
-            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
             if ($master) {
                 $master->quantity -= $detail->qty_order;
                 $master->save();
-
-                $transactions = DB::table('beli_dtl')
-                    ->where('kode_brg', $detail->kode_brg)
-                    ->get();
-
-                $totalCost = 0;
-                foreach($transactions as $transaction){
-                    $totalCost += $transaction->qty_order * $transaction->hrg_per_unit;
-                }
-
-                $currentQuantity = DB::table('invmaster')
-                ->where('kode_brg', $detail->kode_brg)
-                ->whereNotIn('keterangan', $keteranganArray)
-                ->sum('quantity');
-
-                $minSellPrice = $totalCost / $currentQuantity;
-                $markup = $minSellPrice * 0.5;
-                $sellPrice = $minSellPrice + $markup;
-
-                DB::table('invmaster')
-                    ->where('kode_brg', $detail->kode_brg)
-                    ->whereNotIn('keterangan', $keteranganArray)
-                    ->update(['hrg_jual' => $sellPrice]);
             }
         }
 

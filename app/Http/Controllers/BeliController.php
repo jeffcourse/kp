@@ -203,7 +203,6 @@ class BeliController extends Controller
                 ->where('kode_gudang', $detail->kirim_gudang)
                 ->first();
 
-            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
             if ($master) {
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
@@ -222,7 +221,6 @@ class BeliController extends Controller
 
                 $currentQuantity = DB::table('invmaster')
                 ->where('kode_brg', $detail->kode_brg)
-                ->whereNotIn('keterangan', $keteranganArray)
                 ->sum('quantity');
 
                 $minSellPrice = $totalCost / $currentQuantity;
@@ -231,7 +229,6 @@ class BeliController extends Controller
 
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
-                    ->whereNotIn('keterangan', $keteranganArray)
                     ->update(['hrg_jual' => $sellPrice]);
 
             } else {
