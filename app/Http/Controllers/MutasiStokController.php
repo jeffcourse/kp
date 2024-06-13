@@ -52,7 +52,7 @@ class MutasiStokController extends Controller
             $query->whereBetween('tanggal', [$tglAwalFormatted, $tglAkhirFormatted]);
         }
 
-        $kartuStok = $query->paginate(10);
+        $kartuStok = $query->orderBy('tanggal', 'asc')->paginate(10);
 
         $gudang = Gudang::all();
         $satuan = Satuan::all();
@@ -105,7 +105,7 @@ class MutasiStokController extends Controller
         $totalQtyKeluar = $query->sum('qty_keluar');
         $totalQtyRusak = $query->sum('qty_rusak_exp');
 
-        $kartuStok = $query->get();
+        $kartuStok = $query->orderBy('tanggal', 'asc')->get();
         $data = $kartuStok;
 
         $gudang = Gudang::all();
