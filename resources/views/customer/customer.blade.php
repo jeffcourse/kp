@@ -29,7 +29,7 @@
   <div class="d-flex justify-content-left align-items-center">
     <h4 style="display: inline-block; margin-right: 20px;">Customer Table</h4>
     <a href="{{ route('customer.create') }}" class="btn btn-info" style="margin-right: 10px;">Tambah Customer</a>
-    <input style="width: 170px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama customer">
+    <input style="width: 170px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari nama customer" autocomplete="off">
   </div>
 </div><br>
 

@@ -32,4 +32,8 @@ class Gudang extends Model
     public function jualDetail(){
         return $this->hasMany(JualDetail::class,'kode_gudang');
     }
+
+    public function mutasiStok(){
+        return $this->hasMany(MutasiStok::class,'kode_gudang');
+    }
 }

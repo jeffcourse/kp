@@ -9,6 +9,7 @@ use App\Models\Jenis;
 use App\Models\Type;
 use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class MasterController extends Controller
@@ -137,6 +138,7 @@ class MasterController extends Controller
         $kode_type = $request->input('kode_type');
         $packing = $request->input('packing');
         $quantity = $request->input('quantity');
+        $qty_awal = $request->input('qty_awal');
         $id_satuan = $request->input('id_satuan');
         $hrg_jual = $request->input('hrg_jual');
         $kode_gudang = $request->input('kode_gudang');
@@ -172,6 +174,20 @@ class MasterController extends Controller
             ]);
         }
         $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
+
+        DB::table('mutasi_stok')->insert([
+            'no_bukti' => "-",
+            'tanggal' => Carbon::now()->format('Y-m-d'),
+            'kode_brg' => $kode_brg,
+            'nama_brg' => $nama_brg,
+            'id_satuan' => $id_satuan,
+            'kode_gudang' => $kode_gudang,
+            'stok_awal' => $qty_awal, 
+            'qty_masuk' => 0,
+            'qty_keluar' => 0,
+            'qty_rusak_exp' => $quantity,
+            'stok_akhir' => $qty_awal - $quantity
+        ]);
          
         DB::table('invmaster')
             ->where('kode_brg', $kode_brg)

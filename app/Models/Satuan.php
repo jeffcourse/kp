@@ -32,4 +32,8 @@ class Satuan extends Model
     public function jualDetail(){
         return $this->hasMany(JualDetail::class, 'id_satuan');
     }
+
+    public function mutasiStok(){
+        return $this->hasMany(MutasiStok::class, 'id_satuan');
+    }
 }

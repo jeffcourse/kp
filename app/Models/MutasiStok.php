@@ -19,9 +19,22 @@ class MutasiStok extends Model
     protected $fillable = [
         'no_bukti',
         'kode_brg',
+        'tanggal',
+        'nama_brg',
+        'id_satuan',
         'kode_gudang',
+        'stok_awal',
         'qty_masuk',
-        'qty_keluar'
+        'qty_keluar',
+        'qty_rusak_exp',
+        'stok_akhir'
     ];
 
+    public function gudang(){
+        return $this->belongsTo(Gudang::class,'kode_gudang');
+    }
+
+    public function satuan(){
+        return $this->belongsTo(Satuan::class,'id_satuan');
+    }
 }

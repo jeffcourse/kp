@@ -10,6 +10,7 @@ use App\Http\Controllers\JualController;
 use App\Http\Controllers\BeliController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\GudangController;
+use App\Http\Controllers\MutasiStokController;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,6 +37,10 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/master', [MasterController::class, 'master'])->name('master');
     Route::post('/updateQuantity',[MasterController::class, 'updateQuantity'])->name('UpdateQuantity');
     Route::get('/opnameBarang',[MasterController::class, 'opnameBarang'])->name('OpnameBarang');
+
+    Route::resource('kartuStok',MutasiStokController::class);
+    Route::get('/kartuStok',[MutasiStokController::class, 'kartuStok'])->name('kartuStok');
+    Route::post('/unduhKartu', [MutasiStokController::class, 'cetak_pdf'])->name('KartuPdf');
 
     Route::resource('supplier',SupplierController::class);
     Route::get('/supplier', [SupplierController::class, 'supplier'])->name('supplier');

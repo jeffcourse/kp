@@ -188,23 +188,33 @@ class BeliController extends Controller
 
         $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
 
-        foreach ($beliDetail as $detail) {
-            DB::table('mutasi_stok')->insert([
-                'no_bukti' => $no_bukti,
-                'kode_brg' => $detail->kode_brg,
-                'kode_gudang' => $detail->kirim_gudang,
-                'qty_masuk' => $detail->qty_order,
-                'qty_keluar' => 0,
-            ]);
+        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
 
+        foreach ($beliDetail as $detail) {
             $master = DB::table('invmaster')
                 ->where('kode_brg', $detail->kode_brg)
                 ->where('nama_brg', $detail->nama_brg)
                 ->where('kode_gudang', $detail->kirim_gudang)
+                ->whereNotIn('keterangan', $keteranganArray)
                 ->first();
 
-            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
             if ($master) {
+                $stok_awal = $master->quantity;
+
+                DB::table('mutasi_stok')->insert([
+                    'no_bukti' => $no_bukti,
+                    'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
+                    'kode_brg' => $detail->kode_brg,
+                    'nama_brg' => $detail->nama_brg,
+                    'id_satuan' => $detail->id_satuan,
+                    'kode_gudang' => $detail->kirim_gudang,
+                    'stok_awal' => $stok_awal,
+                    'qty_masuk' => $detail->qty_order,
+                    'qty_keluar' => 0,
+                    'qty_rusak_exp' => 0,
+                    'stok_akhir' => $stok_awal + $detail->qty_order
+                ]);
+
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
                     ->where('nama_brg', $detail->nama_brg)
@@ -232,6 +242,20 @@ class BeliController extends Controller
                     ->update(['hrg_jual' => $sellPrice]);
 
             } else {
+                DB::table('mutasi_stok')->insert([
+                    'no_bukti' => $no_bukti,
+                    'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
+                    'kode_brg' => $detail->kode_brg,
+                    'nama_brg' => $detail->nama_brg,
+                    'id_satuan' => $detail->id_satuan,
+                    'kode_gudang' => $detail->kirim_gudang,
+                    'stok_awal' => 0,
+                    'qty_masuk' => $detail->qty_order,
+                    'qty_keluar' => 0,
+                    'qty_rusak_exp' => 0,
+                    'stok_akhir' => $detail->qty_order
+                ]);
+
                 DB::table('invmaster')->insert([
                     'kode_brg' => $detail->kode_brg,
                     'nama_brg' => $detail->nama_brg,

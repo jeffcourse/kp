@@ -49,7 +49,7 @@
           @endforeach
       </select>
     </div>
-    <input style="width: 200px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang">
+    <input style="width: 200px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang" autocomplete="off">
 </div><br>
 
 @if(session('status'))
@@ -238,13 +238,14 @@
       $('#opnameModal').modal('show');
 
       $('#simpanOpname').click(function() {
+        var quantity = $('#qty_sistem').val();
         var selisih = $('#selisih').val();
         var keterangan = $('#keterangan').val();
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
           data: {kode_brg: kodeBrg, nama_brg: namaBrg, kode_divisi: divisiBrg, kode_jenis: jenisBrg, kode_type: tipeBrg, packing: packingBrg,
-            quantity: selisih, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, keterangan: keterangan},
+            quantity: selisih, qty_awal: quantity, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, keterangan: keterangan},
           success: function(response) {
             $('#opnameModal').modal('hide');
 
