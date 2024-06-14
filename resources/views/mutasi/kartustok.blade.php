@@ -68,7 +68,7 @@
             <input type="hidden" name="tglAwal" id="tglAwal" value="">
             <input type="hidden" name="tglAkhir" id="tglAkhir" value="">
         </form>
-        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Unduh Kartu Stok Sesuai Filter</a>
+        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Lihat Kartu Stok Sesuai Filter</a>
     </div>
 </div><br>
 
