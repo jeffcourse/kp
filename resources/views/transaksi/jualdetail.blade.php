@@ -49,8 +49,8 @@
                 <td>{{$j->nama_brg}}</td>
                 <td>{{$j->qty_order}}</td>
                 <td>{{$j->satuan->satuan}}</td>
-                <td>Rp. {{number_format($j->hrg_per_unit, 0, ',', '.')}}</td>
-                <td>Rp. {{number_format($j->hrg_total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($j->hrg_per_unit), 2, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($j->hrg_total), 2, ',', '.')}}</td>
                 <td>{{$j->gudang->nama}}</td>
             </tr>
         @endforeach

@@ -58,9 +58,9 @@
                 <td>{{$l->jatuh_tempo}}</td>
                 <td>{{$l->customer->nama_cust}}</td>
                 <td>{{$l->customer->alm_1}}, {{$l->customer->alm_2}}, {{$l->customer->alm_3}}</td>
-                <td>Rp. {{number_format($l->sub_total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($l->sub_total), 2, ',', '.')}}</td>
                 <td>{{$l->persen_ppn}}%</td>
-                <td>Rp. {{number_format($l->total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($l->total), 2, ',', '.')}}</td>
                 <td style="text-align: center;"><a class='btn btn-info' href="{{route('JualDetail',$l->no_bukti)}}">Details</a></td>
                 <td style="text-align: center;">
                 @if($l->lunas == "Belum Lunas")

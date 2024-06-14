@@ -86,7 +86,7 @@
                 <td>{{$m->packing}}</td>
                 <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
-                <td>Rp. {{number_format($m->hrg_jual, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($m->hrg_jual), 2, ',', '.')}}</td>
                 <td>{{$m->gudang->nama}}</td>
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">

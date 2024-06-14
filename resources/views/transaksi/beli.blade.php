@@ -67,9 +67,9 @@
                 <td>{{$b->tanggal}}</td>
                 <td>{{$b->jatuh_tempo}}</td>
                 <td>{{$b->supplier->nama_supp}}</td>
-                <td>Rp. {{number_format($b->sub_total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($b->sub_total), 2, ',', '.')}}</td>
                 <td>{{$b->persen_ppn}}%</td>
-                <td>Rp. {{number_format($b->total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($b->total), 2, ',', '.')}}</td>
                 <td style="text-align: center;">
                 @if($b->lunas == "Belum Lunas")
                   <button class='btn btn-danger btn-update-bayar' data-toggle="modal" data-target="#dateModal">Belum Lunas</button>

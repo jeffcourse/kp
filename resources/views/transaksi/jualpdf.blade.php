@@ -56,7 +56,7 @@
         <td style="width: 180px;">{{$detail->qty_order}}</td>
         <td style="width: 270px;">{{$detail->nama_brg}}</td>
         <td>{{$detail->satuan->satuan}}</td>
-        <td style="width: 180px;">Rp. {{number_format($detail->hrg_per_unit, 0, ',', '.')}}</td>
+        <td style="width: 180px;">Rp. {{number_format(floatval($detail->hrg_per_unit), 2, ',', '.')}}</td>
       </tr>
       @endforeach
       <tr>
@@ -64,7 +64,7 @@
         <td>Received by:</td>
         <td colspan="1" rowspan="3">Penerima:</td>
         <td>SUBTOTAL</td>
-        <td>Rp. {{number_format($data->sub_total, 0, ',', '.')}}</td>
+        <td>Rp. {{number_format(floatval($data->sub_total), 2, ',', '.')}}</td>
       </tr>
       <tr>
         <td colspan="1" rowspan="2">Disetujui:</td>
@@ -74,7 +74,7 @@
       </tr>
       <tr>
         <td>TOTAL</td>
-        <td>Rp. {{number_format($data->total, 0, ',', '.')}}</td>
+        <td>Rp. {{number_format(floatval($data->total), 2, ',', '.')}}</td>
       </tr>
     </table>
     </td>

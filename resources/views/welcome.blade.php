@@ -47,7 +47,7 @@
                     <div class="card-body" style="background-color: yellow;">
                         <i class="fas fa-dollar-sign fa-3x mb-2"></i>
                         <h5 class="card-title">Total Value</h5>
-                        <h4 class="card-text">Rp. {{number_format($totalPrice, 0, ',', '.')}}</h4>
+                        <h4 class="card-text">Rp. {{number_format(floatval($totalPrice), 2, ',', '.')}}</h4>
                     </div>
                 </div>
             </div>

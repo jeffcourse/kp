@@ -56,9 +56,9 @@
                 <td>{{$k->tanggal}}</td>
                 <td>{{$k->jatuh_tempo}}</td>
                 <td>{{$k->supplier->nama_supp}}</td>
-                <td>Rp. {{number_format($k->sub_total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($k->sub_total), 2, ',', '.')}}</td>
                 <td>{{$k->persen_ppn}}%</td>
-                <td>Rp. {{number_format($k->total, 0, ',', '.')}}</td>
+                <td>Rp. {{number_format(floatval($k->total), 2, ',', '.')}}</td>
                 <td style="text-align: center;"><a class='btn btn-info' href="{{route('BeliDetail',$k->no_bukti)}}">Details</a></td>
                 <td style="text-align: center;">
                 @if($k->status == "Belum Terkirim")

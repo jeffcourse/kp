@@ -112,7 +112,7 @@
         </td>
         <td>
           <div class="form-group">
-            <input type="number" name="hrg_per_unit[]" class="form-control hrg_per_unit" placeholder="Masukkan Harga" required autocomplete="off">
+            <input type="number" name="hrg_per_unit[]" class="form-control hrg_per_unit" placeholder="Masukkan Harga" required autocomplete="off" step="0.01">
           </div>
         </td>
         <td>
@@ -221,28 +221,28 @@
 
         function calculateHargaTotal(section) {
           var qty = $(section).find('.qty_order').val();
-          var hrgPerUnit = $(section).find('.hrg_per_unit').val();
+          var hrgPerUnit = parseFloat($(section).find('.hrg_per_unit').val());
           var hargaTotal = qty * hrgPerUnit;
-          $(section).find('.hrg_total').val(hargaTotal);
+          $(section).find('.hrg_total').val(hargaTotal.toFixed(2));
         }
 
         function calculateSubTotal() {
           var hargaSubTotal = 0;
           $('.barang-section table tbody tr').each(function () {
             var qty = $(this).find('.qty_order').val();
-            var hrgPerUnit = $(this).find('.hrg_per_unit').val();
+            var hrgPerUnit = parseFloat($(this).find('.hrg_per_unit').val());
             var hargaTotal = qty * hrgPerUnit;
-            $(this).find('.hrg_total').val(hargaTotal);
+            $(this).find('.hrg_total').val(hargaTotal.toFixed(2));
             hargaSubTotal += parseFloat(hargaTotal);
           });
-          $('#sub_total').val(hargaSubTotal);
+          $('#sub_total').val(hargaSubTotal.toFixed(2));
         }
 
         function calculateTotal() {
           var subTotal = parseFloat($('#sub_total').val());
           var persenPpn = parseFloat($('#persen_ppn').val());
           var hargaTotal = subTotal + ((persenPpn / 100) * subTotal);
-          $('#total').val(hargaTotal);
+          $('#total').val(hargaTotal.toFixed(2));
         }
 
         $(document).on('input', '.qty_order, .hrg_per_unit', function () {
