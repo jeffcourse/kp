@@ -5,39 +5,39 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
         body {
-            width: 100%;
+            width: 1020px;
         }
         .table-bordered {
-            width: 100%; 
+            width: 1020px; 
         }
-        .table-bordered, .table-bordered th, .table-bordered td {
-            border: 2px solid black; 
+        .table-bordered, .table-bordered th, .table-bordered td, {
+            border: 1px solid black; 
         }
     </style>
 </head>
 <body>
 <table>
     <tr>
-        <td colspan="8"><h4>PT. MASUYA GRAHA TRIKENCANA</h4></td>
+        <td colspan="9"><h4>PT. MASUYA GRAHA TRIKENCANA</h4></td>
         <td style="text-align: right;">{{$data->tanggal}}</td>
     </tr>
     <tr>
-        <td colspan="8">JL. MAHENDRADATTA NO.15 E-F, PADANGSAMBIAN, KEC. DENPASAR BARAT</td>
+        <td colspan="9">JL. MAHENDRADATTA NO.15 E-F, PADANGSAMBIAN, KEC. DENPASAR BARAT</td>
         <td style="text-align: right;">{{$data->no_bukti}}</td> 
     </tr>    
     <tr>
-        <td colspan="8">KOTA DENPASAR, BALI 80119</td>
+        <td colspan="9">KOTA DENPASAR, BALI 80119</td>
         <td style="text-align: right;">{{$data->jatuh_tempo}}</td>
     </tr><br>
     <tr>
-        <td colspan="8">
+        <td colspan="9">
             <h4>{{$data->customer->nama_cust}}</h4>
         </td>
         <td style="text-align: center;">{{$data->author}}</td>
         
     </tr>
     <tr>
-        <td colspan="8">{{$data->customer->alm_1}}, {{$data->customer->alm_2}}, {{$data->customer->alm_3}}</td>
+        <td colspan="9">{{$data->customer->alm_1}}, {{$data->customer->alm_2}}, {{$data->customer->alm_3}}</td>
         <td style="font-weight: bold; text-align: center;">*INVOICE*</td>
     </tr>
     <tr class="table-tr">
@@ -53,28 +53,28 @@
       @foreach($dataDetail as $detail)
       <tr>
         <td style="width: 180px;">{{$detail->kode_brg}}</td>
-        <td style="width: 180px;">{{$detail->qty_order}}</td>
-        <td style="width: 270px;">{{$detail->nama_brg}}</td>
-        <td>{{$detail->satuan->satuan}}</td>
-        <td style="width: 180px;">Rp. {{number_format(floatval($detail->hrg_per_unit), 2, ',', '.')}}</td>
+        <td style="width: 180px; text-align: center;">{{$detail->qty_order}}</td>
+        <td style="width: 320px;">{{$detail->nama_brg}}</td>
+        <td style="text-align: center;">{{$detail->satuan->satuan}}</td>
+        <td style="width: 180px; text-align: center;">Rp. {{number_format(floatval($detail->hrg_per_unit), 2, ',', '.')}}</td>
       </tr>
       @endforeach
       <tr>
-        <td colspan="1">Ordered by:</td>
-        <td>Received by:</td>
-        <td colspan="1" rowspan="3">Penerima:</td>
-        <td>SUBTOTAL</td>
-        <td>Rp. {{number_format(floatval($data->sub_total), 2, ',', '.')}}</td>
+        <td colspan="1" rowspan="1">Ordered by:</td>
+        <td rowspan="1">Received by:</td>
+        <td colspan="1" rowspan="6" style="vertical-align: top; text-align: left;">Penerima:</td>
+        <td rowspan="1" style="text-align: center;">SUBTOTAL</td>
+        <td rowspan="1" style="text-align: center;">Rp. {{number_format(floatval($data->sub_total), 2, ',', '.')}}</td>
       </tr>
       <tr>
-        <td colspan="1" rowspan="2">Disetujui:</td>
-        <td rowspan="2">Pengirim:</td>
-        <td>PPN</td>
-        <td>{{$data->persen_ppn}}%</td>
+        <td colspan="1" rowspan="5" style="vertical-align: top; text-align: left;">Disetujui:</td>
+        <td rowspan="5" style="vertical-align: top; text-align: left;">Pengirim:</td>
+        <td rowspan="1" style="text-align: center;">PPN</td>
+        <td rowspan="1" style="text-align: center;">{{$data->persen_ppn}}%</td>
       </tr>
       <tr>
-        <td>TOTAL</td>
-        <td>Rp. {{number_format(floatval($data->total), 2, ',', '.')}}</td>
+        <td rowspan="4" style="text-align: center;">TOTAL</td>
+        <td rowspan="4" style="text-align: center;">Rp. {{number_format(floatval($data->total), 2, ',', '.')}}</td>
       </tr>
     </table>
     </td>

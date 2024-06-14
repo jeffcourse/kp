@@ -12,7 +12,8 @@ use App\Models\MutasiStok;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use PDF;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
 
 class JualController extends Controller
 {
@@ -254,8 +255,16 @@ class JualController extends Controller
         $data = $jual;
         $dataDetail = $jualDetail;
 
-    	$pdf = PDF::loadview('transaksi.jualpdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer, 'satuan'=>$satuan]);
-    	$pdf->setPaper('A4', 'landscape');
-    	return $pdf->stream();
+        $view = View::make('transaksi.jualpdf', ['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer, 'satuan'=>$satuan]);
+        $pdf = new Dompdf();
+        $pdf->loadHtml($view->render());
+        $pdf->setPaper('A4', 'landscape');
+        $pdf->render();
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline;',
+        ]);
+
+    	//$pdf = PDF::loadview('transaksi.jualpdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer, 'satuan'=>$satuan]);
     }
 }

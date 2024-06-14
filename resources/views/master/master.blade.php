@@ -72,7 +72,6 @@
         <th>Gudang</th>
         <th>Keterangan</th>
         <th>Actions</th>
-        <th>Hapus</th>
       </tr>
     </thead>
     <tbody>
@@ -91,11 +90,8 @@
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('master.edit',$m->id)}}"
-                    @if(in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"]))
-                      style="display: none;"
-                    @endif
-                    >Edit</a>
+                  @if(!in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"]))
+                    <a class='btn btn-info' href="{{route('master.edit',$m->id)}}">Edit</a>
                     <button class='btn btn-danger btn-opname' 
                       data-toggle="modal" 
                       data-kode="{{$m->kode_brg}}"
@@ -108,19 +104,15 @@
                       data-satuan="{{$m->id_satuan}}"
                       data-gudang="{{$m->kode_gudang}}"
                       data-toggle="modal" 
-                      data-target="#opnameModal"
-                      @if(in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"]))
-                        style="display: none;"
-                      @endif
-                      >Opname</button>
+                      data-target="#opnameModal">Opname</button>
+                  @else
+                    <form method="POST" action="{{route('master.destroy', $m->id)}}">
+                      @csrf
+                      @method('DELETE')
+                      <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>
+                    </form>
+                  @endif
                   </div>
-                </td>
-                <td style="text-align: center;">
-                  <form method="POST" action="{{route('master.destroy', $m->id)}}">
-                    @csrf
-                    @method('DELETE')
-                    <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>
-                  </form>
                 </td>
             </tr>
         @endforeach

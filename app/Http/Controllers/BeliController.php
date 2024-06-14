@@ -12,7 +12,8 @@ use App\Models\MutasiStok;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
-use PDF;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Auth;
 
 class BeliController extends Controller
@@ -335,8 +336,16 @@ class BeliController extends Controller
         $data = $beli;
         $dataDetail = $beliDetail;
  
-    	$pdf = PDF::loadview('transaksi.belipdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'supplier'=>$supplier, 'gudang'=>$gudang, 'satuan'=>$satuan]);
+        $view = View::make('transaksi.belipdf', ['data'=>$data, 'dataDetail'=>$dataDetail, 'supplier'=>$supplier, 'gudang'=>$gudang, 'satuan'=>$satuan]);
+        $pdf = new Dompdf();
+        $pdf->loadHtml($view->render());
         $pdf->setPaper('A4', 'landscape');
-    	return $pdf->stream();
+        $pdf->render();
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline;',
+        ]);
+
+    	//$pdf = PDF::loadview('transaksi.belipdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'supplier'=>$supplier, 'gudang'=>$gudang, 'satuan'=>$satuan]);
     }
 }

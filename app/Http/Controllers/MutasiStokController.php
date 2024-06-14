@@ -8,7 +8,8 @@ use App\Models\Satuan;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use PDF;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
 
 class MutasiStokController extends Controller
 {
@@ -115,10 +116,16 @@ class MutasiStokController extends Controller
         $gudang = Gudang::all();
         $satuan = Satuan::all();
  
-    	$pdf = PDF::loadview('mutasi.kartustokpdf',['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'totalMasuk'=>$totalQtyMasuk, 
-            'totalKeluar'=>$totalQtyKeluar, 'totalRusak'=>$totalQtyRusak, 'tglAwal'=>$tglAwalFormatted, 'tglAkhir'=>$tglAkhirFormatted, 
-            'selectedGudang'=>$selectedGudang]);
-        $pdf->setPaper('A4');
-    	return $pdf->stream();
+        $view = View::make('mutasi.kartustokpdf', ['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'totalMasuk'=>$totalQtyMasuk, 
+        'totalKeluar'=>$totalQtyKeluar, 'totalRusak'=>$totalQtyRusak, 'tglAwal'=>$tglAwalFormatted, 'tglAkhir'=>$tglAkhirFormatted, 
+        'selectedGudang'=>$selectedGudang]);
+        $pdf = new Dompdf();
+        $pdf->loadHtml($view->render());
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline;',
+        ]);
     }
 }
