@@ -19,6 +19,9 @@ class MutasiStokController extends Controller
         $tglAwal = $request->get('tglAwal');
         $tglAkhir = $request->get('tglAkhir');
 
+        $tglAwalFormatted = $tglAwal ? Carbon::createFromFormat('d-m-Y', $tglAwal)->startOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::min('tanggal'))->format('d-m-Y');
+        $tglAkhirFormatted = $tglAkhir ? Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::max('tanggal'))->format('d-m-Y');        
+
         $query = MutasiStok::query();
 
         if($selectedGudang && $selectedGudang != 'All'){
@@ -43,13 +46,15 @@ class MutasiStokController extends Controller
         }
 
         if($tglAwal && $tglAkhir){
-            $tglAwalCarbon = Carbon::createFromFormat('d-m-Y', $tglAwal)->startOfDay();
-            $tglAkhirCarbon = Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay();
-
-            $tglAwalFormatted = $tglAwalCarbon->format('Y-m-d');
-            $tglAkhirFormatted = $tglAkhirCarbon->format('Y-m-d');
-
-            $query->whereBetween('tanggal', [$tglAwalFormatted, $tglAkhirFormatted]);
+            $tglAwalFlipped = Carbon::createFromFormat('d-m-Y', $tglAwalFormatted)->format('Y-m-d');
+            $tglAkhirFlipped = Carbon::createFromFormat('d-m-Y', $tglAkhirFormatted)->format('Y-m-d');
+            $query->whereBetween('tanggal', [$tglAwalFlipped, $tglAkhirFlipped]);
+        } elseif ($tglAwal){
+            $tglAwalFlipped = Carbon::createFromFormat('d-m-Y', $tglAwalFormatted)->format('Y-m-d');
+            $query->where('tanggal', '>=', $tglAwalFlipped);
+        } elseif ($tglAkhir){
+            $tglAkhirFlipped = Carbon::createFromFormat('d-m-Y', $tglAkhirFormatted)->format('Y-m-d');
+            $query->where('tanggal', '<=', $tglAkhirFlipped);
         }
 
         $kartuStok = $query->orderBy('tanggal', 'asc')->paginate(10);
@@ -67,6 +72,9 @@ class MutasiStokController extends Controller
         $selectedTrans = $request->get('selectedTrans');
         $tglAwal = $request->get('tglAwal');
         $tglAkhir = $request->get('tglAkhir');
+
+        $tglAwalFormatted = $tglAwal ? Carbon::createFromFormat('d-m-Y', $tglAwal)->startOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::min('tanggal'))->format('d-m-Y');
+        $tglAkhirFormatted = $tglAkhir ? Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::max('tanggal'))->format('d-m-Y');
 
         $query = MutasiStok::query();
 
@@ -91,14 +99,10 @@ class MutasiStokController extends Controller
             $query->where('no_bukti', $selectedTrans);
         }
 
-        if($tglAwal && $tglAkhir){
-            $tglAwalCarbon = Carbon::createFromFormat('d-m-Y', $tglAwal)->startOfDay();
-            $tglAkhirCarbon = Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay();
-
-            $tglAwalFormatted = $tglAwalCarbon->format('Y-m-d');
-            $tglAkhirFormatted = $tglAkhirCarbon->format('Y-m-d');
-
-            $query->whereBetween('tanggal', [$tglAwalFormatted, $tglAkhirFormatted]);
+        if($tglAwal || $tglAkhir || ($tglAwal && $tglAkhir)){
+            $tglAwalFlipped = Carbon::createFromFormat('d-m-Y', $tglAwalFormatted)->format('Y-m-d');
+            $tglAkhirFlipped = Carbon::createFromFormat('d-m-Y', $tglAkhirFormatted)->format('Y-m-d');
+            $query->whereBetween('tanggal', [$tglAwalFlipped, $tglAkhirFlipped]);
         }
 
         $totalQtyMasuk = $query->sum('qty_masuk');
@@ -112,7 +116,7 @@ class MutasiStokController extends Controller
         $satuan = Satuan::all();
  
     	$pdf = PDF::loadview('mutasi.kartustokpdf',['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'totalMasuk'=>$totalQtyMasuk, 
-            'totalKeluar'=>$totalQtyKeluar, 'totalRusak'=>$totalQtyRusak, 'tglAwal'=>$tglAwal, 'tglAkhir'=>$tglAkhir, 
+            'totalKeluar'=>$totalQtyKeluar, 'totalRusak'=>$totalQtyRusak, 'tglAwal'=>$tglAwalFormatted, 'tglAkhir'=>$tglAkhirFormatted, 
             'selectedGudang'=>$selectedGudang]);
         $pdf->setPaper('A4');
     	return $pdf->stream();

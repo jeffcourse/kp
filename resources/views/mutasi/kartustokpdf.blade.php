@@ -33,9 +33,13 @@
     <tr>
         <td style="text-align: center; width: 700px;"><h3>Kartu Stok<h3></td>
     </tr>
-    @if($tglAwal && $tglAkhir)
+    @if($tglAwal != $tglAkhir)
     <tr>
         <td style="text-align: center; width: 700px;">Tanggal {{$tglAwal}} s/d {{$tglAkhir}}</td>
+    </tr>
+    @elseif($tglAwal == $tglAkhir)
+    <tr>
+        <td style="text-align: center; width: 700px;">Tanggal {{$tglAwal}}</td>
     </tr>
     @endif<br>
     @if($selectedGudang != "All")
@@ -62,7 +66,9 @@
     @endif
     <table class="table table-bordered center-table" style="width: 700px;">
       <tr>
-        <th style="text-align: center;">Tanggal Mutasi</th>
+        @if($tglAwal != $tglAkhir)
+            <th style="text-align: center;">Tanggal Mutasi</th>
+        @endif
         <th style="text-align: center;">Nomor Nota</th>
         @if(count(array_unique($kodeBrgArray)) > 1)
             <th style="text-align: center;">Kode Barang</th>
@@ -80,7 +86,9 @@
       </tr>
       @foreach($data as $d)
         <tr>
-            <td>{{date('d-m-Y', strtotime($d->tanggal))}}</td>
+            @if($tglAwal != $tglAkhir)
+                <td>{{date('d-m-Y', strtotime($d->tanggal))}}</td>
+            @endif
             <td>{{$d->no_bukti}}</td>
             @if(count(array_unique($kodeBrgArray)) > 1)
                 <td>{{$d->kode_brg}}</td>
@@ -98,7 +106,9 @@
         </tr>
       @endforeach
       <tr>
-        <td></td>
+        @if($tglAwal != $tglAkhir)
+            <td></td>
+        @endif
         <td></td>
         @if(count(array_unique($kodeBrgArray)) > 1)
             <td></td>
