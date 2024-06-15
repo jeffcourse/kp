@@ -264,7 +264,5 @@ class JualController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline;',
         ]);
-
-    	//$pdf = PDF::loadview('transaksi.jualpdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer, 'satuan'=>$satuan]);
     }
 }

@@ -345,7 +345,5 @@ class BeliController extends Controller
             'Content-Type' => 'application/pdf',
             'Content-Disposition' => 'inline;',
         ]);
-
-    	//$pdf = PDF::loadview('transaksi.belipdf',['data'=>$data, 'dataDetail'=>$dataDetail, 'supplier'=>$supplier, 'gudang'=>$gudang, 'satuan'=>$satuan]);
     }
 }
