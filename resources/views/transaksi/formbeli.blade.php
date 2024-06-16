@@ -279,7 +279,7 @@
         });
 
         if(isDuplicate){
-            $('.error-message').text('Terdapat duplikasi kode barang dan nama barang');
+            $('.error-message').text('Terdapat duplikasi kode, nama dan gudang barang');
             event.preventDefault();
         } else {
             $('.error-message').text('');

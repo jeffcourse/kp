@@ -8,8 +8,12 @@ use App\Models\Gudang;
 use App\Models\Jenis;
 use App\Models\Type;
 use App\Models\Satuan;
+use App\Models\BeliDetail;
+use App\Models\JualDetail;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use Dompdf\Dompdf;
+use Illuminate\Support\Facades\View;
 use Illuminate\Http\Request;
 
 class MasterController extends Controller
@@ -47,8 +51,10 @@ class MasterController extends Controller
         $jenis = Jenis::all();
         $type = Type::all();
         $satuan = Satuan::all();
+        $beli = BeliDetail::all();
+        $jual = JualDetail::all();
 
-        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan','selectedGudang','search','jenis'));
+        return view('master.master',compact('master','divisi','gudang','jenis','type','satuan','selectedGudang','search','jenis','beli','jual'));
     }
 
     public function create()
@@ -123,9 +129,11 @@ class MasterController extends Controller
 
     public function welcome()
     {
-        $totalProducts = Master::count();
+        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
 
-        $totalPrice = Master::sum(DB::raw('hrg_jual * quantity'));
+        $totalProducts = Master::whereNotIn("keterangan", $keteranganArray)->count();
+
+        $totalPrice = Master::whereNotIn("keterangan", $keteranganArray)->sum(DB::raw('hrg_jual * quantity'));
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
     }
@@ -144,58 +152,158 @@ class MasterController extends Controller
         $kode_gudang = $request->input('kode_gudang');
         $keterangan = $request->input('keterangan');
 
+        $qty_fisik = $request->input('qty_fisik');
+        $transaction = $request->input('transaction');
+        $no_bukti = $request->input('no_bukti');
+        $qty_order = $request->input('qty_order');
+        $hrg_total = $request->input('hrg_total');
+
         $master = Master::where('kode_brg', $kode_brg)
             ->where('nama_brg', $nama_brg)
             ->where('kode_gudang', $kode_gudang)
             ->where('keterangan', $keterangan)
             ->first();
-                
-        if($master){
-            DB::table('invmaster')
-            ->where('kode_brg', $kode_brg)
-            ->where('nama_brg', $nama_brg)
-            ->where('kode_gudang', $kode_gudang)
-            ->where('keterangan', [$keterangan])
-            ->increment('quantity', $quantity);
 
-        }else{
-            DB::table('invmaster')->insert([
+        if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
+            $quantity = abs($quantity);
+
+            if($master){
+                DB::table('invmaster')
+                ->where('kode_brg', $kode_brg)
+                ->where('nama_brg', $nama_brg)
+                ->where('kode_gudang', $kode_gudang)
+                ->where('keterangan', [$keterangan])
+                ->increment('quantity', $quantity);
+    
+            }else{
+                DB::table('invmaster')->insert([
+                    'kode_brg' => $kode_brg,
+                    'nama_brg' => $nama_brg,
+                    'kode_divisi' => $kode_divisi,
+                    'kode_jenis' => $kode_jenis,
+                    'kode_type' => $kode_type,
+                    'packing' => $packing,
+                    'quantity' => $quantity,
+                    'id_satuan' => $id_satuan,
+                    'hrg_jual' => $hrg_jual,
+                    'kode_gudang' => $kode_gudang,
+                    'keterangan' => $keterangan,
+                ]);
+            }
+            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
+    
+            DB::table('mutasi_stok')->insert([
+                'no_bukti' => "-",
+                'tanggal' => Carbon::now()->format('Y-m-d'),
                 'kode_brg' => $kode_brg,
                 'nama_brg' => $nama_brg,
-                'kode_divisi' => $kode_divisi,
-                'kode_jenis' => $kode_jenis,
-                'kode_type' => $kode_type,
-                'packing' => $packing,
-                'quantity' => $quantity,
                 'id_satuan' => $id_satuan,
-                'hrg_jual' => $hrg_jual,
                 'kode_gudang' => $kode_gudang,
-                'keterangan' => $keterangan,
+                'stok_awal' => $qty_awal, 
+                'qty_masuk' => 0,
+                'qty_keluar' => 0,
+                'qty_rusak_exp' => $quantity,
+                'stok_akhir' => $qty_awal - $quantity
             ]);
-        }
-        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
+             
+            DB::table('invmaster')
+                ->where('kode_brg', $kode_brg)
+                ->where('nama_brg', $nama_brg)
+                ->where('kode_gudang', $kode_gudang)
+                ->whereNotIn('keterangan', $keteranganArray)
+                ->decrement('quantity', $quantity);
+        
+        } else{
 
-        DB::table('mutasi_stok')->insert([
-            'no_bukti' => "-",
-            'tanggal' => Carbon::now()->format('Y-m-d'),
-            'kode_brg' => $kode_brg,
-            'nama_brg' => $nama_brg,
-            'id_satuan' => $id_satuan,
-            'kode_gudang' => $kode_gudang,
-            'stok_awal' => $qty_awal, 
-            'qty_masuk' => 0,
-            'qty_keluar' => 0,
-            'qty_rusak_exp' => $quantity,
-            'stok_akhir' => $qty_awal - $quantity
-        ]);
-         
-        DB::table('invmaster')
-            ->where('kode_brg', $kode_brg)
-            ->where('nama_brg', $nama_brg)
-            ->where('kode_gudang', $kode_gudang)
-            ->whereNotIn('keterangan', $keteranganArray)
-            ->decrement('quantity', $quantity);
+        }
 
         return response()->json(['success' => true]);
+    }
+
+    public function fetchNoBukti(Request $request){
+        $selectedValue = $request->input('selectedValue');
+        $kodeBrg = $request->input('kodeBrg');
+        $namaBrg = $request->input('namaBrg');
+        $gudangBrg = $request->input('gudangBrg');
+
+        if($selectedValue == 'pembelian'){
+            $beliData = BeliDetail::where('kode_brg', $kodeBrg)
+                ->where('nama_brg', $namaBrg)
+                ->where('kirim_gudang', $gudangBrg)
+                ->get(['no_bukti']);
+
+            return response()->json($beliData);
+        } else if($selectedValue == 'penjualan'){
+            $jualData = JualDetail::where('kode_brg', $kodeBrg)
+                ->where('nama_brg', $namaBrg)
+                ->where('kode_gudang', $gudangBrg)
+                ->get(['no_bukti']);
+
+            return response()->json($jualData);
+        }
+        return response()->json([]);
+    }
+
+    public function fetchTransData(Request $request){
+        $transaction = $request->input('transaction');
+        $noBukti = $request->input('noBukti');
+        $kodeBrg = $request->input('kodeBrg');
+        $namaBrg = $request->input('namaBrg');
+        $gudangBrg = $request->input('gudangBrg');
+
+        if($transaction == 'pembelian'){
+            $beliData = BeliDetail::where('no_bukti', $noBukti)
+                ->where('kode_brg', $kodeBrg)
+                ->where('nama_brg', $namaBrg)
+                ->where('kirim_gudang', $gudangBrg)
+                ->get();
+
+            $beliData = $beliData->map(function ($item, $key) {
+                return [
+                    'no_bukti' => $item->no_bukti,
+                    'kode_brg' => $item->kode_brg,
+                    'nama_brg' => $item->nama_brg,
+                    'qty_order' => $item->qty_order,
+                    'packing' => $item->packing,
+                    'id_satuan' => $item->id_satuan,
+                    'hrg_per_unit' => $item->hrg_per_unit,
+                    'hrg_total' => $item->hrg_total,
+                    'kode_gudang' => $item->kirim_gudang,    
+                ];
+            });
+
+            return response()->json($beliData);
+        } else if($transaction == 'penjualan'){
+            $jualData = JualDetail::where('no_bukti', $noBukti)
+                ->where('kode_brg', $kodeBrg)
+                ->where('nama_brg', $namaBrg)
+                ->where('kode_gudang', $gudangBrg)
+                ->get();
+            
+            return response()->json($jualData);
+        }
+        return response()->json([]);
+    }
+
+    public function cetak_pdf(Request $request){
+        $selectedGudang = $request->input('selectedGudang');
+
+        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
+
+        $opname = MutasiStok::where('kode_gudang', $selectedGudang)->whereIn('keterangan', $keteranganArray);
+
+        $data = $opname;
+        $gudang = Gudang::all();
+        $satuan = Satuan::all();
+ 
+        $view = View::make('master.opnamepdf', ['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'selectedGudang'=>$selectedGudang]);
+        $pdf = new Dompdf();
+        $pdf->loadHtml($view->render());
+        $pdf->setPaper('A4', 'portrait');
+        $pdf->render();
+        return response($pdf->output(), 200, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline;',
+        ]);
     }
 }

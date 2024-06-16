@@ -97,7 +97,7 @@
             <input list="kodeBarangList" class="form-control" id="kode_barang_input" placeholder="Masukkan Kode Barang" autocomplete="off">
             <datalist id="kodeBarangList" style="overflow-y: hidden;">
             @foreach($master as $m)
-              @if(!Str::contains($m->keterangan, ['BARANG RUSAK', 'BARANG EXPIRED', 'BARANG RUSAK & EXPIRED']))
+              @if(!Str::contains($m->keterangan, ['BARANG RUSAK', 'BARANG EXPIRED', 'SALAH PENCATATAN']))
               <option value="{{$m->kode_brg}}">
               @endif
             @endforeach
@@ -296,7 +296,7 @@
         });
 
         if(isDuplicate){
-            $('.error-message').text('Terdapat duplikasi kode barang dan nama barang');
+            $('.error-message').text('Terdapat duplikasi kode, nama dan gudang barang');
             event.preventDefault();
         } else {
             $('.error-message').text('');

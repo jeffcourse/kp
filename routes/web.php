@@ -37,6 +37,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/master', [MasterController::class, 'master'])->name('master');
     Route::post('/updateQuantity',[MasterController::class, 'updateQuantity'])->name('UpdateQuantity');
     Route::get('/opnameBarang',[MasterController::class, 'opnameBarang'])->name('OpnameBarang');
+    Route::get('/fetchNoBukti',[MasterController::class, 'fetchNoBukti'])->name('FetchNoBukti');
+    Route::get('/fetchTransData',[MasterController::class, 'fetchTransData'])->name('FetchTransData');
+    Route::post('/opnamePdf',[MasterController::class, 'cetak_pdf'])->name('OpnamePdf');
 
     Route::resource('kartuStok',MutasiStokController::class);
     Route::get('/kartuStok',[MutasiStokController::class, 'kartuStok'])->name('kartuStok');

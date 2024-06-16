@@ -189,7 +189,7 @@ class BeliController extends Controller
 
         $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
 
-        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"];
+        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
 
         foreach ($beliDetail as $detail) {
             $master = DB::table('invmaster')

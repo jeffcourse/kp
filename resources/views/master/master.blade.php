@@ -49,7 +49,14 @@
           @endforeach
       </select>
     </div>
-    <input style="width: 200px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang" autocomplete="off">
+    <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
+        <input style="width: 200px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang" autocomplete="off">
+        <form id="pdfForm" action="{{route('OpnamePdf')}}" method="POST" style="display: none;">
+            @csrf
+            <input type="hidden" name="selectedGudang" id="selectedGudang" value="">
+        </form>
+        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Lihat Laporan Stok Opname Gudang</a>
+    </div>
 </div><br>
 
 @if(session('status'))
@@ -90,7 +97,7 @@
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                  @if(!in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "BARANG RUSAK & EXPIRED"]))
+                  @if(!in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"]))
                     <a class='btn btn-info' href="{{route('master.edit',$m->id)}}">Edit</a>
                     <button class='btn btn-danger btn-opname' 
                       data-toggle="modal" 
@@ -211,6 +218,28 @@
 
     updateTableData(1);
 
+    function calculateSelisih(){
+      var qtyFisik = $('#qty_fisik').val();
+      var qtySistem = $('#qty_sistem').val();
+      var selisih = qtyFisik - qtySistem;
+      $('#selisih').val(selisih);
+    }
+
+    function calculateHargaTotal(){
+      var qtyOrder = $('#qty-order').val();
+      var hrgPerUnit = $('#hrg-per-unit').val();
+      var hrgTotal = qtyOrder * hrgPerUnit;
+      $('#hrg-total').val(hrgTotal);
+    }
+
+    $('#qty_fisik').on('input', function(){
+      calculateSelisih(); 
+    });
+
+    $('#qty-order').on('input', function(){
+      calculateHargaTotal(); 
+    });
+
     $(document).on('click', '.btn-opname', function(e) {
       e.preventDefault();
       var kodeBrg = $(this).data('kode');
@@ -225,25 +254,33 @@
 
       $('#kode-barang').val(kodeBrg);
       $('#nama-barang').val(namaBrg);
+      $('#kode-gudang').val(gudangBrg);
       $('#qty_sistem').val(quantityBrg);
-      $('#selisih').attr('max', quantityBrg);
       $('#opnameModal').modal('show');
 
       $('#simpanOpname').click(function() {
         var quantity = $('#qty_sistem').val();
+        var qtyFisik = $('#qty_fisik').val();
         var selisih = $('#selisih').val();
         var keterangan = $('#keterangan').val();
+        var transaction = $('input[name="transaksi"]:checked').val();
+        var noBukti = $('#no-bukti').val();
+        var qtyOrder = $('#qty-order').val();
+        var hrgTotal = $('#hrg-total').val();
+
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
           data: {kode_brg: kodeBrg, nama_brg: namaBrg, kode_divisi: divisiBrg, kode_jenis: jenisBrg, kode_type: tipeBrg, packing: packingBrg,
-            quantity: selisih, qty_awal: quantity, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, keterangan: keterangan},
+            quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, 
+            keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
           success: function(response) {
             $('#opnameModal').modal('hide');
 
             $('#kode-barang').val('');
             $('#nama-barang').val('');
             $('#qty_sistem').val('');
+            $('#qty_fisik').val('');
             $('#selisih').val('');
             $('.modal-backdrop').remove();
           },
@@ -258,11 +295,98 @@
     $('#opnameModal').on('hidden.bs.modal', function (e) {
       location.reload();
     });
+
+    $('#keterangan').change(function() {
+      var selectedValue = $(this).val();
+      if (selectedValue === 'SALAH PENCATATAN') {
+        $('#revisiTransaksi').show();
+        fetchTransaction('pembelian');
+      } else {
+        $('#revisiTransaksi').hide();
+      }
+    });
+
+    $(document).on('change', 'input[type="radio"][name="transaksi"]', function() {
+      var selectedValue = $(this).val();
+      fetchTransaction(selectedValue);
+    });
+
+    function fetchTransaction(selectedValue) {
+      var kodeBrg = $('#kode-barang').val();
+      var namaBrg = $('#nama-barang').val();
+      var gudangBrg = $('#kode-gudang').val();
+
+      $.ajax({
+        url: "{{route('FetchNoBukti')}}",
+        type: "GET",
+        data: {selectedValue: selectedValue, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
+        success: function(response) {
+          var optionsHtml = '';
+          if(response.length > 0) {
+            response.forEach(function(item) {
+              optionsHtml += '<option value="' + item.no_bukti + '">' + item.no_bukti + '</option>';
+            });
+          }else {
+            optionsHtml = '<option value="">No data available</option>';
+          }
+          $('#no-bukti').html(optionsHtml);
+
+          var firstOption = response.length > 0 ? response[0].no_bukti : null;
+          fetchTransactionData(firstOption);
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+          $('#no-bukti').html('<option value="">Error fetching data</option>');
+        }
+      });
+    }
+
+    $('#no-bukti').change(function() {
+      var noBukti = $(this).val();
+      fetchTransactionData(noBukti);
+      
+      if(noBukti == "No data available"){
+        $('#qty-order').prop('disabled', true);
+        $('#trans-content').hide();
+      }
+    });
+
+    function fetchTransactionData(noBukti){
+      var transaction = $('input[name="transaksi"]:checked').val();
+      var kodeBrg = $('#kode-barang').val();
+      var namaBrg = $('#nama-barang').val();
+      var gudangBrg = $('#kode-gudang').val();
+
+      $.ajax({
+        url: "{{route('FetchTransData')}}",
+        type: "GET",
+        data: {transaction: transaction, noBukti: noBukti, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
+        success: function(response) {
+          response.forEach(function(item) {
+            $('#kode-barang-trans').val(item.kode_brg);
+            $('#nama-barang-trans').val(item.nama_brg);
+            $('#qty-order').val(item.qty_order);
+            $('#hrg-per-unit').val(item.hrg_per_unit);
+            $('#hrg-total').val(item.hrg_total);
+            $('#kode-gudang-trans').val(item.kode_gudang);
+          });
+        },
+        error: function(xhr, status, error) {
+          console.error(xhr.responseText);
+        }
+      });
+    }
+
+    $("#unduhPdf").click(function(){
+        var gudangBarang = $('#filterGudang').val();
+        $('#selectedGudang').val(gudangBarang);
+        $('#pdfForm').submit();
+    });
   });
 </script>
 
 <div class="modal fade" id="opnameModal" tabindex="-1" role="dialog" aria-labelledby="opnameModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="opnameModalLabel">Opname Stok</h5>
@@ -275,17 +399,48 @@
         <input type="text" id="kode-barang" class="form-control" readonly><br>
         <h5>Nama Barang:</h5>
         <input type="text" id="nama-barang" class="form-control" readonly><br>
-        <h5>Kuantitas Barang:</h5>
+        <input style="display: none;" id="kode-gudang" class="form-control">
+        <h5>Kuantitas Barang Sistem:</h5>
         <input type="number" id="qty_sistem" class="form-control" readonly><br>
-        <h5>Kuantitas Barang Rusak/EXP:</h5>
-        <input type="number" id="selisih" class="form-control" required><br>
+        <h5>Kuantitas Barang Fisik (Barang Baik):</h5>
+        <input type="number" id="qty_fisik" class="form-control" required><br>
+        <h5>Selisih:</h5>
+        <input type="number" id="selisih" class="form-control" readonly><br>
         <h5>Keterangan:</h5>
         <select id="keterangan" class="form-control" style="width: 400px; display: inline-block;">
           <option value="BARANG RUSAK">BARANG RUSAK</option>
           <option value="BARANG EXPIRED">BARANG EXPIRED</option>
-          <option value="BARANG RUSAK & EXPIRED">BARANG RUSAK & EXPIRED</option>
-        </select>
-      </div>
+          <option value="SALAH PENCATATAN">SALAH PENCATATAN</option>
+        </select><br><br>
+
+        <div id="revisiTransaksi" style="display: none;">
+          <h5 id="revisiTransaksiLabel">Revisi Transaksi Terkait</h5>
+          <div id="radioButtonsContainer">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="transaksi" id="radioPembelian" value="pembelian" checked>
+              <label class="form-check-label" for="radioPembelian">Pembelian</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="transaksi" id="radioPenjualan" value="penjualan">
+              <label class="form-check-label" for="radioPenjualan">Penjualan</label>
+            </div>
+          </div><br>
+          <h5>Nomor Nota:</h5>
+          <select id="no-bukti" class="form-control" style="width: 400px; display: inline-block;"></select><br><br>
+          <div id="trans-content">
+            <h5 id="kode-barang-trans-label">Kode Barang:</h5>
+            <input type="text" id="kode-barang-trans" class="form-control" readonly><br>
+            <h5 id="nama-barang-trans-label">Nama Barang:</h5>
+            <input type="text" id="nama-barang-trans" class="form-control" readonly><br>
+            <h5 id="qty-order-label">Quantity Order:</h5>
+            <input type="number" id="qty-order" class="form-control"><br>
+            <h5 id="hrg-per-unit-label">Harga Per Unit:</h5>
+            <input type="number" id="hrg-per-unit" class="form-control" readonly><br>
+            <h5 id="hrg-total-label">Harga Total:</h5>
+            <input type="number" id="hrg-total" class="form-control" readonly><br>
+            <input style="display: none;" type="text" id="kode-gudang-trans" class="form-control">
+          </div> 
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
         <button type="button" class="btn btn-primary" id="simpanOpname">Simpan</button>
