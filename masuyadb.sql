@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 14, 2024 at 08:22 PM
+-- Generation Time: Jun 17, 2024 at 12:39 PM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -48,12 +48,12 @@ CREATE TABLE `beli` (
 --
 
 INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `sub_total`, `persen_ppn`, `total`, `lunas`, `tgl_lunas`, `status`, `tgl_terkirim`, `create_time`, `author`) VALUES
-('BL24-00001', '13-06-2024', '13-07-2024', 'ANEKA', '36219440.00', 10, '39841384.00', 'Lunas', '13-06-2024', 'Sudah Terkirim', '14-06-2024', '13-06-2024', 'Admin'),
+('BL24-00001', '13-06-2024', '13-07-2024', 'ANEKA', '36161460.00', 10, '39777606.00', 'Lunas', '13-06-2024', 'Sudah Terkirim', '14-06-2024', '13-06-2024', 'Admin'),
 ('BL24-00002', '14-06-2024', '14-07-2024', 'ANEKA', '7446175.00', 10, '8190792.50', 'Lunas', '14-06-2024', 'Sudah Terkirim', '15-06-2024', '14-06-2024', 'Admin'),
 ('BL24-00003', '14-06-2024', '14-07-2024', 'AMBICO', '1060809.60', 10, '1166890.56', 'Lunas', '15-06-2024', 'Sudah Terkirim', '16-06-2024', '14-06-2024', 'Admin'),
 ('BL24-00004', '14-06-2024', '14-07-2024', 'AMBICO', '3304049.80', 10, '3634454.78', 'Lunas', '14-06-2024', 'Sudah Terkirim', '14-06-2024', '14-06-2024', 'Admin'),
 ('BL24-00005', '14-06-2024', '14-07-2024', 'AMBICO', '864860.00', 10, '951346.00', 'Lunas', '15-06-2024', 'Sudah Terkirim', '16-06-2024', '14-06-2024', 'Admin'),
-('BL24-00006', '14-06-2024', '14-07-2024', 'AMBICO', '2048922.00', 10, '2253814.20', 'Belum Lunas', '-', 'Belum Terkirim', '-', '14-06-2024', 'Admin'),
+('BL24-00006', '14-06-2024', '14-07-2024', 'AMBICO', '2048922.00', 10, '2253814.20', 'Lunas', '16-06-2024', 'Belum Terkirim', '-', '14-06-2024', 'Admin'),
 ('BL24-00007', '14-06-2024', '14-07-2024', 'AMBICO', '345000.00', 10, '379500.00', 'Lunas', '14-06-2024', 'Sudah Terkirim', '14-06-2024', '14-06-2024', 'Admin'),
 ('BL24-00008', '15-06-2024', '15-07-2024', 'ANEKA', '3949350.00', 10, '4344285.00', 'Lunas', '15-06-2024', 'Sudah Terkirim', '15-06-2024', '15-06-2024', 'Admin');
 
@@ -80,7 +80,7 @@ CREATE TABLE `beli_dtl` (
 --
 
 INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `packing`, `id_satuan`, `hrg_per_unit`, `hrg_total`, `kirim_gudang`) VALUES
-('BL24-00001', 'A0012M', 'Sanma L', 20, '55x7,5KG', 1, 28990, 579800, 'M'),
+('BL24-00001', 'A0012M', 'Sanma L', 18, '55x7,5KG', 1, 28990, 521820, 'M'),
 ('BL24-00001', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 40, '6X1,6LTR', 1, 99099, 3963960, 'M'),
 ('BL24-00001', 'A0023', 'Chirimen Jako 1KG', 120, '6X1KG', 2, 263964, 31675700, 'K'),
 ('BL24-00002', 'A0096F', 'FILLET Salmon Tasman Headless', 30, '1KG', 3, 155000, 4650000, 'K'),
@@ -230,8 +230,8 @@ CREATE TABLE `invmaster` (
 --
 
 INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
-(53, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 25, 1, 40492.5, 'M', '-'),
-(54, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6X1,6LTR', 38, 1, 148648, 'M', '-'),
+(53, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 23, 1, 40335, 'M', '-'),
+(54, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6X1,6LTR', 36, 1, 148648, 'M', '-'),
 (55, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6X1KG', 118, 2, 395946, 'K', '-'),
 (57, 'A0096F', 'FILLET Salmon Tasman Headless', 'W', 'C', 'SLMN', '1KG', 25, 3, 232500, 'K', '-'),
 (58, 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 'J', 'D', 'PTDR', '1,5LTR', 30, 1, 68242.5, 'M', '-'),
@@ -244,7 +244,8 @@ INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jeni
 (65, 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 'J', 'D', 'K18L', '12X250ML', 28, 1, 32432.2, 'M', '-'),
 (66, 'A0042', 'Fresh Salmon IMPORT - N', 'W', 'C', 'SLMN', '1KG', 15, 3, 34500, 'K', '-'),
 (67, 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 'J', 'D', 'K18L', '18LTR', 10, 4, 427702, 'M', '-'),
-(68, 'A18A', 'Fresh Salmon TASMANIA', 'W', 'C', 'SLMN', '1KG', 5, 3, 179400, 'K', '-');
+(68, 'A18A', 'Fresh Salmon TASMANIA', 'W', 'C', 'SLMN', '1KG', 5, 3, 179400, 'K', '-'),
+(69, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6X1,6LTR', 2, 1, 0, 'M', 'BARANG EXPIRED');
 
 -- --------------------------------------------------------
 
@@ -381,11 +382,11 @@ CREATE TABLE `mutasi_stok` (
 --
 
 INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`, `kode_gudang`, `stok_awal`, `qty_masuk`, `qty_keluar`, `qty_rusak_exp`, `stok_akhir`) VALUES
-(40, 'BL24-00001', '2024-06-14', 'A0012M', 'Sanma L', 1, 'M', 0, 20, 0, 0, 20),
+(40, 'BL24-00001', '2024-06-14', 'A0012M', 'Sanma L', 1, 'M', 0, 18, 0, 0, 18),
 (41, 'BL24-00001', '2024-06-14', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 0, 40, 0, 0, 40),
 (42, 'BL24-00001', '2024-06-14', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 0, 120, 0, 0, 120),
-(43, 'JL24-00001', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 20, 0, 10, 0, 10),
-(44, 'JL24-00002', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 10, 0, 5, 0, 5),
+(43, 'JL24-00001', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 20, 0, 10, 0, 8),
+(44, 'JL24-00002', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 8, 0, 5, 0, 3),
 (45, '-', '2024-06-14', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 40, 0, 0, 2, 38),
 (46, 'BL24-00002', '2024-06-15', 'A0096F', 'FILLET Salmon Tasman Headless', 3, 'K', 0, 30, 0, 0, 30),
 (47, 'BL24-00002', '2024-06-15', 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 1, 'M', 0, 40, 0, 0, 40),
@@ -403,10 +404,40 @@ INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, 
 (61, 'BL24-00007', '2024-06-14', 'A0042', 'Fresh Salmon IMPORT - N', 3, 'K', 0, 15, 0, 0, 15),
 (62, 'BL24-00008', '2024-06-15', 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 4, 'M', 0, 10, 0, 0, 10),
 (63, 'BL24-00008', '2024-06-15', 'A18A', 'Fresh Salmon TASMANIA', 3, 'K', 0, 5, 0, 0, 5),
-(64, 'BL24-00008', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 5, 20, 0, 0, 25),
+(64, 'BL24-00008', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 3, 20, 0, 0, 23),
 (65, 'JL24-00005', '2024-06-15', 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 1, 'K', 125, 0, 20, 0, 105),
 (66, 'JL24-00005', '2024-06-15', 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 1, 'M', 30, 0, 5, 0, 25),
-(67, 'JL24-00005', '2024-06-15', 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 1, 'M', 40, 0, 12, 0, 28);
+(67, 'JL24-00005', '2024-06-15', 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 1, 'M', 40, 0, 12, 0, 28),
+(68, '-', '2024-06-16', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 38, 0, 0, 2, 36);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `opname_stok`
+--
+
+CREATE TABLE `opname_stok` (
+  `id` int NOT NULL,
+  `tanggal` varchar(45) DEFAULT NULL,
+  `kode_brg` varchar(45) DEFAULT NULL,
+  `nama_brg` varchar(255) DEFAULT NULL,
+  `id_satuan` int NOT NULL,
+  `kode_gudang` varchar(45) NOT NULL,
+  `qty_sistem` int DEFAULT NULL,
+  `qty_fisik` int DEFAULT NULL,
+  `selisih` int DEFAULT NULL,
+  `keterangan` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `opname_stok`
+--
+
+INSERT INTO `opname_stok` (`id`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`, `kode_gudang`, `qty_sistem`, `qty_fisik`, `selisih`, `keterangan`) VALUES
+(1, '14-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 40, 38, -2, 'BARANG RUSAK'),
+(2, '14-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 120, 118, -2, 'BARANG RUSAK'),
+(3, '16-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 38, 36, -2, 'BARANG EXPIRED'),
+(9, '17-06-2024', 'A0012M', 'Sanma L', 1, 'M', 25, 23, -2, 'SALAH PENCATATAN');
 
 -- --------------------------------------------------------
 
@@ -619,6 +650,14 @@ ALTER TABLE `mutasi_stok`
   ADD KEY `fk_mutasi_stok_invgudang1_idx` (`kode_gudang`);
 
 --
+-- Indexes for table `opname_stok`
+--
+ALTER TABLE `opname_stok`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_opname_stok_invgudang1_idx` (`kode_gudang`),
+  ADD KEY `fk_opname_stok_satuan1_idx` (`id_satuan`);
+
+--
 -- Indexes for table `password_resets`
 --
 ALTER TABLE `password_resets`
@@ -663,7 +702,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `invmaster`
 --
 ALTER TABLE `invmaster`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -675,7 +714,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mutasi_stok`
 --
 ALTER TABLE `mutasi_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+
+--
+-- AUTO_INCREMENT for table `opname_stok`
+--
+ALTER TABLE `opname_stok`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `satuan`
@@ -744,6 +789,13 @@ ALTER TABLE `jual_dtl`
 ALTER TABLE `mutasi_stok`
   ADD CONSTRAINT `fk_mutasi_stok_invgudang1` FOREIGN KEY (`kode_gudang`) REFERENCES `invgudang` (`kode`),
   ADD CONSTRAINT `fk_mutasi_stok_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
+
+--
+-- Constraints for table `opname_stok`
+--
+ALTER TABLE `opname_stok`
+  ADD CONSTRAINT `fk_opname_stok_invgudang1` FOREIGN KEY (`kode_gudang`) REFERENCES `invgudang` (`kode`),
+  ADD CONSTRAINT `fk_opname_stok_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Stok Opname Gudang {{\App\Models\Gudang::find($selectedGudang)->nama}}</title>
+@if($selectedGudang != "All")
+	<title>Stok Opname {{ucwords(strtolower($selectedGudang))}}</title>
+@else
+    <title>Stok Opname Semua Gudang</title>
+@endif
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
         body {
@@ -37,7 +41,13 @@
         @endauth</td> 
     </tr>    
     <tr>
-        <td style="text-align: center; width: 700px;"><h3>Laporan Stok Opname Gudang {{\App\Models\Gudang::find($selectedGudang)->nama}}<h3></td>
+        <td style="text-align: center; width: 700px;">
+        @if($selectedGudang != "All")
+            <h3>Laporan Stok Opname {{ucwords(strtolower($selectedGudang))}}<h3>
+        @else
+            <h3>Laporan Stok Opname Semua Gudang<h3>
+        @endif                
+        </td>
     </tr>
     <table class="table table-bordered center-table" style="width: 700px;">
     <thead>
@@ -46,6 +56,9 @@
         <th style="text-align: center;">Kode Barang</th>
         <th style="text-align: center;">Nama Barang</th>
         <th style="text-align: center;">Satuan</th>
+        @if($selectedGudang == "All")
+            <th style="text-align: center;">Gudang</th>
+        @endif
         <th style="text-align: center;">Quantity Sistem</th>
         <th style="text-align: center;">Quantity Fisik</th>
         <th style="text-align: center;">Selisih</th>
@@ -53,26 +66,19 @@
       </tr>
     </thead>
     <tbody>
-    {{--Belum Dimodifikasi--}}
       @foreach($data as $d)
         <tr>
-            @if($tglAwal != $tglAkhir)
-                <td style="text-align: center;">{{date('d-m-Y', strtotime($d->tanggal))}}</td>
-            @endif
-            <td style="text-align: center;">{{$d->no_bukti}}</td>
-            @if(count(array_unique($kodeBrgArray)) > 1)
-                <td>{{$d->kode_brg}}</td>
-                <td>{{$d->nama_brg}}</td>
-            @endif
+            <td style="text-align: center;">{{$d->tanggal}}</td>
+            <td>{{$d->kode_brg}}</td>
+            <td>{{$d->nama_brg}}</td>
             <td style="text-align: center;">{{$d->satuan->satuan}}</td>
-            @if($selectedGudang == "All")    
+            @if($selectedGudang == "All")
                 <td style="text-align: center;">{{$d->gudang->nama}}</td>
             @endif
-            <td style="text-align: center;">{{$d->stok_awal}}</td>
-            <td style="text-align: center;">{{$d->qty_masuk}}</td>
-            <td style="text-align: center;">{{$d->qty_keluar}}</td>
-            <td style="text-align: center;">{{$d->qty_rusak_exp}}</td>
-            <td style="text-align: center;">{{$d->stok_akhir}}</td>
+            <td style="text-align: center;">{{$d->qty_sistem}}</td>
+            <td style="text-align: center;">{{$d->qty_fisik}}</td>
+            <td style="text-align: center;">{{$d->selisih}}</td>
+            <td style="text-align: center;">{{$d->keterangan}}</td>
         </tr>
       @endforeach
     </tbody>

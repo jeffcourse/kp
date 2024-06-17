@@ -36,4 +36,8 @@ class Gudang extends Model
     public function mutasiStok(){
         return $this->hasMany(MutasiStok::class,'kode_gudang');
     }
+
+    public function opnameStok(){
+        return $this->hasMany(OpnameStok::class,'kode_gudang');
+    }
 }

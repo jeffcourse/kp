@@ -10,6 +10,7 @@ use App\Models\Type;
 use App\Models\Satuan;
 use App\Models\BeliDetail;
 use App\Models\JualDetail;
+use App\Models\OpnameStok;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
@@ -158,13 +159,27 @@ class MasterController extends Controller
         $qty_order = $request->input('qty_order');
         $hrg_total = $request->input('hrg_total');
 
-        $master = Master::where('kode_brg', $kode_brg)
-            ->where('nama_brg', $nama_brg)
-            ->where('kode_gudang', $kode_gudang)
-            ->where('keterangan', $keterangan)
-            ->first();
+        DB::table('opname_stok')->insert([
+            'tanggal' => Carbon::now()->format('d-m-Y'),
+            'kode_brg' => $kode_brg,
+            'nama_brg' => $nama_brg,
+            'id_satuan' => $id_satuan,
+            'kode_gudang' => $kode_gudang,
+            'qty_sistem' => $qty_awal, 
+            'qty_fisik' => $qty_fisik,
+            'selisih' => $qty_fisik - $qty_awal,
+            'keterangan' => $keterangan
+        ]);
+
+        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
 
         if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
+            $master = Master::where('kode_brg', $kode_brg)
+                ->where('nama_brg', $nama_brg)
+                ->where('kode_gudang', $kode_gudang)
+                ->where('keterangan', $keterangan)
+                ->first();
+
             $quantity = abs($quantity);
 
             if($master){
@@ -190,7 +205,6 @@ class MasterController extends Controller
                     'keterangan' => $keterangan,
                 ]);
             }
-            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
     
             DB::table('mutasi_stok')->insert([
                 'no_bukti' => "-",
@@ -214,9 +228,151 @@ class MasterController extends Controller
                 ->decrement('quantity', $quantity);
         
         } else{
+            if($transaction == 'pembelian'){
+                DB::table('beli_dtl')->where('no_bukti', $no_bukti)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kirim_gudang', $kode_gudang)
+                    ->update([
+                        'qty_order' => $qty_order,
+                        'hrg_total' => $hrg_total
+                    ]);
 
+                $sub_total = DB::table('beli_dtl')
+                    ->where('no_bukti', $no_bukti)
+                    ->sum('hrg_total');
+            
+                $beli_data = DB::table('beli')->where('no_bukti', $no_bukti)->first();
+                $sub_total = floatval($sub_total);
+                $total = $sub_total + ($sub_total * ($beli_data->persen_ppn / 100));
+            
+                DB::table('beli')
+                    ->where('no_bukti', $no_bukti)
+                    ->update([
+                        'sub_total' => $sub_total,
+                        'total' => $total
+                    ]);
+
+                DB::table('mutasi_stok')
+                    ->where('no_bukti', $no_bukti)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kode_gudang', $kode_gudang)
+                    ->update([
+                        'qty_masuk' => $qty_order,
+                        'stok_akhir' => DB::raw('stok_awal + ' . $qty_order)
+                    ]);
+
+            } else{
+                DB::table('jual_dtl')->where('no_bukti', $no_bukti)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kode_gudang', $kode_gudang)
+                    ->update([
+                        'qty_order' => $qty_order,
+                        'hrg_total' => $hrg_total
+                    ]);
+
+                $sub_total = DB::table('jual_dtl')
+                    ->where('no_bukti', $no_bukti)
+                    ->sum('hrg_total');
+            
+                $jual_data = DB::table('jual')->where('no_bukti', $no_bukti)->first();
+                $sub_total = floatval($sub_total);
+                $total = $sub_total + ($sub_total * ($jual_data->persen_ppn / 100));
+            
+                DB::table('jual')
+                    ->where('no_bukti', $no_bukti)
+                    ->update([
+                        'sub_total' => $sub_total,
+                        'total' => $total
+                    ]);
+                
+                DB::table('mutasi_stok')
+                    ->where('no_bukti', $no_bukti)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kode_gudang', $kode_gudang)
+                    ->update([
+                        'qty_keluar' => $qty_order,
+                        'stok_akhir' => DB::raw('stok_awal - ' . $qty_order)
+                    ]);
+            }
+            $dataRow = DB::table('mutasi_stok')
+                ->where('no_bukti', $no_bukti)
+                ->where('kode_brg', $kode_brg)
+                ->where('nama_brg', $nama_brg)
+                ->where('kode_gudang', $kode_gudang)
+                ->get(['id', 'stok_akhir']);
+                
+            foreach($dataRow as $row){
+                $rowId = $row->id;
+                $rowStokAkhir = $row->stok_akhir;
+            }
+    
+            $rowsToUpdate = DB::table('mutasi_stok')
+                ->where('kode_brg', $kode_brg)
+                ->where('nama_brg', $nama_brg)
+                ->where('kode_gudang', $kode_gudang)
+                ->where('id', '>', $rowId)
+                ->orderBy('id')
+                ->get();
+
+            $count = count($rowsToUpdate);
+
+            for($i = 0; $i < $count; $i++){
+                $currentRow = $rowsToUpdate[$i];
+
+                $stokAwal = $rowStokAkhir;
+                $masuk = $currentRow->qty_masuk;
+                $keluar = $currentRow->qty_keluar;
+                $rusakExp = $currentRow->qty_rusak_exp;
+
+                $stokAkhir = $stokAwal + $masuk - $keluar - $rusakExp;
+
+                DB::table('mutasi_stok')
+                    ->where('id', $currentRow->id)
+                    ->update([
+                        'stok_akhir' => $stokAkhir
+                    ]);
+
+                if ($i < $count - 1) {
+                    DB::table('mutasi_stok')
+                        ->where('id', $rowsToUpdate[$i + 1]->id)
+                        ->update([
+                            'stok_awal' => $stokAkhir
+                        ]);
+                }
+                $rowStokAkhir = $stokAkhir;
+            }
+            DB::table('invmaster')
+                ->where('kode_brg', $kode_brg)
+                ->where('nama_brg', $nama_brg)
+                ->where('kode_gudang', $kode_gudang)
+                ->whereNotIn('keterangan', $keteranganArray)
+                ->update([
+                    'quantity' => $qty_fisik
+                ]);
+
+            $transactions = DB::table('beli_dtl')
+                ->where('kode_brg', $kode_brg)
+                ->get();
+
+            $totalCost = 0;
+            $currentQuantity = 0;
+            foreach($transactions as $transaction){
+                $totalCost += $transaction->hrg_total;
+                $currentQuantity += $transaction->qty_order;
+            }
+
+            $minSellPrice = $totalCost / $currentQuantity;
+            $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
+
+            DB::table('invmaster')
+                ->where('kode_brg', $kode_brg)
+                ->whereNotIn('keterangan', $keteranganArray)
+                ->update(['hrg_jual' => $sellPrice]);
         }
-
         return response()->json(['success' => true]);
     }
 
@@ -288,10 +444,15 @@ class MasterController extends Controller
     public function cetak_pdf(Request $request){
         $selectedGudang = $request->input('selectedGudang');
 
-        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
+        $query = OpnameStok::query();
 
-        $opname = MutasiStok::where('kode_gudang', $selectedGudang)->whereIn('keterangan', $keteranganArray);
+        if($selectedGudang && $selectedGudang != 'All'){
+            $query->whereHas('gudang', function ($q) use ($selectedGudang) {
+                $q->where('nama', $selectedGudang);
+            });
+        }
 
+        $opname = $query->get();
         $data = $opname;
         $gudang = Gudang::all();
         $satuan = Satuan::all();

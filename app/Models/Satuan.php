@@ -36,4 +36,8 @@ class Satuan extends Model
     public function mutasiStok(){
         return $this->hasMany(MutasiStok::class, 'id_satuan');
     }
+
+    public function opnameStok(){
+        return $this->hasMany(OpnameStok::class, 'id_satuan');
+    }
 }
