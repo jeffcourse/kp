@@ -64,7 +64,8 @@
 <br><br>
 <h3 style="margin-left: auto; margin-right: auto; text-align: center;">Tambah Barang</h3><br>
 
-<div class="barang-section" style="width: 100%;">
+<div class="table-responsive">
+<div class="barang-section" style="width: 1700px;">
    <table class="table">
     <thead>
       <tr>
@@ -137,6 +138,7 @@
       </tr>
     </tbody>
    </table>
+</div>
 </div><br>
 <div class="error-message" style="color: red; text-align: center;"></div>
 <br>
