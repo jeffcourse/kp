@@ -25,7 +25,7 @@
             font-size: 14px;
         }
         h3{
-            font-size: 24px;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -49,6 +49,14 @@
         @endif                
         </td>
     </tr>
+    @if($selectedTanggal != "")
+        <tr>
+            <td style="text-align: center; width: 700px;">Tanggal {{$selectedTanggal}}</td>
+        </tr>
+    @else
+        <br>
+    @endif
+    <br><br>
     <table class="table table-bordered center-table" style="width: 700px;">
     <thead>
       <tr>

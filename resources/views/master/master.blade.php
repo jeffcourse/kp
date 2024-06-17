@@ -51,11 +51,17 @@
     </div>
     <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
         <input style="width: 200px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang" autocomplete="off">
+    </div>
+</div>
+<div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
+    <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
+        <input type="text" id="datepicker" class="form-control" style="width: 150px; display: inline-block;" placeholder="dd-mm-yyyy">
         <form id="pdfForm" action="{{route('OpnamePdf')}}" method="POST" style="display: none;">
             @csrf
             <input type="hidden" name="selectedGudang" id="selectedGudang" value="">
+            <input type="hidden" name="selectedTanggal" id="selectedTanggal" value="">
         </form>
-        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Lihat Laporan Stok Opname Gudang</a>
+        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Lihat Laporan Stok Opname Sesuai Filter</a>
     </div>
 </div><br>
 
@@ -160,8 +166,13 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script>
   $(document).ready(function(){
+    flatpickr("#datepicker", {
+        dateFormat: "d-m-Y",
+    });
+
     function loadFilters(){
         var filterGudangValue = sessionStorage.getItem('filterGudang');
         var filterJenisValue = sessionStorage.getItem('filterJenis');
@@ -379,7 +390,9 @@
 
     $("#unduhPdf").click(function(){
         var gudangBarang = $('#filterGudang').val();
+        var tanggal = $('#datepicker').val();
         $('#selectedGudang').val(gudangBarang);
+        $('#selectedTanggal').val(tanggal);
         $('#pdfForm').submit();
     });
   });

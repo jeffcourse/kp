@@ -51,7 +51,7 @@
         <option value="-">Rusak/EXP</option>
       </select>
     </div>
-</div><br>
+</div>
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
         <input type="text" id="datepicker" class="form-control" style="width: 150px; display: inline-block;" placeholder="dd-mm-yyyy">

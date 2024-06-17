@@ -443,6 +443,7 @@ class MasterController extends Controller
 
     public function cetak_pdf(Request $request){
         $selectedGudang = $request->input('selectedGudang');
+        $selectedTanggal = $request->get('selectedTanggal');
 
         $query = OpnameStok::query();
 
@@ -452,12 +453,17 @@ class MasterController extends Controller
             });
         }
 
+        if($selectedTanggal){
+            $query->where('tanggal', $selectedTanggal);
+        }
+
         $opname = $query->get();
         $data = $opname;
         $gudang = Gudang::all();
         $satuan = Satuan::all();
  
-        $view = View::make('master.opnamepdf', ['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'selectedGudang'=>$selectedGudang]);
+        $view = View::make('master.opnamepdf', ['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'selectedGudang'=>$selectedGudang,
+            'selectedTanggal'=>$selectedTanggal]);
         $pdf = new Dompdf();
         $pdf->loadHtml($view->render());
         $pdf->setPaper('A4', 'portrait');
