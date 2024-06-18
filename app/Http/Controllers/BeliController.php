@@ -42,11 +42,12 @@ class BeliController extends Controller
         $newNoBuktiNum = $lastNoBuktiNum + 1;
         $newNoBukti = 'BL24-' . str_pad($newNoBuktiNum, 5, '0', STR_PAD_LEFT);
 
+        $master = Master::all();
         $supplier = Supplier::all();
         $gudang = Gudang::all();
         $satuan = Satuan::all();
 
-        return view('transaksi.formbeli',compact('supplier','gudang','satuan','newNoBukti'));
+        return view('transaksi.formbeli',compact('supplier','gudang','satuan','newNoBukti','master'));
     }
 
     public function store(Request $request)
@@ -71,7 +72,6 @@ class BeliController extends Controller
         $kode_brg = $request->get('kode_brg');
         $nama_brg = $request->get('nama_brg');
         $qty_order = $request->get('qty_order');
-        $packing = $request->get('packing');
         $id_satuan = $request->get('select_satuan');
         $hrg_per_unit = $request->get('hrg_per_unit');
         $hrg_total = $request->get('hrg_total');
@@ -83,7 +83,6 @@ class BeliController extends Controller
             $detail->kode_brg = $kode_brg[$key];
             $detail->nama_brg = $nama_brg[$key];
             $detail->qty_order = $qty_order[$key];
-            $detail->packing = $packing[$key];
             $detail->id_satuan = $id_satuan[$key];
             $detail->hrg_per_unit = $hrg_per_unit[$key];
             $detail->hrg_total = $hrg_total[$key];
@@ -260,7 +259,6 @@ class BeliController extends Controller
                 DB::table('invmaster')->insert([
                     'kode_brg' => $detail->kode_brg,
                     'nama_brg' => $detail->nama_brg,
-                    'packing' => $detail->packing,
                     'quantity' => $detail->qty_order,
                     'id_satuan' => $detail->id_satuan,
                     'kode_gudang' => $detail->kirim_gudang,

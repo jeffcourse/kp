@@ -78,7 +78,6 @@
         <th>Divisi</th>
         <th>Jenis Barang</th>
         <th>Tipe Barang</th>
-        <th>Packing</th>
         <th>Quantity</th>
         <th>Satuan</th>
         <th>Harga Jual</th>
@@ -95,7 +94,6 @@
                 <td>{{$m->divisi ? $m->divisi->divisi : '-'}}</td>
                 <td>{{$m->jenis ? $m->jenis->jenis : '-'}}</td>
                 <td>{{$m->type ? $m->type->type : '-'}}</td>
-                <td>{{$m->packing}}</td>
                 <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
                 <td>Rp. {{number_format(floatval($m->hrg_jual), 2, ',', '.')}}</td>
@@ -112,7 +110,6 @@
                       data-divisi="{{$m->kode_divisi}}"
                       data-jenis="{{$m->kode_jenis}}"
                       data-tipe="{{$m->kode_type}}"
-                      data-packing="{{$m->packing}}"
                       data-quantity="{{$m->quantity}}"
                       data-satuan="{{$m->id_satuan}}"
                       data-gudang="{{$m->kode_gudang}}"
@@ -258,7 +255,6 @@
       var divisiBrg = $(this).data('divisi');
       var jenisBrg = $(this).data('jenis');
       var tipeBrg = $(this).data('tipe');
-      var packingBrg = $(this).data('packing');
       var quantityBrg = $(this).data('quantity');
       var satuanBrg = $(this).data('satuan');
       var gudangBrg = $(this).data('gudang');
@@ -282,7 +278,7 @@
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
-          data: {kode_brg: kodeBrg, nama_brg: namaBrg, kode_divisi: divisiBrg, kode_jenis: jenisBrg, kode_type: tipeBrg, packing: packingBrg,
+          data: {kode_brg: kodeBrg, nama_brg: namaBrg, kode_divisi: divisiBrg, kode_jenis: jenisBrg, kode_type: tipeBrg,
             quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, 
             keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
           success: function(response) {
@@ -334,13 +330,16 @@
         success: function(response) {
           var optionsHtml = '';
           if(response.length > 0) {
+            $('#no-bukti').empty();
+            $('#trans-content').show();
             response.forEach(function(item) {
               optionsHtml += '<option value="' + item.no_bukti + '">' + item.no_bukti + '</option>';
             });
           }else {
             optionsHtml = '<option value="">No data available</option>';
+            $('#trans-content').hide();
           }
-          $('#no-bukti').html(optionsHtml);
+          $('#no-bukti').empty().append(optionsHtml);
 
           var firstOption = response.length > 0 ? response[0].no_bukti : null;
           fetchTransactionData(firstOption);
@@ -348,6 +347,7 @@
         error: function(xhr, status, error) {
           console.error(xhr.responseText);
           $('#no-bukti').html('<option value="">Error fetching data</option>');
+          $('#trans-content').hide();
         }
       });
     }

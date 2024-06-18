@@ -145,7 +145,6 @@ class MasterController extends Controller
         $kode_divisi = $request->input('kode_divisi');
         $kode_jenis = $request->input('kode_jenis');
         $kode_type = $request->input('kode_type');
-        $packing = $request->input('packing');
         $quantity = $request->input('quantity');
         $qty_awal = $request->input('qty_awal');
         $id_satuan = $request->input('id_satuan');
@@ -197,7 +196,6 @@ class MasterController extends Controller
                     'kode_divisi' => $kode_divisi,
                     'kode_jenis' => $kode_jenis,
                     'kode_type' => $kode_type,
-                    'packing' => $packing,
                     'quantity' => $quantity,
                     'id_satuan' => $id_satuan,
                     'hrg_jual' => $hrg_jual,
@@ -320,30 +318,41 @@ class MasterController extends Controller
 
             $count = count($rowsToUpdate);
 
-            for($i = 0; $i < $count; $i++){
-                $currentRow = $rowsToUpdate[$i];
-
+            if($count > 0){
+                $firstRow = $rowsToUpdate[0];
                 $stokAwal = $rowStokAkhir;
-                $masuk = $currentRow->qty_masuk;
-                $keluar = $currentRow->qty_keluar;
-                $rusakExp = $currentRow->qty_rusak_exp;
-
-                $stokAkhir = $stokAwal + $masuk - $keluar - $rusakExp;
-
+            
                 DB::table('mutasi_stok')
-                    ->where('id', $currentRow->id)
+                    ->where('id', $firstRow->id)
                     ->update([
-                        'stok_akhir' => $stokAkhir
+                        'stok_awal' => $stokAwal
                     ]);
 
-                if ($i < $count - 1) {
+                for($i = 0; $i < $count; $i++){
+                    $currentRow = $rowsToUpdate[$i];
+
+                    $stokAwal = $rowStokAkhir;
+                    $masuk = $currentRow->qty_masuk;
+                    $keluar = $currentRow->qty_keluar;
+                    $rusakExp = $currentRow->qty_rusak_exp;
+
+                    $stokAkhir = $stokAwal + $masuk - $keluar - $rusakExp;
+
                     DB::table('mutasi_stok')
-                        ->where('id', $rowsToUpdate[$i + 1]->id)
+                        ->where('id', $currentRow->id)
                         ->update([
-                            'stok_awal' => $stokAkhir
+                            'stok_akhir' => $stokAkhir
                         ]);
+
+                    if($i < $count - 1){
+                        DB::table('mutasi_stok')
+                            ->where('id', $rowsToUpdate[$i + 1]->id)
+                            ->update([
+                                'stok_awal' => $stokAkhir
+                            ]);
+                    }
+                    $rowStokAkhir = $stokAkhir;
                 }
-                $rowStokAkhir = $stokAkhir;
             }
             DB::table('invmaster')
                 ->where('kode_brg', $kode_brg)
@@ -386,6 +395,7 @@ class MasterController extends Controller
             $beliData = BeliDetail::where('kode_brg', $kodeBrg)
                 ->where('nama_brg', $namaBrg)
                 ->where('kirim_gudang', $gudangBrg)
+                ->distinct()
                 ->get(['no_bukti']);
 
             return response()->json($beliData);
@@ -393,6 +403,7 @@ class MasterController extends Controller
             $jualData = JualDetail::where('kode_brg', $kodeBrg)
                 ->where('nama_brg', $namaBrg)
                 ->where('kode_gudang', $gudangBrg)
+                ->distinct()
                 ->get(['no_bukti']);
 
             return response()->json($jualData);

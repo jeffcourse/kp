@@ -20,6 +20,12 @@
     }
     th{
         text-align: center;
+    }
+    #kodeBarangList {
+      position: absolute;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 1000;
     } 
   </style>
 </head>
@@ -72,7 +78,6 @@
         <th scope="col">Kode Barang</th>
         <th scope="col">Nama Barang</th>
         <th scope="col">Quantity Order</th>
-        <th scope="col">Packing</th>
         <th scope="col">Satuan</th>
         <th scope="col">Harga Per Unit</th>
         <th scope="col">Harga Total</th>
@@ -84,7 +89,14 @@
       <tr>
         <td>
           <div class="form-group">
-            <input type="text" name="kode_brg[]" class="form-control" placeholder="Masukkan Kode Barang" required autocomplete="off">
+            <input list="kodeBarangList" class="form-control" id="kode_barang_input" placeholder="Masukkan Kode Barang" autocomplete="off">
+            <datalist id="kodeBarangList" style="overflow-y: hidden;">
+            @foreach($master as $m)
+              @if(!Str::contains($m->keterangan, ['BARANG RUSAK', 'BARANG EXPIRED', 'SALAH PENCATATAN']))
+              <option value="{{$m->kode_brg}}">
+              @endif
+            @endforeach
+            </datalist>
           </div>
         </td>
         <td>
@@ -95,11 +107,6 @@
         <td>
           <div class="form-group">
             <input type="number" name="qty_order[]" class="form-control qty_order" placeholder="Masukkan Quantity" required autocomplete="off">
-          </div>
-        </td>
-        <td>
-          <div class="form-group">
-            <input type="text" name="packing[]" class="form-control packing" placeholder="Masukkan Packing" required autocomplete="off">
           </div>
         </td>
         <td>
@@ -166,6 +173,8 @@
   $(document).ready(function (){
         $('#no_bukti').val(newNoBukti);
 
+        $('#kode_barang_input').attr('name', 'kode_brg[]');
+
         $('.barang-section table tbody tr:first .btn-delete').prop('disabled', true);
 
         $('#btnTambah').click(function (){
@@ -216,6 +225,9 @@
           newSection.find('.hrg_total').val('0');
           newSection.find('.hrg_total').attr('readonly', 'readonly');
           $('.barang-section table tbody').append(newSection);
+
+          bindRowEvents(newSection);
+          resetDropdowns(newSection);
 
           $('.barang-section table tbody tr .btn-delete').prop('disabled', false);
           $('.barang-section table tbody tr:first .btn-delete').prop('disabled', true);
@@ -290,6 +302,83 @@
 
       $(document).on('click', '.btn-delete', function(){
         $(this).closest('tr').remove();
+      });
+
+      $('#kode_barang_input').on('focus', function(){
+        $('#kodeBarangList').css('display', 'block');
+      });
+
+      function bindRowEvents(section){
+        $('#kode_barang_input', section).on('input', function () {
+          var kode_barang = $(this).val();
+          var selectedMaster = {!! json_encode($master->toArray()) !!};
+          var selectedSatuan = {!! json_encode($satuan->toArray()) !!};
+
+          var masterData = selectedMaster.find(function (item) {
+            return item.kode_brg == kode_barang;
+          });
+
+          if(masterData){
+            var row = $(this).closest('tr');
+            row.find('input[name="nama_brg[]"]').val(masterData.nama_brg);
+
+            var satuanDropdown = row.find('select[name="select_satuan[]"]');
+            satuanDropdown.empty();
+
+            var filteredSatuan = selectedSatuan.filter(function (satuan) {
+              return satuan.id == masterData.id_satuan;
+            });
+
+            filteredSatuan.forEach(function (satuan) {
+              satuanDropdown.append('<option value="' + satuan.id + '">' + satuan.satuan + '</option>');
+            });
+
+            row.find('input[name="nama_brg[]"]').prop('readonly', true);
+            satuanDropdown.prop('readonly', true);
+
+          } else{
+            var row = $(this).closest('tr');
+            row.find('input[name="nama_brg[]"]').val('');
+
+            row.find('input[name="nama_brg[]"]').prop('readonly', false);
+            var satuanDropdown = row.find('select[name="select_satuan[]"]');
+            satuanDropdown.empty();
+
+            selectedSatuan.forEach(function (satuan){
+              satuanDropdown.append('<option value="' + satuan.id + '">' + satuan.satuan + '</option>');
+            });
+
+            satuanDropdown.prop('readonly', false); 
+          }
+        });
+      }
+
+      function resetDropdowns(section){
+        var satuanDropdown = section.find('select[name="select_satuan[]"]');
+        satuanDropdown.empty();
+
+        var selectedSatuan = {!! json_encode($satuan->toArray()) !!};
+        selectedSatuan.forEach(function (satuan) {
+          satuanDropdown.append('<option value="' + satuan.id + '">' + satuan.satuan + '</option>');
+        });
+
+        section.find('input[name="nama_brg[]"]').prop('readonly', false);
+        satuanDropdown.prop('readonly', false);
+      }
+
+      bindRowEvents($('.barang-section table tbody tr:first'));
+
+      $(document).on('input', '.qty_order', function() {
+        var masterQty = $(this).attr('max');
+        var currentValue = $(this).val();
+        if(parseInt(currentValue) > parseInt(masterQty)) {
+          this.setCustomValidity('Kuantitas tidak boleh melebihi jumlah stok sebanyak ' + masterQty);
+        } else {
+          this.setCustomValidity('');
+        }
+
+        calculateSubTotal();
+        calculateTotal();
       });
     });
 </script>
