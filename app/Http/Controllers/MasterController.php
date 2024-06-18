@@ -78,7 +78,6 @@ class MasterController extends Controller
         $data->kode_divisi = $request->get('select_divisi');
         $data->kode_jenis = $request->get('select_jenis');
         $data->kode_type = $request->get('select_type');
-        $data->packing = $request->get('packing');
         $data->quantity = $request->get('quantity');
         $data->id_satuan = $request->get('select_satuan');
         $data->hrg_jual = $request->get('hrg_jual');
@@ -431,7 +430,6 @@ class MasterController extends Controller
                     'kode_brg' => $item->kode_brg,
                     'nama_brg' => $item->nama_brg,
                     'qty_order' => $item->qty_order,
-                    'packing' => $item->packing,
                     'id_satuan' => $item->id_satuan,
                     'hrg_per_unit' => $item->hrg_per_unit,
                     'hrg_total' => $item->hrg_total,
