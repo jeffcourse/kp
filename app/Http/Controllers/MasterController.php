@@ -157,76 +157,77 @@ class MasterController extends Controller
         $qty_order = $request->input('qty_order');
         $hrg_total = $request->input('hrg_total');
 
-        DB::table('opname_stok')->insert([
-            'tanggal' => Carbon::now()->format('d-m-Y'),
-            'kode_brg' => $kode_brg,
-            'nama_brg' => $nama_brg,
-            'id_satuan' => $id_satuan,
-            'kode_gudang' => $kode_gudang,
-            'qty_sistem' => $qty_awal, 
-            'qty_fisik' => $qty_fisik,
-            'selisih' => $qty_fisik - $qty_awal,
-            'keterangan' => $keterangan
-        ]);
-
-        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
-
-        if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
-            $master = Master::where('kode_brg', $kode_brg)
-                ->where('nama_brg', $nama_brg)
-                ->where('kode_gudang', $kode_gudang)
-                ->where('keterangan', $keterangan)
-                ->first();
-
-            $quantity = abs($quantity);
-
-            if($master){
-                DB::table('invmaster')
-                ->where('kode_brg', $kode_brg)
-                ->where('nama_brg', $nama_brg)
-                ->where('kode_gudang', $kode_gudang)
-                ->where('keterangan', [$keterangan])
-                ->increment('quantity', $quantity);
-    
-            }else{
-                DB::table('invmaster')->insert([
-                    'kode_brg' => $kode_brg,
-                    'nama_brg' => $nama_brg,
-                    'kode_divisi' => $kode_divisi,
-                    'kode_jenis' => $kode_jenis,
-                    'kode_type' => $kode_type,
-                    'quantity' => $quantity,
-                    'id_satuan' => $id_satuan,
-                    'hrg_jual' => $hrg_jual,
-                    'kode_gudang' => $kode_gudang,
-                    'keterangan' => $keterangan,
-                ]);
-            }
-    
-            DB::table('mutasi_stok')->insert([
-                'no_bukti' => "-",
-                'tanggal' => Carbon::now()->format('Y-m-d'),
+        if($quantity != 0){
+            DB::table('opname_stok')->insert([
+                'tanggal' => Carbon::now()->format('d-m-Y'),
                 'kode_brg' => $kode_brg,
                 'nama_brg' => $nama_brg,
                 'id_satuan' => $id_satuan,
                 'kode_gudang' => $kode_gudang,
-                'stok_awal' => $qty_awal, 
-                'qty_masuk' => 0,
-                'qty_keluar' => 0,
-                'qty_rusak_exp' => $quantity,
-                'stok_akhir' => $qty_awal - $quantity
+                'qty_sistem' => $qty_awal, 
+                'qty_fisik' => $qty_fisik,
+                'selisih' => $qty_fisik - $qty_awal,
+                'keterangan' => $keterangan
             ]);
+
+            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
+
+            if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
+                $master = Master::where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kode_gudang', $kode_gudang)
+                    ->where('keterangan', $keterangan)
+                    ->first();
+
+                $quantity = abs($quantity);
+
+                if($master){
+                    DB::table('invmaster')
+                    ->where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kode_gudang', $kode_gudang)
+                    ->where('keterangan', [$keterangan])
+                    ->increment('quantity', $quantity);
+    
+                }else{
+                    DB::table('invmaster')->insert([
+                        'kode_brg' => $kode_brg,
+                        'nama_brg' => $nama_brg,
+                        'kode_divisi' => $kode_divisi,
+                        'kode_jenis' => $kode_jenis,
+                        'kode_type' => $kode_type,
+                        'quantity' => $quantity,
+                        'id_satuan' => $id_satuan,
+                        'hrg_jual' => $hrg_jual,
+                        'kode_gudang' => $kode_gudang,
+                        'keterangan' => $keterangan,
+                    ]);
+                }
+    
+                DB::table('mutasi_stok')->insert([
+                    'no_bukti' => "-",
+                    'tanggal' => Carbon::now()->format('Y-m-d'),
+                    'kode_brg' => $kode_brg,
+                    'nama_brg' => $nama_brg,
+                    'id_satuan' => $id_satuan,
+                    'kode_gudang' => $kode_gudang,
+                    'stok_awal' => $qty_awal, 
+                    'qty_masuk' => 0,
+                    'qty_keluar' => 0,
+                    'qty_rusak_exp' => $quantity,
+                    'stok_akhir' => $qty_awal - $quantity
+                ]);
              
-            DB::table('invmaster')
-                ->where('kode_brg', $kode_brg)
-                ->where('nama_brg', $nama_brg)
-                ->where('kode_gudang', $kode_gudang)
-                ->whereNotIn('keterangan', $keteranganArray)
-                ->decrement('quantity', $quantity);
+                DB::table('invmaster')
+                    ->where('kode_brg', $kode_brg)
+                    ->where('nama_brg', $nama_brg)
+                    ->where('kode_gudang', $kode_gudang)
+                    ->whereNotIn('keterangan', $keteranganArray)
+                    ->decrement('quantity', $quantity);
         
-        } else{
-            if($transaction == 'pembelian'){
-                DB::table('beli_dtl')->where('no_bukti', $no_bukti)
+            } else{
+                if($transaction == 'pembelian'){
+                    DB::table('beli_dtl')->where('no_bukti', $no_bukti)
                     ->where('kode_brg', $kode_brg)
                     ->where('nama_brg', $nama_brg)
                     ->where('kirim_gudang', $kode_gudang)
@@ -235,22 +236,22 @@ class MasterController extends Controller
                         'hrg_total' => $hrg_total
                     ]);
 
-                $sub_total = DB::table('beli_dtl')
+                    $sub_total = DB::table('beli_dtl')
                     ->where('no_bukti', $no_bukti)
                     ->sum('hrg_total');
             
-                $beli_data = DB::table('beli')->where('no_bukti', $no_bukti)->first();
-                $sub_total = floatval($sub_total);
-                $total = $sub_total + ($sub_total * ($beli_data->persen_ppn / 100));
+                    $beli_data = DB::table('beli')->where('no_bukti', $no_bukti)->first();
+                    $sub_total = floatval($sub_total);
+                    $total = $sub_total + ($sub_total * ($beli_data->persen_ppn / 100));
             
-                DB::table('beli')
+                    DB::table('beli')
                     ->where('no_bukti', $no_bukti)
                     ->update([
                         'sub_total' => $sub_total,
                         'total' => $total
                     ]);
 
-                DB::table('mutasi_stok')
+                    DB::table('mutasi_stok')
                     ->where('no_bukti', $no_bukti)
                     ->where('kode_brg', $kode_brg)
                     ->where('nama_brg', $nama_brg)
@@ -260,8 +261,8 @@ class MasterController extends Controller
                         'stok_akhir' => DB::raw('stok_awal + ' . $qty_order)
                     ]);
 
-            } else{
-                DB::table('jual_dtl')->where('no_bukti', $no_bukti)
+                } else{
+                    DB::table('jual_dtl')->where('no_bukti', $no_bukti)
                     ->where('kode_brg', $kode_brg)
                     ->where('nama_brg', $nama_brg)
                     ->where('kode_gudang', $kode_gudang)
@@ -270,22 +271,22 @@ class MasterController extends Controller
                         'hrg_total' => $hrg_total
                     ]);
 
-                $sub_total = DB::table('jual_dtl')
+                    $sub_total = DB::table('jual_dtl')
                     ->where('no_bukti', $no_bukti)
                     ->sum('hrg_total');
             
-                $jual_data = DB::table('jual')->where('no_bukti', $no_bukti)->first();
-                $sub_total = floatval($sub_total);
-                $total = $sub_total + ($sub_total * ($jual_data->persen_ppn / 100));
+                    $jual_data = DB::table('jual')->where('no_bukti', $no_bukti)->first();
+                    $sub_total = floatval($sub_total);
+                    $total = $sub_total + ($sub_total * ($jual_data->persen_ppn / 100));
             
-                DB::table('jual')
+                    DB::table('jual')
                     ->where('no_bukti', $no_bukti)
                     ->update([
                         'sub_total' => $sub_total,
                         'total' => $total
                     ]);
                 
-                DB::table('mutasi_stok')
+                    DB::table('mutasi_stok')
                     ->where('no_bukti', $no_bukti)
                     ->where('kode_brg', $kode_brg)
                     ->where('nama_brg', $nama_brg)
@@ -294,20 +295,20 @@ class MasterController extends Controller
                         'qty_keluar' => $qty_order,
                         'stok_akhir' => DB::raw('stok_awal - ' . $qty_order)
                     ]);
-            }
-            $dataRow = DB::table('mutasi_stok')
+                }
+                $dataRow = DB::table('mutasi_stok')
                 ->where('no_bukti', $no_bukti)
                 ->where('kode_brg', $kode_brg)
                 ->where('nama_brg', $nama_brg)
                 ->where('kode_gudang', $kode_gudang)
                 ->get(['id', 'stok_akhir']);
                 
-            foreach($dataRow as $row){
-                $rowId = $row->id;
-                $rowStokAkhir = $row->stok_akhir;
-            }
+                foreach($dataRow as $row){
+                    $rowId = $row->id;
+                    $rowStokAkhir = $row->stok_akhir;
+                }
     
-            $rowsToUpdate = DB::table('mutasi_stok')
+                $rowsToUpdate = DB::table('mutasi_stok')
                 ->where('kode_brg', $kode_brg)
                 ->where('nama_brg', $nama_brg)
                 ->where('kode_gudang', $kode_gudang)
@@ -315,45 +316,45 @@ class MasterController extends Controller
                 ->orderBy('id')
                 ->get();
 
-            $count = count($rowsToUpdate);
+                $count = count($rowsToUpdate);
 
-            if($count > 0){
-                $firstRow = $rowsToUpdate[0];
-                $stokAwal = $rowStokAkhir;
+                if($count > 0){
+                    $firstRow = $rowsToUpdate[0];
+                    $stokAwal = $rowStokAkhir;
             
-                DB::table('mutasi_stok')
+                    DB::table('mutasi_stok')
                     ->where('id', $firstRow->id)
                     ->update([
                         'stok_awal' => $stokAwal
                     ]);
 
-                for($i = 0; $i < $count; $i++){
-                    $currentRow = $rowsToUpdate[$i];
+                    for($i = 0; $i < $count; $i++){
+                        $currentRow = $rowsToUpdate[$i];
 
-                    $stokAwal = $rowStokAkhir;
-                    $masuk = $currentRow->qty_masuk;
-                    $keluar = $currentRow->qty_keluar;
-                    $rusakExp = $currentRow->qty_rusak_exp;
+                        $stokAwal = $rowStokAkhir;
+                        $masuk = $currentRow->qty_masuk;
+                        $keluar = $currentRow->qty_keluar;
+                        $rusakExp = $currentRow->qty_rusak_exp;
 
-                    $stokAkhir = $stokAwal + $masuk - $keluar - $rusakExp;
+                        $stokAkhir = $stokAwal + $masuk - $keluar - $rusakExp;
 
-                    DB::table('mutasi_stok')
+                        DB::table('mutasi_stok')
                         ->where('id', $currentRow->id)
                         ->update([
                             'stok_akhir' => $stokAkhir
                         ]);
 
-                    if($i < $count - 1){
-                        DB::table('mutasi_stok')
+                        if($i < $count - 1){
+                            DB::table('mutasi_stok')
                             ->where('id', $rowsToUpdate[$i + 1]->id)
                             ->update([
                                 'stok_awal' => $stokAkhir
                             ]);
+                        }
+                        $rowStokAkhir = $stokAkhir;
                     }
-                    $rowStokAkhir = $stokAkhir;
                 }
-            }
-            DB::table('invmaster')
+                DB::table('invmaster')
                 ->where('kode_brg', $kode_brg)
                 ->where('nama_brg', $nama_brg)
                 ->where('kode_gudang', $kode_gudang)
@@ -362,26 +363,27 @@ class MasterController extends Controller
                     'quantity' => $qty_fisik
                 ]);
 
-            $transactions = DB::table('beli_dtl')
+                $transactions = DB::table('beli_dtl')
                 ->where('kode_brg', $kode_brg)
                 ->get();
 
-            $totalCost = 0;
-            $currentQuantity = 0;
-            foreach($transactions as $transaction){
-                $totalCost += $transaction->hrg_total;
-                $currentQuantity += $transaction->qty_order;
-            }
+                $totalCost = 0;
+                $currentQuantity = 0;
+                foreach($transactions as $transaction){
+                    $totalCost += $transaction->hrg_total;
+                    $currentQuantity += $transaction->qty_order;
+                }
 
-            $minSellPrice = $totalCost / $currentQuantity;
-            $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
+                $minSellPrice = $totalCost / $currentQuantity;
+                $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
 
-            DB::table('invmaster')
+                DB::table('invmaster')
                 ->where('kode_brg', $kode_brg)
                 ->whereNotIn('keterangan', $keteranganArray)
                 ->update(['hrg_jual' => $sellPrice]);
+            }
+            return response()->json(['success' => true]);
         }
-        return response()->json(['success' => true]);
     }
 
     public function fetchNoBukti(Request $request){

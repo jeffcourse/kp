@@ -304,6 +304,10 @@
         $(this).closest('tr').remove();
       });
 
+      $('#kode_barang_input').on('input', function() {
+        this.value = this.value.toUpperCase();
+      });
+
       $('#kode_barang_input').on('focus', function(){
         $('#kodeBarangList').css('display', 'block');
       });
