@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 17, 2024 at 12:39 PM
+-- Generation Time: Jun 19, 2024 at 02:14 AM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -55,7 +55,8 @@ INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `sub_tota
 ('BL24-00005', '14-06-2024', '14-07-2024', 'AMBICO', '864860.00', 10, '951346.00', 'Lunas', '15-06-2024', 'Sudah Terkirim', '16-06-2024', '14-06-2024', 'Admin'),
 ('BL24-00006', '14-06-2024', '14-07-2024', 'AMBICO', '2048922.00', 10, '2253814.20', 'Lunas', '16-06-2024', 'Belum Terkirim', '-', '14-06-2024', 'Admin'),
 ('BL24-00007', '14-06-2024', '14-07-2024', 'AMBICO', '345000.00', 10, '379500.00', 'Lunas', '14-06-2024', 'Sudah Terkirim', '14-06-2024', '14-06-2024', 'Admin'),
-('BL24-00008', '15-06-2024', '15-07-2024', 'ANEKA', '3949350.00', 10, '4344285.00', 'Lunas', '15-06-2024', 'Sudah Terkirim', '15-06-2024', '15-06-2024', 'Admin');
+('BL24-00008', '15-06-2024', '15-07-2024', 'ANEKA', '7848700.00', 10, '8633570.00', 'Lunas', '15-06-2024', 'Sudah Terkirim', '15-06-2024', '15-06-2024', 'Admin'),
+('BL24-00009', '19-06-2024', '19-07-2024', 'AMBICO', '850000.00', 10, '935000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -68,7 +69,6 @@ CREATE TABLE `beli_dtl` (
   `kode_brg` varchar(45) DEFAULT NULL,
   `nama_brg` varchar(255) DEFAULT NULL,
   `qty_order` int DEFAULT NULL,
-  `packing` varchar(45) DEFAULT NULL,
   `id_satuan` int NOT NULL,
   `hrg_per_unit` float DEFAULT NULL,
   `hrg_total` float DEFAULT NULL,
@@ -79,24 +79,43 @@ CREATE TABLE `beli_dtl` (
 -- Dumping data for table `beli_dtl`
 --
 
-INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `packing`, `id_satuan`, `hrg_per_unit`, `hrg_total`, `kirim_gudang`) VALUES
-('BL24-00001', 'A0012M', 'Sanma L', 18, '55x7,5KG', 1, 28990, 521820, 'M'),
-('BL24-00001', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 40, '6X1,6LTR', 1, 99099, 3963960, 'M'),
-('BL24-00001', 'A0023', 'Chirimen Jako 1KG', 120, '6X1KG', 2, 263964, 31675700, 'K'),
-('BL24-00002', 'A0096F', 'FILLET Salmon Tasman Headless', 30, '1KG', 3, 155000, 4650000, 'K'),
-('BL24-00002', 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 40, '1,5LTR', 1, 45495, 1819800, 'M'),
-('BL24-00002', 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 125, '(+/-200-250GR)', 1, 7811, 976375, 'K'),
-('BL24-00003', 'A015M', 'HIGASHIMARU Usukuchi Shoyu Bottle 1LTR', 15, '15X1LTR', 1, 35585.5, 533782, 'M'),
-('BL24-00003', 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 30, '30X300ML', 1, 17567.6, 527027, 'M'),
-('BL24-00004', 'A102M', 'EBARA Yakiniku No Tare Mild 300ML', 25, '12X300ML', 1, 21171, 529275, 'K'),
-('BL24-00004', 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 35, '6X2.15KG', 1, 79279.3, 2774770, 'K'),
-('BL24-00005', 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 40, '12X250ML', 1, 21621.5, 864860, 'M'),
-('BL24-00006', 'A156M', 'TIGER Oyster Sauce 280GR', 36, '12X280GR', 1, 14414.5, 518922, 'M'),
-('BL24-00006', 'A17F', 'Salmon Norway Fillet Import', 12, '1KG', 3, 127500, 1530000, 'K'),
-('BL24-00007', 'A0042', 'Fresh Salmon IMPORT - N', 15, '1KG', 3, 23000, 345000, 'K'),
-('BL24-00008', 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 10, '18LTR', 4, 285135, 2851350, 'M'),
-('BL24-00008', 'A18A', 'Fresh Salmon TASMANIA', 5, '1KG', 3, 119600, 598000, 'K'),
-('BL24-00008', 'A0012M', 'Sanma L', 20, '55PCS/7,5KG', 1, 25000, 500000, 'M');
+INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`, `kirim_gudang`) VALUES
+('BL24-00001', 'A0012M', 'Sanma L', 18, 1, 28990, 521820, 'M'),
+('BL24-00001', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 40, 1, 99099, 3963960, 'M'),
+('BL24-00001', 'A0023', 'Chirimen Jako 1KG', 120, 2, 263964, 31675700, 'K'),
+('BL24-00002', 'A0096F', 'FILLET Salmon Tasman Headless', 30, 3, 155000, 4650000, 'K'),
+('BL24-00002', 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 40, 1, 45495, 1819800, 'M'),
+('BL24-00002', 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 125, 1, 7811, 976375, 'K'),
+('BL24-00003', 'A015M', 'HIGASHIMARU Usukuchi Shoyu Bottle 1LTR', 15, 1, 35585.5, 533782, 'M'),
+('BL24-00003', 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 30, 1, 17567.6, 527027, 'M'),
+('BL24-00004', 'A102M', 'EBARA Yakiniku No Tare Mild 300ML', 25, 1, 21171, 529275, 'K'),
+('BL24-00004', 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 35, 1, 79279.3, 2774770, 'K'),
+('BL24-00005', 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 40, 1, 21621.5, 864860, 'M'),
+('BL24-00006', 'A156M', 'TIGER Oyster Sauce 280GR', 36, 1, 14414.5, 518922, 'M'),
+('BL24-00006', 'A17F', 'Salmon Norway Fillet Import', 12, 3, 127500, 1530000, 'K'),
+('BL24-00007', 'A0042', 'Fresh Salmon IMPORT - N', 15, 3, 23000, 345000, 'K'),
+('BL24-00008', 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 10, 4, 285135, 2851350, 'M'),
+('BL24-00008', 'A18A', 'Fresh Salmon TASMANIA', 5, 3, 119600, 598000, 'K'),
+('BL24-00008', 'A0012M', 'Sanma L', 19, 1, 25000, 475000, 'M'),
+('BL24-00001', 'A0012M', 'Sanma L', 18, 1, 28990, 521820, 'M'),
+('BL24-00001', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 40, 1, 99099, 3963960, 'M'),
+('BL24-00001', 'A0023', 'Chirimen Jako 1KG', 120, 2, 263964, 31675700, 'K'),
+('BL24-00002', 'A0096F', 'FILLET Salmon Tasman Headless', 30, 3, 155000, 4650000, 'K'),
+('BL24-00002', 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 40, 1, 45495, 1819800, 'M'),
+('BL24-00002', 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 125, 1, 7811, 976375, 'K'),
+('BL24-00003', 'A015M', 'HIGASHIMARU Usukuchi Shoyu Bottle 1LTR', 15, 1, 35585.5, 533782, 'M'),
+('BL24-00003', 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 30, 1, 17567.6, 527027, 'M'),
+('BL24-00004', 'A102M', 'EBARA Yakiniku No Tare Mild 300ML', 25, 1, 21171, 529275, 'K'),
+('BL24-00004', 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 35, 1, 79279.3, 2774770, 'K'),
+('BL24-00005', 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 40, 1, 21621.5, 864860, 'M'),
+('BL24-00006', 'A156M', 'TIGER Oyster Sauce 280GR', 36, 1, 14414.5, 518922, 'M'),
+('BL24-00006', 'A17F', 'Salmon Norway Fillet Import', 12, 3, 127500, 1530000, 'K'),
+('BL24-00007', 'A0042', 'Fresh Salmon IMPORT - N', 15, 3, 23000, 345000, 'K'),
+('BL24-00008', 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 10, 4, 285135, 2851350, 'M'),
+('BL24-00008', 'A18A', 'Fresh Salmon TASMANIA', 5, 3, 119600, 598000, 'K'),
+('BL24-00008', 'A0012M', 'Sanma L', 19, 1, 25000, 475000, 'M'),
+('BL24-00009', 'A0012M', 'Sanma L', 10, 1, 34000, 340000, 'K'),
+('BL24-00009', 'A0035M', 'EBARA Sukiyaki 1.5LTR (R)', 30, 1, 17000, 510000, 'M');
 
 -- --------------------------------------------------------
 
@@ -135,11 +154,11 @@ INSERT INTO `customer` (`kode_cust`, `nama_cust`, `type_cust`, `alm_1`, `alm_2`,
 
 CREATE TABLE `failed_jobs` (
   `id` bigint UNSIGNED NOT NULL,
-  `uuid` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `failed_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -217,7 +236,6 @@ CREATE TABLE `invmaster` (
   `kode_divisi` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `kode_jenis` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `kode_type` varchar(45) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
-  `packing` varchar(45) NOT NULL,
   `quantity` int NOT NULL,
   `id_satuan` int NOT NULL,
   `hrg_jual` float DEFAULT NULL,
@@ -229,23 +247,25 @@ CREATE TABLE `invmaster` (
 -- Dumping data for table `invmaster`
 --
 
-INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `packing`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
-(53, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', '55x7,5KG', 23, 1, 40335, 'M', '-'),
-(54, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6X1,6LTR', 36, 1, 148648, 'M', '-'),
-(55, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6X1KG', 118, 2, 395946, 'K', '-'),
-(57, 'A0096F', 'FILLET Salmon Tasman Headless', 'W', 'C', 'SLMN', '1KG', 25, 3, 232500, 'K', '-'),
-(58, 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 'J', 'D', 'PTDR', '1,5LTR', 30, 1, 68242.5, 'M', '-'),
-(59, 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 'J', 'F', 'JSFN', '(+/-200-250GR)', 105, 1, 11716.5, 'K', '-'),
-(60, 'A102M', 'EBARA Yakiniku No Tare Mild 300ML', 'J', 'D', 'PTDR', '12X300ML', 15, 1, 31756.5, 'K', '-'),
-(61, 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 'J', 'D', 'PTDR', '6X2.15KG', 25, 1, 118919, 'K', '-'),
-(62, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', '6X1KG', 2, 2, 0, 'K', 'BARANG RUSAK'),
-(63, 'A015M', 'HIGASHIMARU Usukuchi Shoyu Bottle 1LTR', 'J', 'D', 'PTDR', '15X1LTR', 15, 1, 53378.2, 'M', '-'),
-(64, 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 'W', 'D', 'PTDR', '30X300ML', 25, 1, 26351.3, 'M', '-'),
-(65, 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 'J', 'D', 'K18L', '12X250ML', 28, 1, 32432.2, 'M', '-'),
-(66, 'A0042', 'Fresh Salmon IMPORT - N', 'W', 'C', 'SLMN', '1KG', 15, 3, 34500, 'K', '-'),
-(67, 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 'J', 'D', 'K18L', '18LTR', 10, 4, 427702, 'M', '-'),
-(68, 'A18A', 'Fresh Salmon TASMANIA', 'W', 'C', 'SLMN', '1KG', 5, 3, 179400, 'K', '-'),
-(69, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', '6X1,6LTR', 2, 1, 0, 'M', 'BARANG EXPIRED');
+INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
+(53, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 14, 1, 41672.1, 'M', '-'),
+(54, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', 36, 1, 148648, 'M', '-'),
+(55, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', 118, 2, 395946, 'K', '-'),
+(57, 'A0096F', 'FILLET Salmon Tasman Headless', 'W', 'C', 'SLMN', 25, 3, 232500, 'K', '-'),
+(58, 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 'J', 'D', 'PTDR', 30, 1, 68242.5, 'M', '-'),
+(59, 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 'J', 'F', 'JSFN', 105, 1, 11716.5, 'K', '-'),
+(60, 'A102M', 'EBARA Yakiniku No Tare Mild 300ML', 'J', 'D', 'PTDR', 15, 1, 31756.5, 'K', '-'),
+(61, 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 'J', 'D', 'PTDR', 25, 1, 118919, 'K', '-'),
+(62, 'A0023', 'Chirimen Jako 1KG', 'L', 'F', 'LCSF', 2, 2, 0, 'K', 'BARANG RUSAK'),
+(63, 'A015M', 'HIGASHIMARU Usukuchi Shoyu Bottle 1LTR', 'J', 'D', 'PTDR', 15, 1, 53378.2, 'M', '-'),
+(64, 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 'W', 'D', 'PTDR', 25, 1, 26351.3, 'M', '-'),
+(65, 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 'J', 'D', 'K18L', 28, 1, 32432.2, 'M', '-'),
+(66, 'A0042', 'Fresh Salmon IMPORT - N', 'W', 'C', 'SLMN', 10, 3, 34500, 'K', '-'),
+(67, 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 'J', 'D', 'K18L', 4, 4, 427702, 'M', '-'),
+(68, 'A18A', 'Fresh Salmon TASMANIA', 'W', 'C', 'SLMN', 5, 3, 179400, 'K', '-'),
+(69, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'K18L', 2, 1, 0, 'M', 'BARANG EXPIRED'),
+(70, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 10, 1, 41672.1, 'K', '-'),
+(71, 'A0035M', 'EBARA Sukiyaki 1.5LTR (R)', 'J', 'D', 'PTDR', 30, 1, 25500, 'M', '-');
 
 -- --------------------------------------------------------
 
@@ -300,7 +320,8 @@ INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `sub_tota
 ('JL24-00002', '13-06-2024', '13-07-2024', '88SUNARI', '217425.00', 10, '239167.50', 'Lunas', '14-06-2024', 'Sudah Terkirim', '15-06-2024', '13-06-2024', 'Admin'),
 ('JL24-00003', '14-06-2024', '14-07-2024', '104 BAR', '1844925.00', 10, '2029417.50', 'Lunas', '15-06-2024', 'Sudah Terkirim', '15-06-2024', '14-06-2024', 'Admin'),
 ('JL24-00004', '14-06-2024', '14-07-2024', '88SUNARI', '1506755.00', 10, '1657430.50', 'Lunas', '16-06-2024', 'Sudah Terkirim', '16-06-2024', '14-06-2024', 'Admin'),
-('JL24-00005', '15-06-2024', '15-07-2024', '104 BAR', '755272.90', 10, '830800.19', 'Lunas', '15-06-2024', 'Sudah Terkirim', '15-06-2024', '15-06-2024', 'Admin');
+('JL24-00005', '15-06-2024', '15-07-2024', '104 BAR', '755272.90', 10, '830800.19', 'Lunas', '15-06-2024', 'Sudah Terkirim', '15-06-2024', '15-06-2024', 'Admin'),
+('JL24-00006', '19-06-2024', '19-07-2024', '104 BAR', '3071312.80', 10, '3378444.08', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -333,7 +354,19 @@ INSERT INTO `jual_dtl` (`no_bukti`, `id_brg`, `kode_brg`, `nama_brg`, `qty_order
 ('JL24-00004', 61, 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 10, 1, 118919, 1189190, 'K'),
 ('JL24-00005', 59, 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 20, 1, 11716.5, 234330, 'K'),
 ('JL24-00005', 64, 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 5, 1, 26351.3, 131756, 'M'),
-('JL24-00005', 65, 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 12, 1, 32432.2, 389186, 'M');
+('JL24-00005', 65, 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 12, 1, 32432.2, 389186, 'M'),
+('JL24-00001', 53, 'A0012M', 'Sanma L', 10, 1, 43485, 434850, 'M'),
+('JL24-00002', 53, 'A0012M', 'Sanma L', 5, 1, 43485, 217425, 'M'),
+('JL24-00003', 57, 'A0096F', 'FILLET Salmon Tasman Headless', 5, 3, 232500, 1162500, 'K'),
+('JL24-00003', 58, 'A004R', 'BULLDOG Tonkatsu Sauce 1.5LTR (R)', 10, 1, 68242.5, 682425, 'M'),
+('JL24-00004', 60, 'A102M', 'EBARA Yakiniku No Tare Mild 300ML', 10, 1, 31756.5, 317565, 'K'),
+('JL24-00004', 61, 'A133', 'OTAFUKU Yakisoba Sauce Kokusai 2.15KG', 10, 1, 118919, 1189190, 'K'),
+('JL24-00005', 59, 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 20, 1, 11716.5, 234330, 'K'),
+('JL24-00005', 64, 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 5, 1, 26351.3, 131756, 'M'),
+('JL24-00005', 65, 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 12, 1, 32432.2, 389186, 'M'),
+('JL24-00006', 53, 'A0012M', 'Sanma L', 8, 1, 41575.1, 332601, 'M'),
+('JL24-00006', 66, 'A0042', 'Fresh Salmon IMPORT - N', 5, 3, 34500, 172500, 'K'),
+('JL24-00006', 67, 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 6, 4, 427702, 2566210, 'M');
 
 -- --------------------------------------------------------
 
@@ -343,7 +376,7 @@ INSERT INTO `jual_dtl` (`no_bukti`, `id_brg`, `kode_brg`, `nama_brg`, `qty_order
 
 CREATE TABLE `migrations` (
   `id` int UNSIGNED NOT NULL,
-  `migration` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `batch` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -385,7 +418,7 @@ INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, 
 (40, 'BL24-00001', '2024-06-14', 'A0012M', 'Sanma L', 1, 'M', 0, 18, 0, 0, 18),
 (41, 'BL24-00001', '2024-06-14', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 0, 40, 0, 0, 40),
 (42, 'BL24-00001', '2024-06-14', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 0, 120, 0, 0, 120),
-(43, 'JL24-00001', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 20, 0, 10, 0, 8),
+(43, 'JL24-00001', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 18, 0, 10, 0, 8),
 (44, 'JL24-00002', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 8, 0, 5, 0, 3),
 (45, '-', '2024-06-14', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 40, 0, 0, 2, 38),
 (46, 'BL24-00002', '2024-06-15', 'A0096F', 'FILLET Salmon Tasman Headless', 3, 'K', 0, 30, 0, 0, 30),
@@ -404,11 +437,16 @@ INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, 
 (61, 'BL24-00007', '2024-06-14', 'A0042', 'Fresh Salmon IMPORT - N', 3, 'K', 0, 15, 0, 0, 15),
 (62, 'BL24-00008', '2024-06-15', 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 4, 'M', 0, 10, 0, 0, 10),
 (63, 'BL24-00008', '2024-06-15', 'A18A', 'Fresh Salmon TASMANIA', 3, 'K', 0, 5, 0, 0, 5),
-(64, 'BL24-00008', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 3, 20, 0, 0, 23),
+(64, 'BL24-00008', '2024-06-15', 'A0012M', 'Sanma L', 1, 'M', 3, 19, 0, 0, 22),
 (65, 'JL24-00005', '2024-06-15', 'A0087R', 'Dorry Fillet Frozen (+/-200-250GR)', 1, 'K', 125, 0, 20, 0, 105),
 (66, 'JL24-00005', '2024-06-15', 'A028M', 'BULLDOG Worchestershire Sauce 300ML', 1, 'M', 30, 0, 5, 0, 25),
 (67, 'JL24-00005', '2024-06-15', 'A123M', 'KIKKOMAN Teriyaki Grill Sauce 250ML', 1, 'M', 40, 0, 12, 0, 28),
-(68, '-', '2024-06-16', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 38, 0, 0, 2, 36);
+(68, '-', '2024-06-16', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 38, 0, 0, 2, 36),
+(69, 'BL24-00009', '2024-06-19', 'A0012M', 'Sanma L', 1, 'K', 0, 10, 0, 0, 10),
+(70, 'BL24-00009', '2024-06-19', 'A0035M', 'EBARA Sukiyaki 1.5LTR (R)', 1, 'M', 0, 30, 0, 0, 30),
+(71, 'JL24-00006', '2024-06-19', 'A0012M', 'Sanma L', 1, 'M', 22, 0, 8, 0, 14),
+(72, 'JL24-00006', '2024-06-19', 'A0042', 'Fresh Salmon IMPORT - N', 3, 'K', 15, 0, 5, 0, 10),
+(73, 'JL24-00006', '2024-06-19', 'A181M', 'KIKKOMAN Shoyu (Mild Aroma) 18LTR', 4, 'M', 10, 0, 6, 0, 4);
 
 -- --------------------------------------------------------
 
@@ -437,7 +475,8 @@ INSERT INTO `opname_stok` (`id`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`,
 (1, '14-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 40, 38, -2, 'BARANG RUSAK'),
 (2, '14-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 120, 118, -2, 'BARANG RUSAK'),
 (3, '16-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 1, 'M', 38, 36, -2, 'BARANG EXPIRED'),
-(9, '17-06-2024', 'A0012M', 'Sanma L', 1, 'M', 25, 23, -2, 'SALAH PENCATATAN');
+(9, '17-06-2024', 'A0012M', 'Sanma L', 1, 'M', 25, 23, -2, 'SALAH PENCATATAN'),
+(10, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 15, 14, -1, 'SALAH PENCATATAN');
 
 -- --------------------------------------------------------
 
@@ -446,8 +485,8 @@ INSERT INTO `opname_stok` (`id`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`,
 --
 
 CREATE TABLE `password_resets` (
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -533,11 +572,11 @@ INSERT INTO `supplier` (`kode_supp`, `nama_supp`, `bank`, `acc_bank`, `alm_1`, `
 
 CREATE TABLE `users` (
   `id` bigint UNSIGNED NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_verified_at` timestamp NULL DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `remember_token` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -702,7 +741,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `invmaster`
 --
 ALTER TABLE `invmaster`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=70;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -714,13 +753,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mutasi_stok`
 --
 ALTER TABLE `mutasi_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=74;
 
 --
 -- AUTO_INCREMENT for table `opname_stok`
 --
 ALTER TABLE `opname_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `satuan`
