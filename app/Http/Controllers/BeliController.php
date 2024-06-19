@@ -27,7 +27,7 @@ class BeliController extends Controller
             $query->where('tanggal', $selectedDate);
         }
 
-        $beli = $query->orderBy('tanggal', 'desc')->paginate(5);
+        $beli = $query->orderBy('tanggal', 'desc')->paginate(10);
 
         $supplier = Supplier::all();
         $gudang = Gudang::all();
@@ -256,14 +256,40 @@ class BeliController extends Controller
                     'stok_akhir' => $detail->qty_order
                 ]);
 
-                DB::table('invmaster')->insert([
-                    'kode_brg' => $detail->kode_brg,
-                    'nama_brg' => $detail->nama_brg,
-                    'quantity' => $detail->qty_order,
-                    'id_satuan' => $detail->id_satuan,
-                    'kode_gudang' => $detail->kirim_gudang,
-                    'keterangan' => '-',
-                ]);
+                $masterDetail = DB::table('invmaster')
+                    ->select('kode_divisi', 'kode_jenis', 'kode_type')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->where('nama_brg', $detail->nama_brg)
+                    ->whereNotIn('keterangan', $keteranganArray)
+                    ->first();
+
+                if($masterDetail){
+                    $kodeDivisi = $masterDetail->kode_divisi;
+                    $kodeJenis = $masterDetail->kode_jenis;
+                    $kodeType = $masterDetail->kode_type;
+
+                    DB::table('invmaster')->insert([
+                        'kode_brg' => $detail->kode_brg,
+                        'nama_brg' => $detail->nama_brg,
+                        'kode_divisi' => $kodeDivisi,
+                        'kode_jenis' => $kodeJenis,
+                        'kode_type' => $kodeType,
+                        'quantity' => $detail->qty_order,
+                        'id_satuan' => $detail->id_satuan,
+                        'kode_gudang' => $detail->kirim_gudang,
+                        'keterangan' => '-',
+                    ]);
+
+                } else{
+                    DB::table('invmaster')->insert([
+                        'kode_brg' => $detail->kode_brg,
+                        'nama_brg' => $detail->nama_brg,
+                        'quantity' => $detail->qty_order,
+                        'id_satuan' => $detail->id_satuan,
+                        'kode_gudang' => $detail->kirim_gudang,
+                        'keterangan' => '-',
+                    ]);
+                }
 
                 $transactions = DB::table('beli_dtl')
                     ->where('kode_brg', $detail->kode_brg)

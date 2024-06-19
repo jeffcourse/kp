@@ -17,7 +17,7 @@ class SupplierController extends Controller
             $query->where('nama_supp', 'like', '%'.$search.'%');
         }
 
-        $supplier = $query->paginate(5);
+        $supplier = $query->paginate(10);
 
         return view('supplier.supplier',compact('supplier','search'));
     }

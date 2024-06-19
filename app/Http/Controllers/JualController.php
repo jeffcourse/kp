@@ -26,7 +26,7 @@ class JualController extends Controller
             $query->where('tanggal', $selectedDate);
         }
 
-        $jual = $query->orderBy('tanggal', 'desc')->paginate(5);
+        $jual = $query->orderBy('tanggal', 'desc')->paginate(10);
 
         $customer = Customer::all();
 

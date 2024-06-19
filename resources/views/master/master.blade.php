@@ -81,9 +81,9 @@
         <th>Quantity</th>
         <th>Satuan</th>
         <th>Harga Jual</th>
-        <th>Gudang</th>
-        <th>Keterangan</th>
-        <th>Actions</th>
+        <th class="gudang-th">Gudang</th>
+        <th class="gudang-th">Keterangan</th>
+        <th class="gudang-th">Actions</th>
       </tr>
     </thead>
     <tbody>
@@ -97,33 +97,29 @@
                 <td>{{$m->quantity}}</td>
                 <td>{{$m->satuan->satuan}}</td>
                 <td>Rp. {{number_format(floatval($m->hrg_jual), 2, ',', '.')}}</td>
+                @if($selectedGudang != 'All')
                 <td>{{$m->gudang->nama}}</td>
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
-                  @if(!in_array($m->keterangan, ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"]))
                     <a class='btn btn-info' href="{{route('master.edit',$m->id)}}">Edit</a>
-                    <button class='btn btn-danger btn-opname' 
-                      data-toggle="modal" 
-                      data-kode="{{$m->kode_brg}}"
-                      data-nama="{{$m->nama_brg}}"
-                      data-divisi="{{$m->kode_divisi}}"
-                      data-jenis="{{$m->kode_jenis}}"
-                      data-tipe="{{$m->kode_type}}"
-                      data-quantity="{{$m->quantity}}"
-                      data-satuan="{{$m->id_satuan}}"
-                      data-gudang="{{$m->kode_gudang}}"
-                      data-toggle="modal" 
-                      data-target="#opnameModal">Opname</button>
-                  @else
-                    <form method="POST" action="{{route('master.destroy', $m->id)}}">
+                      <button class='btn btn-danger btn-opname' 
+                        data-toggle="modal" 
+                        data-kode="{{$m->kode_brg}}"
+                        data-nama="{{$m->nama_brg}}"
+                        data-quantity="{{$m->quantity}}"
+                        data-satuan="{{$m->id_satuan}}"
+                        data-gudang="{{$m->kode_gudang}}"
+                        data-toggle="modal" 
+                        data-target="#opnameModal">Opname</button>
+                    {{--<form method="POST" action="{{route('master.destroy', $m->id)}}">
                       @csrf
                       @method('DELETE')
                       <button style="width: 75px;" type="submit" class="btn btn-danger" onclick="return confirm('Do you agree to delete item with {{$m->kode_brg}} - {{$m->nama_brg}} ?');">Delete</button>
-                    </form>
-                  @endif
+                    </form>--}}
                   </div>
                 </td>
+                @endif
             </tr>
         @endforeach
     </tbody>
@@ -170,8 +166,29 @@
         dateFormat: "d-m-Y",
     });
 
+    function initFilterHide() {
+      var selectedGudang = $('#filterGudang').val();
+      if (selectedGudang == 'All'){
+        $('.gudang-th').hide();
+      } else{
+        $('.gudang-th').show();
+      }
+    }
+
+    initFilterHide();
+
+    $('#filterGudang').change(function () {
+      var selectedGudang = $(this).val();
+      if (selectedGudang == 'All') {
+        $('.gudang-th').hide();
+      } else {
+        $('.gudang-th').show();
+      }
+    });
+
     function loadFilters(){
-        var filterGudangValue = sessionStorage.getItem('filterGudang');
+        //var filterGudangValue = sessionStorage.getItem('filterGudang');
+        var filterGudangValue = $('#filterGudang').val();
         var filterJenisValue = sessionStorage.getItem('filterJenis');
         var searchItemValue = sessionStorage.getItem('searchItem');
         if (filterGudangValue) {
@@ -188,11 +205,11 @@
     loadFilters();
 
     function saveFilters(){
-        var selectedGudang = $('#filterGudang').val();
+        //var selectedGudang = $('#filterGudang').val();
         var selectedJenis = $('#filterJenis').val();
         var searchText = $('#searchItem').val();
 
-        sessionStorage.setItem('filterGudang', selectedGudang);
+        //sessionStorage.setItem('filterGudang', selectedGudang);
         sessionStorage.setItem('filterJenis', selectedJenis);
         sessionStorage.setItem('searchItem', searchText);
     }
@@ -276,9 +293,6 @@
       e.preventDefault();
       var kodeBrg = $(this).data('kode');
       var namaBrg = $(this).data('nama');
-      var divisiBrg = $(this).data('divisi');
-      var jenisBrg = $(this).data('jenis');
-      var tipeBrg = $(this).data('tipe');
       var quantityBrg = $(this).data('quantity');
       var satuanBrg = $(this).data('satuan');
       var gudangBrg = $(this).data('gudang');
@@ -302,9 +316,8 @@
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
-          data: {kode_brg: kodeBrg, nama_brg: namaBrg, kode_divisi: divisiBrg, kode_jenis: jenisBrg, kode_type: tipeBrg,
-            quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, hrg_jual: 0, kode_gudang: gudangBrg, 
-            keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
+          data: {kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, 
+            kode_gudang: gudangBrg, keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
           success: function(response) {
             $('#opnameModal').modal('hide');
 

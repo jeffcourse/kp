@@ -18,7 +18,7 @@ class CustomerController extends Controller
             $query->where('nama_cust', 'like', '%'.$search.'%');
         }
 
-        $customer = $query->paginate(5);
+        $customer = $query->paginate(10);
         $salesPerson = SalesPerson::all();
 
         return view('customer.customer',compact('customer','salesPerson','search'));

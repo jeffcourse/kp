@@ -32,6 +32,12 @@ class MasterController extends Controller
             });
         }
 
+        if($selectedGudang == 'All'){
+            $query->select('kode_brg', 'nama_brg', 'kode_divisi', 'kode_jenis', 'kode_type', 'id_satuan', 'hrg_jual', 'keterangan')
+                  ->selectRaw('SUM(quantity) as quantity')
+                  ->groupBy('kode_brg', 'nama_brg', 'kode_divisi', 'kode_jenis', 'kode_type', 'id_satuan', 'hrg_jual', 'keterangan');
+        }
+
         if($jenis && $jenis != 'All'){
             $query->whereHas('jenis', function ($j) use ($jenis){
                 $j->where('jenis',$jenis);
@@ -45,7 +51,7 @@ class MasterController extends Controller
             });
         }
 
-        $master = $query->paginate(5);
+        $master = $query->paginate(10);
 
         $divisi = Divisi::all();
         $gudang = Gudang::all();
@@ -141,13 +147,9 @@ class MasterController extends Controller
     public function opnameBarang(Request $request){
         $kode_brg = $request->input('kode_brg');
         $nama_brg = $request->input('nama_brg');
-        $kode_divisi = $request->input('kode_divisi');
-        $kode_jenis = $request->input('kode_jenis');
-        $kode_type = $request->input('kode_type');
         $quantity = $request->input('quantity');
         $qty_awal = $request->input('qty_awal');
         $id_satuan = $request->input('id_satuan');
-        $hrg_jual = $request->input('hrg_jual');
         $kode_gudang = $request->input('kode_gudang');
         $keterangan = $request->input('keterangan');
 
@@ -173,36 +175,7 @@ class MasterController extends Controller
             $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
 
             if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
-                $master = Master::where('kode_brg', $kode_brg)
-                    ->where('nama_brg', $nama_brg)
-                    ->where('kode_gudang', $kode_gudang)
-                    ->where('keterangan', $keterangan)
-                    ->first();
-
                 $quantity = abs($quantity);
-
-                if($master){
-                    DB::table('invmaster')
-                    ->where('kode_brg', $kode_brg)
-                    ->where('nama_brg', $nama_brg)
-                    ->where('kode_gudang', $kode_gudang)
-                    ->where('keterangan', [$keterangan])
-                    ->increment('quantity', $quantity);
-    
-                }else{
-                    DB::table('invmaster')->insert([
-                        'kode_brg' => $kode_brg,
-                        'nama_brg' => $nama_brg,
-                        'kode_divisi' => $kode_divisi,
-                        'kode_jenis' => $kode_jenis,
-                        'kode_type' => $kode_type,
-                        'quantity' => $quantity,
-                        'id_satuan' => $id_satuan,
-                        'hrg_jual' => $hrg_jual,
-                        'kode_gudang' => $kode_gudang,
-                        'keterangan' => $keterangan,
-                    ]);
-                }
     
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => "-",
