@@ -187,8 +187,7 @@
     });
 
     function loadFilters(){
-        //var filterGudangValue = sessionStorage.getItem('filterGudang');
-        var filterGudangValue = $('#filterGudang').val();
+        var filterGudangValue = sessionStorage.getItem('filterGudang');
         var filterJenisValue = sessionStorage.getItem('filterJenis');
         var searchItemValue = sessionStorage.getItem('searchItem');
         if (filterGudangValue) {
@@ -205,11 +204,11 @@
     loadFilters();
 
     function saveFilters(){
-        //var selectedGudang = $('#filterGudang').val();
+        var selectedGudang = $('#filterGudang').val();
         var selectedJenis = $('#filterJenis').val();
         var searchText = $('#searchItem').val();
 
-        //sessionStorage.setItem('filterGudang', selectedGudang);
+        sessionStorage.setItem('filterGudang', selectedGudang);
         sessionStorage.setItem('filterJenis', selectedJenis);
         sessionStorage.setItem('searchItem', searchText);
     }
