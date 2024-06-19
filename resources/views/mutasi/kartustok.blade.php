@@ -42,8 +42,10 @@
       </select>
     </div>
     <input style="width: 230px; display: inline-block;" type="text" id="searchItem" class="form-control" placeholder="Cari kode/nama barang" autocomplete="off">
+</div>
+<div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
-      <h4 style="display: inline-block; margin-left: 10px;">Filter transaksi:</h4>
+      <h4 style="display: inline-block;">Filter transaksi:</h4>
       <select id="filterTransaksi" class="form-control" style="width: 200px; display: inline-block;">
         <option value="All">All</option>
         <option value="BL">Pembelian</option>
