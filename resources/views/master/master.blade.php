@@ -231,6 +231,21 @@
       var qtySistem = $('#qty_sistem').val();
       var selisih = qtyFisik - qtySistem;
       $('#selisih').val(selisih);
+      return selisih;
+    }
+
+    function calculateQtyOrder(){
+      var trans = $('input[name="transaksi"]:checked').val();
+      var selisih = parseInt($('#selisih').val());
+      var qtyOrder = parseInt($('#qty-order').val());
+      if(trans == "pembelian"){
+        var qtyOrder = qtyOrder + selisih;
+      }else{
+        var qtyOrder = qtyOrder - selisih;
+      }
+      $('#qty-order').val(qtyOrder);
+      calculateHargaTotal();
+      return qtyOrder;
     }
 
     function calculateHargaTotal(){
@@ -238,14 +253,23 @@
       var hrgPerUnit = $('#hrg-per-unit').val();
       var hrgTotal = qtyOrder * hrgPerUnit;
       $('#hrg-total').val(hrgTotal);
+      return hrgTotal;
     }
 
     $('#qty_fisik').on('input', function(){
-      calculateSelisih(); 
+      calculateSelisih();
+      calculateQtyOrder();
+
+      var noBukti = $('#no-bukti').val();
+      fetchTransactionData(noBukti);
+    });
+
+    $('#selisih').on('input', function(){
+        calculateQtyOrder();
     });
 
     $('#qty-order').on('input', function(){
-      calculateHargaTotal(); 
+        calculateHargaTotal();
     });
 
     $(document).on('click', '.btn-opname', function(e) {
@@ -367,6 +391,7 @@
       var kodeBrg = $('#kode-barang').val();
       var namaBrg = $('#nama-barang').val();
       var gudangBrg = $('#kode-gudang').val();
+      var selisih = $('#selisih').val();
 
       $.ajax({
         url: "{{route('FetchTransData')}}",
@@ -377,8 +402,15 @@
             $('#kode-barang-trans').val(item.kode_brg);
             $('#nama-barang-trans').val(item.nama_brg);
             $('#qty-order').val(item.qty_order);
+            var qtyOrder = parseInt(item.qty_order);
+            var newQtyOrder = transaction == 'pembelian' ? qtyOrder + parseInt(selisih) : qtyOrder - parseInt(selisih);
+
+            $('#qty-order').val(newQtyOrder);
             $('#hrg-per-unit').val(item.hrg_per_unit);
-            $('#hrg-total').val(item.hrg_total);
+
+            var hrgPerUnit = parseFloat(item.hrg_per_unit);
+            var newHrgTotal = newQtyOrder * hrgPerUnit; 
+            $('#hrg-total').val(newHrgTotal);
             $('#kode-gudang-trans').val(item.kode_gudang);
           });
         },
@@ -418,7 +450,7 @@
         <h5>Kuantitas Barang Fisik (Barang Baik):</h5>
         <input type="number" id="qty_fisik" class="form-control" required><br>
         <h5>Selisih:</h5>
-        <input type="number" id="selisih" class="form-control" readonly><br>
+        <input type="number" id="selisih" name="selisih" class="form-control" readonly><br>
         <h5>Keterangan:</h5>
         <select id="keterangan" class="form-control" style="width: 400px; display: inline-block;">
           <option value="BARANG RUSAK">BARANG RUSAK</option>
@@ -427,7 +459,7 @@
         </select><br><br>
 
         <div id="revisiTransaksi" style="display: none;">
-          <h5 id="revisiTransaksiLabel">Revisi Transaksi Terkait</h5>
+          <h5 id="revisiTransaksiLabel">Pilih Transaksi Terkait Untuk Koreksi Otomatis</h5>
           <div id="radioButtonsContainer">
             <div class="form-check form-check-inline">
               <input class="form-check-input" type="radio" name="transaksi" id="radioPembelian" value="pembelian" checked>
@@ -446,7 +478,7 @@
             <h5 id="nama-barang-trans-label">Nama Barang:</h5>
             <input type="text" id="nama-barang-trans" class="form-control" readonly><br>
             <h5 id="qty-order-label">Quantity Order:</h5>
-            <input type="number" id="qty-order" class="form-control"><br>
+            <input type="number" id="qty-order" class="form-control" readonly><br>
             <h5 id="hrg-per-unit-label">Harga Per Unit:</h5>
             <input type="number" id="hrg-per-unit" class="form-control" readonly><br>
             <h5 id="hrg-total-label">Harga Total:</h5>

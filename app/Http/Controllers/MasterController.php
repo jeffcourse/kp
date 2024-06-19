@@ -436,7 +436,6 @@ class MasterController extends Controller
                     'kode_gudang' => $item->kirim_gudang,    
                 ];
             });
-
             return response()->json($beliData);
         } else if($transaction == 'penjualan'){
             $jualData = JualDetail::where('no_bukti', $noBukti)
@@ -445,6 +444,19 @@ class MasterController extends Controller
                 ->where('kode_gudang', $gudangBrg)
                 ->get();
             
+            $jualData = $jualData->map(function ($item, $key) {
+                return [
+                    'no_bukti' => $item->no_bukti,
+                    'id_brg' => $item->id_brg,
+                    'kode_brg' => $item->kode_brg,
+                    'nama_brg' => $item->nama_brg,
+                    'qty_order' => $item->qty_order,
+                    'id_satuan' => $item->id_satuan,
+                    'hrg_per_unit' => $item->hrg_per_unit,
+                    'hrg_total' => $item->hrg_total,
+                    'kode_gudang' => $item->kode_gudang,    
+                ];
+            });
             return response()->json($jualData);
         }
         return response()->json([]);
