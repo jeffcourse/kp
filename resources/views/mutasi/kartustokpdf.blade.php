@@ -12,9 +12,9 @@
 @endforeach
 <head>
     @if(count(array_unique($kodeBrgArray)) != 1)
-	    <title>Kartu Stok</title>
+	    <title>Laporan Mutasi Stok</title>
     @else
-        <title>Kartu Stok - {{$kodeBrgArray[0]}} - {{$namaBrgArray[0]}}</title>
+        <title>Laporan Mutasi Stok-{{$kodeBrgArray[0]}}-{{$namaBrgArray[0]}}</title>
     @endif
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
@@ -51,7 +51,7 @@
         @endauth</td> 
     </tr>    
     <tr>
-        <td style="text-align: center; width: 700px;"><h3>Kartu Stok<h3></td>
+        <td style="text-align: center; width: 700px;"><h3>Laporan Mutasi Stok<h3></td>
     </tr>
     @if($tglAwal != $tglAkhir)
     <tr>

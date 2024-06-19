@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title','Kartu Stok')
+@section('title','Mutasi Stok')
 @section('content')
 
 <head>
@@ -28,7 +28,7 @@
 <div class="mt-5">
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center">
-      <h4 style="display: inline-block; margin-right: 20px;">Kartu Stok</h4>
+      <h4 style="display: inline-block; margin-right: 20px;">Mutasi Stok</h4>
     </div>
 </div>
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
@@ -70,7 +70,7 @@
             <input type="hidden" name="tglAwal" id="tglAwal" value="">
             <input type="hidden" name="tglAkhir" id="tglAkhir" value="">
         </form>
-        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Lihat Kartu Stok Sesuai Filter</a>
+        <a class='btn btn-info' id="unduhPdf" style="margin-left: 10px;" href="javascript:void(0)">Lihat Laporan Mutasi Stok Sesuai Filter</a>
     </div>
 </div><br>
 
