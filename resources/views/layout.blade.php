@@ -37,7 +37,7 @@
                 <a class="nav-link" href="{{ route('home') }}">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('master') }}">Master</a>
+                <a class="nav-link" href="{{ route('master') }}">Inventory</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="{{ route('gudang') }}">Gudang</a>

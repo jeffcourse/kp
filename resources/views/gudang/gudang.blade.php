@@ -30,7 +30,7 @@
 <div class="mt-5">
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center">
-      <h4 style="display: inline-block; margin-right: 20px;">Gudang Table</h4>
+      <h4 style="display: inline-block; margin-right: 20px;">Daftar Gudang</h4>
       <a style="margin-right: 20px;" href="{{route('gudang.create')}}" class="btn btn-info">Tambah Gudang</a>
     </div>
 </div><br>

@@ -28,7 +28,7 @@
 <div class="mt-5">
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center">
-      <h4 style="display: inline-block; margin-right: 20px;">Mutasi Stok</h4>
+      <h4 style="display: inline-block; margin-right: 20px;">Daftar Mutasi Stok</h4>
     </div>
 </div>
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">

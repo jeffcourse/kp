@@ -1,5 +1,5 @@
 @extends('layout')
-@section('title','Master')
+@section('title','Inventory')
 @section('content')
 
 <head>
@@ -28,7 +28,7 @@
 <div class="mt-5">
 <div class="d-flex flex-column flex-md-row align-items-md-center" style="margin-left: 20px;">
     <div class="d-flex justify-content-left align-items-center">
-      <h4 style="display: inline-block; margin-right: 20px;">Master Table</h4>
+      <h4 style="display: inline-block; margin-right: 20px;">Inventory Table</h4>
       {{--<a style="margin-right: 20px;" href="{{route('master.create')}}" class="btn btn-info">Tambah Barang</a>--}}
     </div>
     <div class="d-flex justify-content-left align-items-center mb-2 mb-md-0">
