@@ -32,7 +32,7 @@
             border: 1px solid black;
         }
         h4{
-            font-size: 14px;
+            font-size: 12px;
         }
         h3{
             font-size: 24px;
@@ -66,8 +66,6 @@
     <tr>
         <td><h4>{{\App\Models\Gudang::find($selectedGudang)->nama}}<h4></td>
     </tr>
-    @else
-    <br>
     @endif
     @if(count(array_unique($kodeBrgArray)) == 1)
         <tr>
