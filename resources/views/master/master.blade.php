@@ -82,8 +82,8 @@
         <th>Satuan</th>
         <th>Harga Jual</th>
         <th class="gudang-th">Gudang</th>
-        <th class="gudang-th">Keterangan</th>
-        <th class="gudang-th">Actions</th>
+        <th>Keterangan</th>
+        <th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -98,11 +98,15 @@
                 <td>{{$m->satuan->satuan}}</td>
                 <td>Rp. {{number_format(floatval($m->hrg_jual), 2, ',', '.')}}</td>
                 @if($selectedGudang != 'All')
-                <td>{{$m->gudang->nama}}</td>
+                  <td>{{$m->gudang->nama}}</td>
+                @endif
                 <td>{{$m->keterangan}}</td>
                 <td style="text-align: center;">
-                  <div class="btn-group-vertical" role="group" aria-label="Actions">
-                    <a class='btn btn-info' href="{{route('master.edit',$m->id)}}">Edit</a>
+                  <div class="btn-group-vertical" role="group" aria-label="Action">
+                    @if($selectedGudang == 'All')
+                    <a class='btn btn-info' href="{{route('master.edit',['kode_brg' => $m->kode_brg, 'nama_brg' => $m->nama_brg])}}">Edit</a>
+                    @endif
+                    @if($selectedGudang != 'All')
                       <button class='btn btn-danger btn-opname' 
                         data-toggle="modal" 
                         data-kode="{{$m->kode_brg}}"
@@ -112,6 +116,7 @@
                         data-gudang="{{$m->kode_gudang}}"
                         data-toggle="modal" 
                         data-target="#opnameModal">Opname</button>
+                    @endif
                     {{--<form method="POST" action="{{route('master.destroy', $m->id)}}">
                       @csrf
                       @method('DELETE')
@@ -119,7 +124,6 @@
                     </form>--}}
                   </div>
                 </td>
-                @endif
             </tr>
         @endforeach
     </tbody>
@@ -192,6 +196,7 @@
         var searchItemValue = sessionStorage.getItem('searchItem');
         if (filterGudangValue) {
             $('#filterGudang').val(filterGudangValue);
+            $('#filterGudang').trigger('change');
         }
         if (filterJenisValue) {
             $('#filterJenis').val(filterJenisValue);

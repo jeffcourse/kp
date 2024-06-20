@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 19, 2024 at 11:38 AM
+-- Generation Time: Jun 20, 2024 at 03:32 AM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -48,9 +48,13 @@ CREATE TABLE `beli` (
 --
 
 INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `sub_total`, `persen_ppn`, `total`, `lunas`, `tgl_lunas`, `status`, `tgl_terkirim`, `create_time`, `author`) VALUES
-('BL24-00001', '19-06-2024', '19-07-2024', 'AMBICO', '1560000.00', 10, '1716000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('BL24-00002', '19-06-2024', '19-07-2024', 'ANEKA', '9715287.50', 10, '10686816.25', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('BL24-00003', '19-06-2024', '19-07-2024', 'AMBICO', '2227250.00', 10, '2449975.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin');
+('BL24-00001', '19-06-2024', '19-07-2024', 'AMBICO', '1596000.00', 10, '1755600.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
+('BL24-00002', '19-06-2024', '19-07-2024', 'ANEKA', '9979264.00', 10, '10977190.40', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
+('BL24-00003', '19-06-2024', '19-07-2024', 'AMBICO', '2227250.00', 10, '2449975.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
+('BL24-00004', '19-06-2024', '19-07-2024', 'AMBICO', '640000.00', 10, '704000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '20-06-2024', 'Admin'),
+('BL24-00005', '20-06-2024', '20-07-2024', 'AMBICO', '350000.00', 10, '385000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', '20-06-2024', 'Admin'),
+('BL24-00006', '20-06-2024', '20-07-2024', 'AMBICO', '160000.00', 10, '176000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', '20-06-2024', 'Admin'),
+('BL24-00007', '20-06-2024', '20-07-2024', 'AMBICO', '2960000.00', 10, '3256000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', '20-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -75,12 +79,17 @@ CREATE TABLE `beli_dtl` (
 
 INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`, `kirim_gudang`) VALUES
 ('BL24-00001', 'A0012M', 'Sanma L', 28, 1, 30000, 840000, 'M'),
-('BL24-00001', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 40, 2, 18000, 720000, 'M'),
-('BL24-00002', 'A0023', 'Chirimen Jako 1KG', 25, 2, 131982, 3299540, 'K'),
+('BL24-00001', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 42, 2, 18000, 756000, 'M'),
+('BL24-00002', 'A0023', 'Chirimen Jako 1KG', 27, 2, 131982, 3563510, 'K'),
 ('BL24-00002', 'A0032F', 'Frz Salmon Fillet Import - T', 35, 3, 111750, 3911250, 'K'),
 ('BL24-00002', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 40, 1, 62612.5, 2504500, 'M'),
 ('BL24-00003', 'A005M', 'BULLDOG Worchestershire 1,8LTR', 20, 1, 62612.5, 1252250, 'M'),
-('BL24-00003', 'A0087', 'Dorry Fillet Frozen 1KG', 30, 1, 32500, 975000, 'K');
+('BL24-00003', 'A0087', 'Dorry Fillet Frozen 1KG', 30, 1, 32500, 975000, 'K'),
+('BL24-00004', 'A0012M', 'Sanma L', 20, 1, 32000, 640000, 'K'),
+('BL24-00005', 'A0012M', 'Sanma L', 10, 1, 35000, 350000, 'M'),
+('BL24-00006', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 10, 2, 16000, 160000, 'K'),
+('BL24-00007', 'A0090M', 'BONE Salmon Tasman Headless', 25, 3, 112000, 2800000, 'K'),
+('BL24-00007', 'A0012M', 'Sanma L', 5, 1, 32000, 160000, 'M');
 
 -- --------------------------------------------------------
 
@@ -213,14 +222,16 @@ CREATE TABLE `invmaster` (
 --
 
 INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
-(72, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 10, 1, 45000, 'M', '-'),
-(73, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 25, 2, 27000, 'M', '-'),
-(74, 'A0023', 'Chirimen Jako 1KG', 'L', 'C', 'LCSF', 24, 2, 197972, 'K', '-'),
+(72, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 25, 1, 47381, 'M', '-'),
+(73, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 25, 2, 26423.1, 'M', '-'),
+(74, 'A0023', 'Chirimen Jako 1KG', 'L', 'C', 'LCSF', 25, 2, 197973, 'K', '-'),
 (75, 'A0032F', 'Frz Salmon Fillet Import - T', 'W', 'C', 'SLMN', 27, 3, 167625, 'K', '-'),
 (76, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', 30, 1, 93918.8, 'M', '-'),
 (77, 'A005M', 'BULLDOG Worchestershire 1,8LTR', 'J', 'D', 'PTDR', 20, 1, 93918.8, 'M', '-'),
-(78, 'A0087', 'Dorry Fillet Frozen 1KG', 'J', 'C', 'JSFN', 30, 1, 48750, 'K', '-'),
-(79, 'A0023', 'Chirimen Jako 1KG', 'L', 'C', 'LCSF', 1, 2, 0, 'K', 'BARANG RUSAK');
+(78, 'A0087', 'Dorry Fillet Frozen 1KG', 'J', 'C', 'JSFN', 29, 1, 48750, 'K', '-'),
+(80, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 20, 1, 47381, 'K', '-'),
+(81, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 10, 2, 26423.1, 'K', '-'),
+(82, 'A0090M', 'BONE Salmon Tasman Headless', 'W', 'C', 'SLMN', 25, 3, 168000, 'K', '-');
 
 -- --------------------------------------------------------
 
@@ -352,18 +363,27 @@ CREATE TABLE `mutasi_stok` (
 
 INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`, `kode_gudang`, `stok_awal`, `qty_masuk`, `qty_keluar`, `qty_rusak_exp`, `stok_akhir`) VALUES
 (74, 'BL24-00001', '2024-06-19', 'A0012M', 'Sanma L', 1, 'M', 0, 28, 0, 0, 28),
-(75, 'BL24-00001', '2024-06-19', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 0, 40, 0, 0, 40),
+(75, 'BL24-00001', '2024-06-19', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 0, 42, 0, 0, 42),
 (76, 'JL24-00001', '2024-06-19', 'A0012M', 'Sanma L', 1, 'M', 28, 0, 8, 0, 20),
-(77, 'BL24-00002', '2024-06-19', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 0, 25, 0, 0, 25),
+(77, 'BL24-00002', '2024-06-19', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 0, 27, 0, 0, 27),
 (78, 'BL24-00002', '2024-06-19', 'A0032F', 'Frz Salmon Fillet Import - T', 3, 'K', 0, 35, 0, 0, 35),
 (79, 'BL24-00002', '2024-06-19', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 1, 'M', 0, 40, 0, 0, 40),
 (80, 'BL24-00003', '2024-06-19', 'A005M', 'BULLDOG Worchestershire 1,8LTR', 1, 'M', 0, 20, 0, 0, 20),
 (81, 'BL24-00003', '2024-06-19', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 0, 30, 0, 0, 30),
-(82, 'JL24-00002', '2024-06-19', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 40, 0, 15, 0, 25),
+(82, 'JL24-00002', '2024-06-19', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 42, 0, 15, 0, 27),
 (83, 'JL24-00002', '2024-06-19', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 1, 'M', 40, 0, 10, 0, 30),
-(84, '-', '2024-06-19', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 25, 0, 0, 1, 24),
+(84, '-', '2024-06-19', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 27, 0, 0, 1, 26),
 (85, 'JL24-00003', '2024-06-19', 'A0012M', 'Sanma L', 1, 'M', 20, 0, 10, 0, 10),
-(86, 'JL24-00003', '2024-06-19', 'A0032F', 'Frz Salmon Fillet Import - T', 3, 'K', 35, 0, 8, 0, 27);
+(86, 'JL24-00003', '2024-06-19', 'A0032F', 'Frz Salmon Fillet Import - T', 3, 'K', 35, 0, 8, 0, 27),
+(87, 'BL24-00004', '2024-06-19', 'A0012M', 'Sanma L', 1, 'K', 0, 20, 0, 0, 20),
+(88, '-', '2024-06-20', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 26, 0, 0, 1, 25),
+(89, '-', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 27, 0, 0, 1, 26),
+(90, '-', '2024-06-20', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 30, 0, 0, 1, 29),
+(91, 'BL24-00005', '2024-06-20', 'A0012M', 'Sanma L', 1, 'M', 10, 10, 0, 0, 20),
+(92, 'BL24-00006', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'K', 0, 10, 0, 0, 10),
+(93, '-', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 26, 0, 0, 1, 25),
+(94, 'BL24-00007', '2024-06-20', 'A0090M', 'BONE Salmon Tasman Headless', 3, 'K', 0, 25, 0, 0, 25),
+(95, 'BL24-00007', '2024-06-20', 'A0012M', 'Sanma L', 1, 'M', 20, 5, 0, 0, 25);
 
 -- --------------------------------------------------------
 
@@ -392,7 +412,13 @@ INSERT INTO `opname_stok` (`id`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`,
 (11, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 30, 28, -2, 'SALAH PENCATATAN'),
 (12, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 18, 19, 1, 'SALAH PENCATATAN'),
 (16, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 19, 20, 1, 'SALAH PENCATATAN'),
-(17, '19-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 25, 24, -1, 'BARANG RUSAK');
+(17, '19-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 25, 24, -1, 'BARANG RUSAK'),
+(18, '20-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 24, 23, -1, 'BARANG RUSAK'),
+(19, '20-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 25, 24, -1, 'BARANG RUSAK'),
+(20, '20-06-2024', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 30, 29, -1, 'BARANG RUSAK'),
+(21, '20-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 23, 25, 2, 'SALAH PENCATATAN'),
+(22, '20-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 24, 23, -1, 'BARANG EXPIRED'),
+(23, '20-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 23, 25, 2, 'SALAH PENCATATAN');
 
 -- --------------------------------------------------------
 
@@ -657,7 +683,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `invmaster`
 --
 ALTER TABLE `invmaster`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=80;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
 
 --
 -- AUTO_INCREMENT for table `migrations`
@@ -669,13 +695,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mutasi_stok`
 --
 ALTER TABLE `mutasi_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
 
 --
 -- AUTO_INCREMENT for table `opname_stok`
 --
 ALTER TABLE `opname_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `satuan`

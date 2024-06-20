@@ -34,7 +34,9 @@ Route::group(['middleware' => 'auth'], function(){
     Route::get('/', [HomeController::class, 'welcome'])->name('home');
 
     Route::resource('master',MasterController::class);
-    Route::get('/master', [MasterController::class, 'master'])->name('master');
+    Route::get('/inventory', [MasterController::class, 'master'])->name('master');
+    Route::get('master/{kode_brg}/{nama_brg}/edit', [MasterController::class, 'edit'])->name('master.edit');
+    Route::put('master/{kode_brg}/{nama_brg}/update', [MasterController::class, 'update'])->name('master.update');
     Route::post('/updateQuantity',[MasterController::class, 'updateQuantity'])->name('UpdateQuantity');
     Route::get('/opnameBarang',[MasterController::class, 'opnameBarang'])->name('OpnameBarang');
     Route::get('/fetchNoBukti',[MasterController::class, 'fetchNoBukti'])->name('FetchNoBukti');
@@ -42,8 +44,8 @@ Route::group(['middleware' => 'auth'], function(){
     Route::post('/opnamePdf',[MasterController::class, 'cetak_pdf'])->name('OpnamePdf');
 
     Route::resource('kartuStok',MutasiStokController::class);
-    Route::get('/kartuStok',[MutasiStokController::class, 'kartuStok'])->name('kartuStok');
-    Route::post('/unduhKartu', [MutasiStokController::class, 'cetak_pdf'])->name('KartuPdf');
+    Route::get('/mutasiStok',[MutasiStokController::class, 'kartuStok'])->name('kartuStok');
+    Route::post('/unduhMutasi', [MutasiStokController::class, 'cetak_pdf'])->name('KartuPdf');
 
     Route::resource('supplier',SupplierController::class);
     Route::get('/supplier', [SupplierController::class, 'supplier'])->name('supplier');

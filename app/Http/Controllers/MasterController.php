@@ -93,10 +93,11 @@ class MasterController extends Controller
         return redirect()->route('master')->with('status','Hooray!! Your new item is already inserted');
     }
 
-    public function edit($id)
+    public function edit($kode_brg, $nama_brg)
     {
-        //
-        $objMaster = Master::find($id);
+        $objMaster = Master::where('kode_brg', $kode_brg)
+                        ->where('nama_brg', $nama_brg)
+                        ->first();
         $divisi = Divisi::all();
         $jenis = Jenis::all();
         $type = Type::all();
@@ -105,17 +106,18 @@ class MasterController extends Controller
         return view('master.formedit',compact('data','divisi','jenis','type'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $kode_brg, $nama_brg)
     {
-        //
-        $objMaster = Master::find($id);
-        $objMaster->kode_brg = $request->get('kode_brg');
-        $objMaster->nama_brg = $request->get('nama_brg');
-        $objMaster->kode_divisi = $request->get('select_divisi');
-        $objMaster->kode_jenis = $request->get('select_jenis');
-        $objMaster->kode_type = $request->get('select_type');
-        $objMaster->keterangan = $request->get('keterangan');
-        $objMaster->save();
+        $objMasters = Master::where('kode_brg', $kode_brg)
+                        ->where('nama_brg', $nama_brg)->get();
+
+        foreach($objMasters as $objMaster){
+            $objMaster->kode_divisi = $request->input('select_divisi');
+            $objMaster->kode_jenis = $request->input('select_jenis');
+            $objMaster->kode_type = $request->input('select_type');
+            $objMaster->keterangan = $request->input('keterangan');
+            $objMaster->save();
+        }
         return redirect()->route('master')->with('status','Your item is up-to-date');
     }
 
@@ -135,11 +137,11 @@ class MasterController extends Controller
 
     public function welcome()
     {
-        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
+        $totalProducts = Master::select('kode_brg')
+                            ->distinct()
+                            ->count('kode_brg');
 
-        $totalProducts = Master::whereNotIn("keterangan", $keteranganArray)->count();
-
-        $totalPrice = Master::whereNotIn("keterangan", $keteranganArray)->sum(DB::raw('hrg_jual * quantity'));
+        $totalPrice = Master::sum(DB::raw('hrg_jual * quantity'));
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
     }

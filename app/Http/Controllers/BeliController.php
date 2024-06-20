@@ -42,7 +42,7 @@ class BeliController extends Controller
         $newNoBuktiNum = $lastNoBuktiNum + 1;
         $newNoBukti = 'BL24-' . str_pad($newNoBuktiNum, 5, '0', STR_PAD_LEFT);
 
-        $master = Master::all();
+        $master = Master::select('kode_brg','nama_brg','id_satuan')->distinct('kode_brg')->get();
         $supplier = Supplier::all();
         $gudang = Gudang::all();
         $satuan = Satuan::all();

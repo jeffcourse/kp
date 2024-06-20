@@ -6,7 +6,7 @@
 <div class="mt-2"></div>
 <h3 style="margin-left: auto; margin-right: auto; text-align: center;">Edit Barang</h3><br>
 
-<form method="POST" action="{{route('master.update',$data->id)}}" style="margin-left: auto; margin-right: auto; width: 50%;">
+<form method="POST" action="{{route('master.update',['kode_brg' => $data->kode_brg, 'nama_brg' => $data->nama_brg])}}" style="margin-left: auto; margin-right: auto; width: 50%;">
    @csrf
    @method("PUT")
   <div class="form-group">
