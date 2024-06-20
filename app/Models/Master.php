@@ -52,4 +52,7 @@ class Master extends Model
     public function jualDetail(){
         return $this->hasMany(JualDetail::class,'id_brg');
     }
+    public function opnameStok(){
+        return $this->hasMany(OpnameStok::class,'id_brg');
+    }
 }

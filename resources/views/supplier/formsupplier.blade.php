@@ -17,36 +17,12 @@
     <input type="text" name="nama_supp" class="form-control" id="nama_supp" placeholder="Masukkan Nama Supplier" required autocomplete="off">
   </div><br>
   <div class="form-group">
-    <label for="exampleInputBank">Bank</label>
-    <input type="text" name="bank" class="form-control" id="bank" placeholder="Masukkan Nama Bank" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputAkunBank">Nomor Rekening</label>
-    <input type="text" name="acc_bank" class="form-control" id="acc_bank" placeholder="Masukkan Nomor Rekening" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputAlamat1">Alamat 1</label>
-    <input type="text" name="alm_1" class="form-control" id="alm_1" placeholder="Masukkan Alamat Supplier" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputAlamat2">Alamat 2</label>
-    <input type="text" name="alm_2" class="form-control" id="alm_2" placeholder="Masukkan Alamat Supplier" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputKota">Kota</label>
-    <input type="text" name="kota" class="form-control" id="kota" placeholder="Masukkan Kota" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputNegara">Negara</label>
-    <input type="text" name="negara" class="form-control" id="negara" placeholder="Masukkan Negara" required autocomplete="off">
+    <label for="exampleInputAlamat1">Alamat</label>
+    <input type="text" name="alamat" class="form-control" id="alamat" placeholder="Masukkan Alamat Supplier" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputKontak">Nama Kontak</label>
     <input type="text" name="kontak" class="form-control" id="kontak" placeholder="Masukkan Nama Kontak" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputJabatan">Jabatan Kontak</label>
-    <input type="text" name="jabatan" class="form-control" id="jabatan" placeholder="Masukkan Jabatan Kontak" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputNoTelp">No Telp</label>

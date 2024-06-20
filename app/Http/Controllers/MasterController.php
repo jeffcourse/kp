@@ -147,6 +147,7 @@ class MasterController extends Controller
     }
 
     public function opnameBarang(Request $request){
+        $id_brg = $request->input('id_brg');
         $kode_brg = $request->input('kode_brg');
         $nama_brg = $request->input('nama_brg');
         $quantity = $request->input('quantity');
@@ -164,10 +165,7 @@ class MasterController extends Controller
         if($quantity != 0){
             DB::table('opname_stok')->insert([
                 'tanggal' => Carbon::now()->format('d-m-Y'),
-                'kode_brg' => $kode_brg,
-                'nama_brg' => $nama_brg,
-                'id_satuan' => $id_satuan,
-                'kode_gudang' => $kode_gudang,
+                'id_brg' => $id_brg,
                 'qty_sistem' => $qty_awal, 
                 'qty_fisik' => $qty_fisik,
                 'selisih' => $qty_fisik - $qty_awal,
@@ -443,25 +441,24 @@ class MasterController extends Controller
         $selectedGudang = $request->input('selectedGudang');
         $selectedTanggal = $request->get('selectedTanggal');
 
-        $query = OpnameStok::query();
+        $query = OpnameStok::query()
+                    ->select('opname_stok.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
+                    ->join('invmaster', 'opname_stok.id_brg', '=', 'invmaster.id')
+                    ->join('invgudang', 'invmaster.kode_gudang', '=', 'invgudang.kode')
+                    ->join('satuan', 'invmaster.id_satuan', '=', 'satuan.id');
 
         if($selectedGudang && $selectedGudang != 'All'){
-            $query->whereHas('gudang', function ($q) use ($selectedGudang) {
-                $q->where('nama', $selectedGudang);
-            });
+            $query->where('invgudang.nama', $selectedGudang);
         }
 
         if($selectedTanggal){
-            $query->where('tanggal', $selectedTanggal);
+            $query->where('opname_stok.tanggal', $selectedTanggal);
         }
 
         $opname = $query->get();
         $data = $opname;
-        $gudang = Gudang::all();
-        $satuan = Satuan::all();
  
-        $view = View::make('master.opnamepdf', ['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'selectedGudang'=>$selectedGudang,
-            'selectedTanggal'=>$selectedTanggal]);
+        $view = View::make('master.opnamepdf', ['data'=>$data, 'selectedGudang'=>$selectedGudang, 'selectedTanggal'=>$selectedTanggal]);
         $pdf = new Dompdf();
         $pdf->loadHtml($view->render());
         $pdf->setPaper('A4', 'portrait');

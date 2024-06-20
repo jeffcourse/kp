@@ -17,24 +17,8 @@
     <input type="text" name="nama_cust" class="form-control" id="nama_cust" placeholder="Masukkan Nama Customer" required autocomplete="off">
   </div><br>
   <div class="form-group">
-    <label for="exampleInputTipeCustomer">Tipe Customer</label>
-    <input type="text" name="type_cust" class="form-control" id="type_cust" placeholder="Masukkan Tipe Customer" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputAlamat1">Alamat 1</label>
-    <input type="text" name="alm_1" class="form-control" id="alm_1" placeholder="Masukkan Alamat Customer" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputAlamat2">Alamat 2</label>
-    <input type="text" name="alm_2" class="form-control" id="alm_2" placeholder="Masukkan Alamat Customer" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputAlamat3">Alamat 3</label>
-    <input type="text" name="alm_3" class="form-control" id="alm_3" placeholder="Masukkan Alamat Customer" required autocomplete="off">
-  </div><br>
-  <div class="form-group">
-    <label for="exampleInputKota">Kota</label>
-    <input type="text" name="kota" class="form-control" id="kota" placeholder="Masukkan Kota" required autocomplete="off">
+    <label for="exampleInputAlamat1">Alamat</label>
+    <input type="text" name="alamat" class="form-control" id="alamat" placeholder="Masukkan Alamat Customer" required autocomplete="off">
   </div><br>
   <div class="form-group">
     <label for="exampleInputKontak">Kontak Customer</label>

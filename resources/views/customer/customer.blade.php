@@ -43,9 +43,7 @@
       <tr>
         <th>Kode Customer</th>
         <th>Nama Customer</th>
-        <th>Tipe Customer</th>
         <th>Alamat Customer</th>
-        <th>Kota</th>
         <th>Kontak</th>
         <th>No Telp</th>
         <th>Nama Sales</th>
@@ -57,9 +55,7 @@
             <tr id="tr_{{$c->kode_cust}}">
                 <td>{{$c->kode_cust}}</td>
                 <td>{{$c->nama_cust}}</td>
-                <td>{{$c->type_cust}}</td>
-                <td>{{$c->alm_1}}, {{$c->alm_2}}, {{$c->alm_3}}</td>
-                <td>{{$c->kota}}</td>
+                <td>{{$c->alamat}}</td>
                 <td>{{$c->kontak}}</td>
                 <td>{{$c->no_telp}}</td>
                 <td>{{$c->salesPerson->nama_sales}}</td>

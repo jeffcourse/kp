@@ -16,7 +16,7 @@ class OpnameStok extends Model
 
     protected $keyType = 'integer';
 
-    protected $fillable = [
+    /*protected $fillable = [
         'tanggal',
         'kode_brg',
         'nama_brg',
@@ -26,13 +26,9 @@ class OpnameStok extends Model
         'qty_fisik',
         'selisih',
         'keterangan'
-    ];
+    ];*/
 
-    public function gudang(){
-        return $this->belongsTo(Gudang::class,'kode_gudang');
-    }
-
-    public function satuan(){
-        return $this->belongsTo(Satuan::class,'id_satuan');
+    public function master(){
+        return $this->belongsTo(Master::class,'id_brg');
     }
 }

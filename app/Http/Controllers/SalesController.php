@@ -33,7 +33,6 @@ class SalesController extends Controller
         $data = new SalesPerson();
         $data->kode_sales = $request->get('kode_sales');
         $data->nama_sales = $request->get('nama_sales');
-        $data->divisi = $request->get('select_divisi');
         $data->save();
         return redirect()->route('salesPerson')->with('status','Hooray!! Your new item is already inserted');
     }
@@ -53,7 +52,6 @@ class SalesController extends Controller
         $objSales = SalesPerson::find($kode_sales);
         $objSales->kode_sales = $request->get('kode_sales');
         $objSales->nama_sales = $request->get('nama_sales');
-        $objSales->divisi = $request->get('select_divisi');
         $objSales->save();
         return redirect()->route('salesPerson')->with('status','Your item is up-to-date');
     }

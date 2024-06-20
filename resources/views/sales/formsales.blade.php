@@ -16,14 +16,6 @@
     <label for="exampleInputNamaSales">Nama Sales Person</label>
     <input type="text" name="nama_sales" class="form-control" id="nama_sales" placeholder="Masukkan Nama Sales Person" required autocomplete="off">
   </div><br>
-  <div class="form-group">
-    <label for="select_divisi">Divisi</label>
-    <select class="form-control" id="select_divisi" name="select_divisi">
-        @foreach(['RETAIL','FOOD','COLDSTONE','SUBWAY'] as $option)
-            <option value="{{$option}}">{{$option}}</option>
-        @endforeach
-    </select>
-  </div><br>
   <div class="form-group row">
     <div class="col-12">
       <button type="submit" class="btn btn-primary btn-block" style="width: 100%;">Submit</button>

@@ -79,9 +79,9 @@
             <td style="text-align: center;">{{$d->tanggal}}</td>
             <td>{{$d->kode_brg}}</td>
             <td>{{$d->nama_brg}}</td>
-            <td style="text-align: center;">{{$d->satuan->satuan}}</td>
+            <td style="text-align: center;">{{$d->nama_satuan}}</td>
             @if($selectedGudang == "All")
-                <td style="text-align: center;">{{$d->gudang->nama}}</td>
+                <td style="text-align: center;">{{$d->nama_gudang}}</td>
             @endif
             <td style="text-align: center;">{{$d->qty_sistem}}</td>
             <td style="text-align: center;">{{$d->qty_fisik}}</td>

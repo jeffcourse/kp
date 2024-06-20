@@ -37,11 +37,7 @@ class CustomerController extends Controller
         $data = new Customer();
         $data->kode_cust = $request->get('kode_cust');
         $data->nama_cust = $request->get('nama_cust');
-        $data->type_cust = $request->get('type_cust');
-        $data->alm_1 = $request->get('alm_1');
-        $data->alm_2 = $request->get('alm_2');
-        $data->alm_3 = $request->get('alm_3');
-        $data->kota = $request->get('kota');
+        $data->alamat = $request->get('alamat');
         $data->kontak = $request->get('kontak');
         $data->no_telp = $request->get('no_telp');
         $data->kode_sales = $request->get('select_sales');
@@ -65,11 +61,7 @@ class CustomerController extends Controller
         $objCustomer = Customer::find($kode_cust);
         $objCustomer->kode_cust = $request->get('kode_cust');
         $objCustomer->nama_cust = $request->get('nama_cust');
-        $objCustomer->type_cust = $request->get('type_cust');
-        $objCustomer->alm_1 = $request->get('alm_1');
-        $objCustomer->alm_2 = $request->get('alm_2');
-        $objCustomer->alm_3 = $request->get('alm_3');
-        $objCustomer->kota = $request->get('kota');
+        $objCustomer->alamat = $request->get('alamat');
         $objCustomer->kontak = $request->get('kontak');
         $objCustomer->no_telp = $request->get('no_telp');
         $objCustomer->kode_sales = $request->get('select_sales');

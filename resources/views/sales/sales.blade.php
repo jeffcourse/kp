@@ -46,7 +46,6 @@
       <tr>
         <th style="width: 100px;">Kode Sales</th>
         <th style="width: 150px;">Nama Sales</th>
-        <th style="width: 150px;">Divisi</th>
         <th style="width: 100px;">Actions</th>
       </tr>
     </thead>
@@ -55,7 +54,6 @@
             <tr id="tr_{{$s->kode_sales}}">
                 <td>{{$s->kode_sales}}</td>
                 <td>{{$s->nama_sales}}</td>
-                <td>{{$s->divisi}}</td>
                 <td style="text-align: center;">
                   <div class="btn-group-vertical" role="group" aria-label="Actions">
                     <a class='btn btn-info' href="{{route('salesPerson.edit',$s->kode_sales)}}">Edit</a>

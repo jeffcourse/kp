@@ -43,13 +43,8 @@
       <tr>
         <th>Kode Supplier</th>
         <th>Nama Supplier</th>
-        <th>Bank</th>
-        <th>Nomor Rekening</th>
         <th>Alamat Supplier</th>
-        <th>Kota</th>
-        <th>Negara</th>
         <th>Kontak</th>
-        <th>Jabatan</th>
         <th>No Telp</th>
         <th>Email</th>
         <th>Actions</th>
@@ -60,13 +55,8 @@
             <tr id="tr_{{$s->kode_supp}}">
                 <td>{{$s->kode_supp}}</td>
                 <td>{{$s->nama_supp}}</td>
-                <td>{{$s->bank}}</td>
-                <td>{{$s->acc_bank}}</td>
-                <td>{{$s->alm_1}}, {{$s->alm_2}}</td>
-                <td>{{$s->kota}}</td>
-                <td>{{$s->negara}}</td>
+                <td>{{$s->alamat}}</td>
                 <td>{{$s->kontak}}</td>
-                <td>{{$s->jabatan}}</td>
                 <td>{{$s->no_telp}}</td>
                 <td>{{$s->email}}</td>
                 <td style="text-align: center;">

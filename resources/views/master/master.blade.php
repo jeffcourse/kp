@@ -108,7 +108,8 @@
                     @endif
                     @if($selectedGudang != 'All')
                       <button class='btn btn-danger btn-opname' 
-                        data-toggle="modal" 
+                        data-toggle="modal"
+                        data-id="{{$m->id}}" 
                         data-kode="{{$m->kode_brg}}"
                         data-nama="{{$m->nama_brg}}"
                         data-quantity="{{$m->quantity}}"
@@ -295,6 +296,7 @@
 
     $(document).on('click', '.btn-opname', function(e) {
       e.preventDefault();
+      var idBrg = $(this).data('id');
       var kodeBrg = $(this).data('kode');
       var namaBrg = $(this).data('nama');
       var quantityBrg = $(this).data('quantity');
@@ -320,7 +322,7 @@
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
-          data: {kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, 
+          data: {id_brg: idBrg, kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, 
             kode_gudang: gudangBrg, keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
           success: function(response) {
             $('#opnameModal').modal('hide');
