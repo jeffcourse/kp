@@ -23,10 +23,15 @@ class MutasiStokController extends Controller
         $tglAwalFormatted = $tglAwal ? Carbon::createFromFormat('d-m-Y', $tglAwal)->startOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::min('tanggal'))->format('d-m-Y');
         $tglAkhirFormatted = $tglAkhir ? Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::max('tanggal'))->format('d-m-Y');        
 
-        $query = MutasiStok::query();
+        $query = MutasiStok::query()
+                    ->select('mutasi_stok.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 
+                        'invgudang.nama as nama_gudang')
+                    ->join('inventory', 'mutasi_stok.id_brg', '=', 'inventory.id')
+                    ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                    ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id')->orderBy('mutasi_stok.id', 'asc');
 
         if($selectedGudang && $selectedGudang != 'All'){
-            $query->where('kode_gudang', $selectedGudang);
+            $query->where('invgudang.nama', $selectedGudang);
         }
     
         if($search){
@@ -37,13 +42,11 @@ class MutasiStokController extends Controller
         }
 
         if($selectedTrans && $selectedTrans != 'All' && $selectedTrans != "-"){
-            $query->where(function ($query) use ($selectedTrans){
-                $query->where('no_bukti', 'like', '%'.$selectedTrans.'%');
-            });
+            $query->where('mutasi_stok.no_bukti', 'like', '%'.$selectedTrans.'%');
         }
 
         if($selectedTrans == "-"){
-            $query->where('no_bukti', '-');
+            $query->where('mutasi_stok.no_bukti', '-');
         }
 
         if($tglAwal && $tglAkhir){
@@ -59,11 +62,9 @@ class MutasiStokController extends Controller
         }
 
         $kartuStok = $query->orderBy('tanggal', 'asc')->paginate(10);
-
         $gudang = Gudang::all();
-        $satuan = Satuan::all();
 
-        return view('mutasi.kartustok',compact('kartuStok','gudang','satuan'));
+        return view('mutasi.kartustok',compact('kartuStok', 'gudang'));
     }
 
     public function cetak_pdf(Request $request)
@@ -77,10 +78,15 @@ class MutasiStokController extends Controller
         $tglAwalFormatted = $tglAwal ? Carbon::createFromFormat('d-m-Y', $tglAwal)->startOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::min('tanggal'))->format('d-m-Y');
         $tglAkhirFormatted = $tglAkhir ? Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::max('tanggal'))->format('d-m-Y');
 
-        $query = MutasiStok::query();
+        $query = MutasiStok::query()
+                    ->select('mutasi_stok.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 
+                        'invgudang.nama as nama_gudang')
+                    ->join('inventory', 'mutasi_stok.id_brg', '=', 'inventory.id')
+                    ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                    ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id')->orderBy('mutasi_stok.id', 'asc');
 
         if($selectedGudang && $selectedGudang != 'All'){
-            $query->where('kode_gudang', $selectedGudang);
+            $query->where('invgudang.nama', $selectedGudang);
         }
 
         if($searchText){
@@ -91,13 +97,11 @@ class MutasiStokController extends Controller
         }
 
         if($selectedTrans && $selectedTrans != 'All' && $selectedTrans != "-"){
-            $query->where(function ($query) use ($selectedTrans){
-                $query->where('no_bukti', 'like', '%'.$selectedTrans.'%');
-            });
+            $query->where('mutasi_stok.no_bukti', 'like', '%'.$selectedTrans.'%');
         }
 
         if($selectedTrans == "-"){
-            $query->where('no_bukti', $selectedTrans);
+            $query->where('mutasi_stok.no_bukti', $selectedTrans);
         }
 
         if($tglAwal || $tglAkhir || ($tglAwal && $tglAkhir)){
@@ -112,11 +116,8 @@ class MutasiStokController extends Controller
 
         $kartuStok = $query->orderBy('tanggal', 'asc')->get();
         $data = $kartuStok;
-
-        $gudang = Gudang::all();
-        $satuan = Satuan::all();
  
-        $view = View::make('mutasi.kartustokpdf', ['data'=>$data, 'gudang'=>$gudang, 'satuan'=>$satuan, 'totalMasuk'=>$totalQtyMasuk, 
+        $view = View::make('mutasi.kartustokpdf', ['data'=>$data, 'totalMasuk'=>$totalQtyMasuk, 
         'totalKeluar'=>$totalQtyKeluar, 'totalRusak'=>$totalQtyRusak, 'tglAwal'=>$tglAwalFormatted, 'tglAkhir'=>$tglAkhirFormatted, 
         'selectedGudang'=>$selectedGudang]);
         $pdf = new Dompdf();

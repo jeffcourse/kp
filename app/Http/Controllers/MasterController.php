@@ -152,7 +152,6 @@ class MasterController extends Controller
         $nama_brg = $request->input('nama_brg');
         $quantity = $request->input('quantity');
         $qty_awal = $request->input('qty_awal');
-        $id_satuan = $request->input('id_satuan');
         $kode_gudang = $request->input('kode_gudang');
         $keterangan = $request->input('keterangan');
 
@@ -174,26 +173,21 @@ class MasterController extends Controller
 
             if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
                 $quantity = abs($quantity);
-    
+             
+                DB::table('inventory')
+                    ->where('id', $id_brg)
+                    ->decrement('quantity', $quantity);
+
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => "-",
                     'tanggal' => Carbon::now()->format('Y-m-d'),
-                    'kode_brg' => $kode_brg,
-                    'nama_brg' => $nama_brg,
-                    'id_satuan' => $id_satuan,
-                    'kode_gudang' => $kode_gudang,
+                    'id_brg' => $id_brg,
                     'stok_awal' => $qty_awal, 
                     'qty_masuk' => 0,
                     'qty_keluar' => 0,
                     'qty_rusak_exp' => $quantity,
                     'stok_akhir' => $qty_awal - $quantity
                 ]);
-             
-                DB::table('invmaster')
-                    ->where('kode_brg', $kode_brg)
-                    ->where('nama_brg', $nama_brg)
-                    ->where('kode_gudang', $kode_gudang)
-                    ->decrement('quantity', $quantity);
         
             } else{
                 if($transaction == 'pembelian'){
@@ -223,9 +217,7 @@ class MasterController extends Controller
 
                     DB::table('mutasi_stok')
                     ->where('no_bukti', $no_bukti)
-                    ->where('kode_brg', $kode_brg)
-                    ->where('nama_brg', $nama_brg)
-                    ->where('kode_gudang', $kode_gudang)
+                    ->where('id_brg', $id_brg)
                     ->update([
                         'qty_masuk' => $qty_order,
                         'stok_akhir' => DB::raw('stok_awal + ' . $qty_order)
@@ -256,9 +248,7 @@ class MasterController extends Controller
                 
                     DB::table('mutasi_stok')
                     ->where('no_bukti', $no_bukti)
-                    ->where('kode_brg', $kode_brg)
-                    ->where('nama_brg', $nama_brg)
-                    ->where('kode_gudang', $kode_gudang)
+                    ->where('id_brg', $id_brg)
                     ->update([
                         'qty_keluar' => $qty_order,
                         'stok_akhir' => DB::raw('stok_awal - ' . $qty_order)
@@ -266,9 +256,7 @@ class MasterController extends Controller
                 }
                 $dataRow = DB::table('mutasi_stok')
                 ->where('no_bukti', $no_bukti)
-                ->where('kode_brg', $kode_brg)
-                ->where('nama_brg', $nama_brg)
-                ->where('kode_gudang', $kode_gudang)
+                ->where('id_brg', $id_brg)
                 ->get(['id', 'stok_akhir']);
                 
                 foreach($dataRow as $row){
@@ -277,9 +265,7 @@ class MasterController extends Controller
                 }
     
                 $rowsToUpdate = DB::table('mutasi_stok')
-                ->where('kode_brg', $kode_brg)
-                ->where('nama_brg', $nama_brg)
-                ->where('kode_gudang', $kode_gudang)
+                ->where('id_brg', $id_brg)
                 ->where('id', '>', $rowId)
                 ->orderBy('id')
                 ->get();
@@ -322,10 +308,8 @@ class MasterController extends Controller
                         $rowStokAkhir = $stokAkhir;
                     }
                 }
-                DB::table('invmaster')
-                ->where('kode_brg', $kode_brg)
-                ->where('nama_brg', $nama_brg)
-                ->where('kode_gudang', $kode_gudang)
+                DB::table('inventory')
+                ->where('id', $id_brg)
                 ->update([
                     'quantity' => $qty_fisik
                 ]);
@@ -344,7 +328,7 @@ class MasterController extends Controller
                 $minSellPrice = $totalCost / $currentQuantity;
                 $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
 
-                DB::table('invmaster')
+                DB::table('inventory')
                 ->where('kode_brg', $kode_brg)
                 ->update(['hrg_jual' => $sellPrice]);
             }
@@ -407,8 +391,8 @@ class MasterController extends Controller
             return response()->json($beliData);
         } else if($transaction == 'penjualan'){
             $jualData = JualDetail::query()
-                            ->select('jual_dtl.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','invmaster.id_satuan', 'invmaster.kode_gudang')
-                            ->join('invmaster', 'jual_dtl.id_brg', '=', 'invmaster.id')
+                            ->select('jual_dtl.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','inventory.id_satuan', 'inventory.kode_gudang')
+                            ->join('inventory', 'jual_dtl.id_brg', '=', 'inventory.id')
                             ->where('jual_dtl.no_bukti', $noBukti)
                             ->where('jual_dtl.id_brg', $idBrg)->get();
             
@@ -434,10 +418,10 @@ class MasterController extends Controller
         $selectedTanggal = $request->get('selectedTanggal');
 
         $query = OpnameStok::query()
-                    ->select('opname_stok.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
-                    ->join('invmaster', 'opname_stok.id_brg', '=', 'invmaster.id')
-                    ->join('invgudang', 'invmaster.kode_gudang', '=', 'invgudang.kode')
-                    ->join('satuan', 'invmaster.id_satuan', '=', 'satuan.id');
+                    ->select('opname_stok.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
+                    ->join('inventory', 'opname_stok.id_brg', '=', 'inventory.id')
+                    ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                    ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id');
 
         if($selectedGudang && $selectedGudang != 'All'){
             $query->where('invgudang.nama', $selectedGudang);

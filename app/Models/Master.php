@@ -10,7 +10,7 @@ class Master extends Model
     use HasFactory;
 
     public $timestamps = false;
-    protected $table = "invmaster";
+    protected $table = "inventory";
 
     protected $primaryKey = 'id';
 

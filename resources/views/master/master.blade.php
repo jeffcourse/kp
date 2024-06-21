@@ -113,7 +113,6 @@
                         data-kode="{{$m->kode_brg}}"
                         data-nama="{{$m->nama_brg}}"
                         data-quantity="{{$m->quantity}}"
-                        data-satuan="{{$m->id_satuan}}"
                         data-gudang="{{$m->kode_gudang}}"
                         data-toggle="modal" 
                         data-target="#opnameModal">Opname</button>
@@ -300,7 +299,6 @@
       var kodeBrg = $(this).data('kode');
       var namaBrg = $(this).data('nama');
       var quantityBrg = $(this).data('quantity');
-      var satuanBrg = $(this).data('satuan');
       var gudangBrg = $(this).data('gudang');
 
       $('#id-barang').val(idBrg);
@@ -323,7 +321,7 @@
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
-          data: {id_brg: idBrg, kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, id_satuan: satuanBrg, 
+          data: {id_brg: idBrg, kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, 
             kode_gudang: gudangBrg, keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
           success: function(response) {
             $('#opnameModal').modal('hide');

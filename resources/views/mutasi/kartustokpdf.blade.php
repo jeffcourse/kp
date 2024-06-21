@@ -64,7 +64,7 @@
     @endif<br>
     @if($selectedGudang != "All")
     <tr>
-        <td><h4>{{\App\Models\Gudang::find($selectedGudang)->nama}}<h4></td>
+        <td><h4>{{$selectedGudang}}<h4></td>
     </tr>
     @endif
     @if(count(array_unique($kodeBrgArray)) == 1)
@@ -75,6 +75,9 @@
     <table class="table table-bordered center-table" style="width: 700px;">
     <thead>
       <tr>
+        @if($selectedGudang == "All")
+            <th style="text-align: center;">Gudang</th>
+        @endif
         @if($tglAwal != $tglAkhir)
             <th style="text-align: center;">Tanggal Mutasi</th>
         @endif
@@ -84,9 +87,6 @@
             <th style="text-align: center;">Nama Barang</th>
         @endif
         <th style="text-align: center;">Satuan</th>
-        @if($selectedGudang == "All")
-            <th style="text-align: center;">Gudang</th>
-        @endif
         <th style="text-align: center;">Stok Awal</th>
         <th style="text-align: center;">Masuk</th>
         <th style="text-align: center;">Keluar</th>
@@ -97,6 +97,9 @@
     <tbody>
       @foreach($data as $d)
         <tr>
+            @if($selectedGudang == "All")    
+                <td style="text-align: center;">{{$d->nama_gudang}}</td>
+            @endif
             @if($tglAwal != $tglAkhir)
                 <td style="text-align: center;">{{date('d-m-Y', strtotime($d->tanggal))}}</td>
             @endif
@@ -105,10 +108,7 @@
                 <td>{{$d->kode_brg}}</td>
                 <td>{{$d->nama_brg}}</td>
             @endif
-            <td style="text-align: center;">{{$d->satuan->satuan}}</td>
-            @if($selectedGudang == "All")    
-                <td style="text-align: center;">{{$d->gudang->nama}}</td>
-            @endif
+            <td style="text-align: center;">{{$d->nama_satuan}}</td>
             <td style="text-align: center;">{{$d->stok_awal}}</td>
             <td style="text-align: center;">{{$d->qty_masuk}}</td>
             <td style="text-align: center;">{{$d->qty_keluar}}</td>

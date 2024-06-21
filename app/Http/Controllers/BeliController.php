@@ -188,30 +188,17 @@ class BeliController extends Controller
         $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
 
         foreach ($beliDetail as $detail) {
-            $master = DB::table('invmaster')
+            $master = DB::table('inventory')
                 ->where('kode_brg', $detail->kode_brg)
                 ->where('nama_brg', $detail->nama_brg)
                 ->where('kode_gudang', $detail->kirim_gudang)
                 ->first();
 
             if ($master) {
+                $id_brg = $master->id;
                 $stok_awal = $master->quantity;
 
-                DB::table('mutasi_stok')->insert([
-                    'no_bukti' => $no_bukti,
-                    'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
-                    'kode_brg' => $detail->kode_brg,
-                    'nama_brg' => $detail->nama_brg,
-                    'id_satuan' => $detail->id_satuan,
-                    'kode_gudang' => $detail->kirim_gudang,
-                    'stok_awal' => $stok_awal,
-                    'qty_masuk' => $detail->qty_order,
-                    'qty_keluar' => 0,
-                    'qty_rusak_exp' => 0,
-                    'stok_akhir' => $stok_awal + $detail->qty_order
-                ]);
-
-                DB::table('invmaster')
+                DB::table('inventory')
                     ->where('kode_brg', $detail->kode_brg)
                     ->where('nama_brg', $detail->nama_brg)
                     ->where('kode_gudang', $detail->kirim_gudang)
@@ -231,26 +218,23 @@ class BeliController extends Controller
                 $minSellPrice = $totalCost / $currentQuantity;
                 $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
 
-                DB::table('invmaster')
+                DB::table('inventory')
                     ->where('kode_brg', $detail->kode_brg)
                     ->update(['hrg_jual' => $sellPrice]);
 
-            } else {
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => $no_bukti,
                     'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
-                    'kode_brg' => $detail->kode_brg,
-                    'nama_brg' => $detail->nama_brg,
-                    'id_satuan' => $detail->id_satuan,
-                    'kode_gudang' => $detail->kirim_gudang,
-                    'stok_awal' => 0,
+                    'id_brg' => $id_brg,
+                    'stok_awal' => $stok_awal,
                     'qty_masuk' => $detail->qty_order,
                     'qty_keluar' => 0,
                     'qty_rusak_exp' => 0,
-                    'stok_akhir' => $detail->qty_order
+                    'stok_akhir' => $stok_awal + $detail->qty_order
                 ]);
 
-                $masterDetail = DB::table('invmaster')
+            } else {
+                $masterDetail = DB::table('inventory')
                     ->select('kode_divisi', 'kode_jenis', 'kode_type')
                     ->where('kode_brg', $detail->kode_brg)
                     ->first();
@@ -260,7 +244,7 @@ class BeliController extends Controller
                     $kodeJenis = $masterDetail->kode_jenis;
                     $kodeType = $masterDetail->kode_type;
 
-                    DB::table('invmaster')->insert([
+                    DB::table('inventory')->insert([
                         'kode_brg' => $detail->kode_brg,
                         'nama_brg' => $detail->nama_brg,
                         'kode_divisi' => $kodeDivisi,
@@ -273,7 +257,7 @@ class BeliController extends Controller
                     ]);
 
                 } else{
-                    DB::table('invmaster')->insert([
+                    DB::table('inventory')->insert([
                         'kode_brg' => $detail->kode_brg,
                         'nama_brg' => $detail->nama_brg,
                         'quantity' => $detail->qty_order,
@@ -297,9 +281,25 @@ class BeliController extends Controller
                 $minSellPrice = $totalCost / $currentQuantity;
                 $sellPrice = $minSellPrice + ($minSellPrice * 0.5);
 
-                DB::table('invmaster')
+                DB::table('inventory')
                     ->where('kode_brg', $detail->kode_brg)
                     ->update(['hrg_jual' => $sellPrice]);
+
+                $id = DB::table('inventory')
+                    ->where('kode_brg', $detail->kode_brg)
+                    ->where('kode_gudang', $detail->kirim_gudang)
+                    ->select('id')->first();
+
+                DB::table('mutasi_stok')->insert([
+                    'no_bukti' => $no_bukti,
+                    'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
+                    'id_brg' => $id->id,
+                    'stok_awal' => 0,
+                    'qty_masuk' => $detail->qty_order,
+                    'qty_keluar' => 0,
+                    'qty_rusak_exp' => 0,
+                    'stok_akhir' => $detail->qty_order
+                ]);
             }
         }
 

@@ -37,7 +37,7 @@
       <select id="filterGudang" class="form-control" style="width: 200px; display: inline-block;">
         <option value="All">All</option>
           @foreach($gudang as $gd)
-            <option value="{{$gd->kode}}">{{$gd->nama}}</option>
+            <option value="{{$gd->nama}}">{{$gd->nama}}</option>
           @endforeach
       </select>
     </div>
@@ -98,12 +98,12 @@
     <tbody>
         @foreach($kartuStok as $k)
             <tr id="tr_{{$k->id}}">
-                <td>{{$k->gudang->nama}}</td>
+                <td>{{$k->nama_gudang}}</td>
                 <td>{{$k->no_bukti}}</td>
                 <td>{{date('d-m-Y', strtotime($k->tanggal))}}</td>
                 <td>{{$k->kode_brg}}</td>
                 <td>{{$k->nama_brg}}</td>
-                <td>{{$k->satuan->satuan}}</td>
+                <td>{{$k->nama_satuan}}</td>
                 <td>{{$k->stok_awal}}</td>
                 <td>{{$k->qty_masuk}}</td>
                 <td>{{$k->qty_keluar}}</td>
