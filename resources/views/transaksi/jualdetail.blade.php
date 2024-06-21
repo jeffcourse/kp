@@ -48,10 +48,10 @@
                 <td>{{$j->kode_brg}}</td>
                 <td>{{$j->nama_brg}}</td>
                 <td>{{$j->qty_order}}</td>
-                <td>{{$j->satuan->satuan}}</td>
+                <td>{{$j->nama_satuan}}</td>
                 <td>Rp. {{number_format(floatval($j->hrg_per_unit), 2, ',', '.')}}</td>
                 <td>Rp. {{number_format(floatval($j->hrg_total), 2, ',', '.')}}</td>
-                <td>{{$j->gudang->nama}}</td>
+                <td>{{$j->nama_gudang}}</td>
             </tr>
         @endforeach
     </tbody>

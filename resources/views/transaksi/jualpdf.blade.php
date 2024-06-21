@@ -37,7 +37,7 @@
         
     </tr>
     <tr>
-        <td colspan="9">{{$data->customer->alm_1}}, {{$data->customer->alm_2}}, {{$data->customer->alm_3}}</td>
+        <td colspan="9">{{$data->customer->alamat}}</td>
         <td style="font-weight: bold; text-align: center;">*INVOICE*</td>
     </tr>
     <tr class="table-tr">
@@ -55,7 +55,7 @@
         <td style="width: 180px;">{{$detail->kode_brg}}</td>
         <td style="width: 180px; text-align: center;">{{$detail->qty_order}}</td>
         <td style="width: 320px;">{{$detail->nama_brg}}</td>
-        <td style="text-align: center;">{{$detail->satuan->satuan}}</td>
+        <td style="text-align: center;">{{$detail->nama_satuan}}</td>
         <td style="width: 180px; text-align: center;">Rp. {{number_format(floatval($detail->hrg_per_unit), 2, ',', '.')}}</td>
       </tr>
       @endforeach

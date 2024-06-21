@@ -303,6 +303,7 @@
       var satuanBrg = $(this).data('satuan');
       var gudangBrg = $(this).data('gudang');
 
+      $('#id-barang').val(idBrg);
       $('#kode-barang').val(kodeBrg);
       $('#nama-barang').val(namaBrg);
       $('#kode-gudang').val(gudangBrg);
@@ -362,6 +363,7 @@
     });
 
     function fetchTransaction(selectedValue) {
+      var idBrg = $('#id-barang').val();
       var kodeBrg = $('#kode-barang').val();
       var namaBrg = $('#nama-barang').val();
       var gudangBrg = $('#kode-gudang').val();
@@ -369,7 +371,7 @@
       $.ajax({
         url: "{{route('FetchNoBukti')}}",
         type: "GET",
-        data: {selectedValue: selectedValue, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
+        data: {selectedValue: selectedValue, idBrg: idBrg, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
         success: function(response) {
           var optionsHtml = '';
           if(response.length > 0) {
@@ -407,6 +409,7 @@
 
     function fetchTransactionData(noBukti){
       var transaction = $('input[name="transaksi"]:checked').val();
+      var idBrg = $('#id-barang').val();
       var kodeBrg = $('#kode-barang').val();
       var namaBrg = $('#nama-barang').val();
       var gudangBrg = $('#kode-gudang').val();
@@ -415,7 +418,7 @@
       $.ajax({
         url: "{{route('FetchTransData')}}",
         type: "GET",
-        data: {transaction: transaction, noBukti: noBukti, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
+        data: {transaction: transaction, noBukti: noBukti, idBrg: idBrg, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
         success: function(response) {
           response.forEach(function(item) {
             $('#kode-barang-trans').val(item.kode_brg);
@@ -459,6 +462,7 @@
         </button>
       </div>
       <div class="modal-body">
+        <input style="display: none;" type="text" id="id-barang" class="form-control">
         <h5>Kode Barang:</h5>
         <input type="text" id="kode-barang" class="form-control" readonly><br>
         <h5>Nama Barang:</h5>

@@ -60,7 +60,6 @@ class JualController extends Controller
         $data->total = $request->get('total'); 
         $data->lunas = 'Belum Lunas';
         $data->status = 'Belum Terkirim';
-        $data->create_time = Carbon::now()->format('d-m-Y');
         $data->author = auth()->user()->name;
         $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
         $data->tgl_lunas = '-';
@@ -68,25 +67,17 @@ class JualController extends Controller
         $data->save();
 
         $id_brg = $request->get('id_brg');
-        $kode_brg = $request->get('kode_brg');
-        $nama_brg = $request->get('nama_brg');
         $qty_order = $request->get('qty_order');
-        $id_satuan = $request->get('select_satuan');
         $hrg_per_unit = $request->get('hrg_per_unit');
         $hrg_total = $request->get('hrg_total');
-        $kode_gudang = $request->get('select_gudang');
 
-        foreach($kode_brg as $key => $value) {
+        foreach($id_brg as $key => $value){
             $detail = new JualDetail();
-            $detail->id_brg = $id_brg[$key];
             $detail->no_bukti = $data->no_bukti;
-            $detail->kode_brg = $kode_brg[$key];
-            $detail->nama_brg = $nama_brg[$key];
+            $detail->id_brg = $id_brg[$key];
             $detail->qty_order = $qty_order[$key];
-            $detail->id_satuan = $id_satuan[$key];
             $detail->hrg_per_unit = $hrg_per_unit[$key];
             $detail->hrg_total = $hrg_total[$key];
-            $detail->kode_gudang = $kode_gudang[$key];
             $detail->save();
         }
 
@@ -184,7 +175,10 @@ class JualController extends Controller
         $jual->tgl_terkirim = $tgl_terkirim;
         $jual->save();
 
-        $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
+        $jualDetail = JualDetail::query()
+                        ->select('jual_dtl.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','invmaster.id_satuan', 'invmaster.kode_gudang')
+                        ->join('invmaster', 'jual_dtl.id_brg', '=', 'invmaster.id')
+                        ->where('jual_dtl.no_bukti', $no_bukti)->get();
 
         foreach ($jualDetail as $detail) {
             $master = Master::find($detail->id_brg);
@@ -213,11 +207,14 @@ class JualController extends Controller
     }
 
     public function showDetail($no_bukti){
-        $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
-        $satuan = Satuan::all();
-        $gudang = Gudang::all();
+        $jualDetail = JualDetail::query()
+            ->select('jual_dtl.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
+            ->join('invmaster', 'jual_dtl.id_brg', '=', 'invmaster.id')
+            ->join('invgudang', 'invmaster.kode_gudang', '=', 'invgudang.kode')
+            ->join('satuan', 'invmaster.id_satuan', '=', 'satuan.id')
+            ->where('jual_dtl.no_bukti', $no_bukti)->get();
 
-        return view('transaksi.jualdetail', compact('jualDetail','satuan','gudang','no_bukti'));
+        return view('transaksi.jualdetail', compact('jualDetail','no_bukti'));
     }
 
     public function welcomeJual(){
@@ -248,14 +245,18 @@ class JualController extends Controller
     public function cetak_pdf($no_bukti)
     {
         $jual = Jual::find($no_bukti);
-        $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
+        $jualDetail = JualDetail::query()
+                        ->select('jual_dtl.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
+                        ->join('invmaster', 'jual_dtl.id_brg', '=', 'invmaster.id')
+                        ->join('invgudang', 'invmaster.kode_gudang', '=', 'invgudang.kode')
+                        ->join('satuan', 'invmaster.id_satuan', '=', 'satuan.id')
+                        ->where('jual_dtl.no_bukti', $no_bukti)->get();
         $customer = Customer::all();
-        $satuan = Satuan::all();
  
         $data = $jual;
         $dataDetail = $jualDetail;
 
-        $view = View::make('transaksi.jualpdf', ['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer, 'satuan'=>$satuan]);
+        $view = View::make('transaksi.jualpdf', ['data'=>$data, 'dataDetail'=>$dataDetail, 'customer'=>$customer]);
         $pdf = new Dompdf();
         $pdf->loadHtml($view->render());
         $pdf->setPaper('A4', 'landscape');

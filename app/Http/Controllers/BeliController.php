@@ -62,7 +62,6 @@ class BeliController extends Controller
         $data->total = $request->get('total'); 
         $data->lunas = 'Belum Lunas';
         $data->status = 'Belum Terkirim';
-        $data->create_time = Carbon::now()->format('d-m-Y');
         $data->author = auth()->user()->name;
         $data->jatuh_tempo = Carbon::parse($data->tanggal)->addMonth()->format('d-m-Y');
         $data->tgl_lunas = '-';
@@ -188,14 +187,11 @@ class BeliController extends Controller
 
         $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
 
-        $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
-
         foreach ($beliDetail as $detail) {
             $master = DB::table('invmaster')
                 ->where('kode_brg', $detail->kode_brg)
                 ->where('nama_brg', $detail->nama_brg)
                 ->where('kode_gudang', $detail->kirim_gudang)
-                ->whereNotIn('keterangan', $keteranganArray)
                 ->first();
 
             if ($master) {
@@ -219,7 +215,6 @@ class BeliController extends Controller
                     ->where('kode_brg', $detail->kode_brg)
                     ->where('nama_brg', $detail->nama_brg)
                     ->where('kode_gudang', $detail->kirim_gudang)
-                    ->whereNotIn('keterangan', $keteranganArray)
                     ->increment('quantity', $detail->qty_order);
                 
                 $transactions = DB::table('beli_dtl')
@@ -238,7 +233,6 @@ class BeliController extends Controller
 
                 DB::table('invmaster')
                     ->where('kode_brg', $detail->kode_brg)
-                    ->whereNotIn('keterangan', $keteranganArray)
                     ->update(['hrg_jual' => $sellPrice]);
 
             } else {
@@ -259,8 +253,6 @@ class BeliController extends Controller
                 $masterDetail = DB::table('invmaster')
                     ->select('kode_divisi', 'kode_jenis', 'kode_type')
                     ->where('kode_brg', $detail->kode_brg)
-                    ->where('nama_brg', $detail->nama_brg)
-                    ->whereNotIn('keterangan', $keteranganArray)
                     ->first();
 
                 if($masterDetail){

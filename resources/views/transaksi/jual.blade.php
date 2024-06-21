@@ -68,7 +68,7 @@
                 <td>{{$j->tanggal}}</td>
                 <td>{{$j->jatuh_tempo}}</td>
                 <td>{{$j->customer->nama_cust}}</td>
-                <td>{{$j->customer->alm_1}}, {{$j->customer->alm_2}}, {{$j->customer->alm_3}}</td>
+                <td>{{$j->customer->alamat}}</td>
                 <td>Rp. {{number_format(floatval($j->sub_total), 2, ',', '.')}}</td>
                 <td>{{$j->persen_ppn}}%</td>
                 <td>Rp. {{number_format(floatval($j->total), 2, ',', '.')}}</td>

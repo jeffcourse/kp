@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 20, 2024 at 03:32 AM
+-- Generation Time: Jun 21, 2024 at 05:11 AM
 -- Server version: 8.0.26
 -- PHP Version: 7.4.27
 
@@ -39,7 +39,6 @@ CREATE TABLE `beli` (
   `tgl_lunas` varchar(45) NOT NULL,
   `status` varchar(45) DEFAULT NULL,
   `tgl_terkirim` varchar(45) NOT NULL,
-  `create_time` varchar(45) DEFAULT NULL,
   `author` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -47,14 +46,16 @@ CREATE TABLE `beli` (
 -- Dumping data for table `beli`
 --
 
-INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `sub_total`, `persen_ppn`, `total`, `lunas`, `tgl_lunas`, `status`, `tgl_terkirim`, `create_time`, `author`) VALUES
-('BL24-00001', '19-06-2024', '19-07-2024', 'AMBICO', '1596000.00', 10, '1755600.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('BL24-00002', '19-06-2024', '19-07-2024', 'ANEKA', '9979264.00', 10, '10977190.40', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('BL24-00003', '19-06-2024', '19-07-2024', 'AMBICO', '2227250.00', 10, '2449975.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('BL24-00004', '19-06-2024', '19-07-2024', 'AMBICO', '640000.00', 10, '704000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '20-06-2024', 'Admin'),
-('BL24-00005', '20-06-2024', '20-07-2024', 'AMBICO', '350000.00', 10, '385000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', '20-06-2024', 'Admin'),
-('BL24-00006', '20-06-2024', '20-07-2024', 'AMBICO', '160000.00', 10, '176000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', '20-06-2024', 'Admin'),
-('BL24-00007', '20-06-2024', '20-07-2024', 'AMBICO', '2960000.00', 10, '3256000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', '20-06-2024', 'Admin');
+INSERT INTO `beli` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_supp`, `sub_total`, `persen_ppn`, `total`, `lunas`, `tgl_lunas`, `status`, `tgl_terkirim`, `author`) VALUES
+('BL24-00001', '19-06-2024', '19-07-2024', 'AMBICO', '1596000.00', 10, '1755600.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('BL24-00002', '19-06-2024', '19-07-2024', 'ANEKA', '9979264.00', 10, '10977190.40', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('BL24-00003', '19-06-2024', '19-07-2024', 'AMBICO', '2324750.00', 10, '2557225.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('BL24-00004', '19-06-2024', '19-07-2024', 'AMBICO', '640000.00', 10, '704000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('BL24-00005', '20-06-2024', '20-07-2024', 'AMBICO', '350000.00', 10, '385000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', 'Admin'),
+('BL24-00006', '20-06-2024', '20-07-2024', 'AMBICO', '160000.00', 10, '176000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', 'Admin'),
+('BL24-00007', '20-06-2024', '20-07-2024', 'AMBICO', '2960000.00', 10, '3256000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', 'Admin'),
+('BL24-00008', '20-06-2024', '20-07-2024', 'AMBICO', '300000.00', 10, '330000.00', 'Lunas', '20-06-2024', 'Sudah Terkirim', '20-06-2024', 'Admin'),
+('BL24-00009', '21-06-2024', '21-07-2024', 'ANEKA', '1100000.00', 10, '1210000.00', 'Lunas', '21-06-2024', 'Sudah Terkirim', '21-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -84,12 +85,15 @@ INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_sat
 ('BL24-00002', 'A0032F', 'Frz Salmon Fillet Import - T', 35, 3, 111750, 3911250, 'K'),
 ('BL24-00002', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 40, 1, 62612.5, 2504500, 'M'),
 ('BL24-00003', 'A005M', 'BULLDOG Worchestershire 1,8LTR', 20, 1, 62612.5, 1252250, 'M'),
-('BL24-00003', 'A0087', 'Dorry Fillet Frozen 1KG', 30, 1, 32500, 975000, 'K'),
+('BL24-00003', 'A0087', 'Dorry Fillet Frozen 1KG', 33, 1, 32500, 1072500, 'K'),
 ('BL24-00004', 'A0012M', 'Sanma L', 20, 1, 32000, 640000, 'K'),
 ('BL24-00005', 'A0012M', 'Sanma L', 10, 1, 35000, 350000, 'M'),
 ('BL24-00006', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 10, 2, 16000, 160000, 'K'),
 ('BL24-00007', 'A0090M', 'BONE Salmon Tasman Headless', 25, 3, 112000, 2800000, 'K'),
-('BL24-00007', 'A0012M', 'Sanma L', 5, 1, 32000, 160000, 'M');
+('BL24-00007', 'A0012M', 'Sanma L', 5, 1, 32000, 160000, 'M'),
+('BL24-00008', 'A0012M', 'Sanma L', 10, 1, 30000, 300000, 'K'),
+('BL24-00009', 'A0012M', 'Sanma L', 20, 1, 30000, 600000, 'M'),
+('BL24-00009', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 25, 2, 20000, 500000, 'M');
 
 -- --------------------------------------------------------
 
@@ -100,11 +104,7 @@ INSERT INTO `beli_dtl` (`no_bukti`, `kode_brg`, `nama_brg`, `qty_order`, `id_sat
 CREATE TABLE `customer` (
   `kode_cust` varchar(45) NOT NULL,
   `nama_cust` varchar(45) DEFAULT NULL,
-  `type_cust` varchar(45) DEFAULT NULL,
-  `alm_1` varchar(255) DEFAULT NULL,
-  `alm_2` varchar(255) DEFAULT NULL,
-  `alm_3` varchar(255) DEFAULT NULL,
-  `kota` varchar(45) DEFAULT NULL,
+  `alamat` varchar(255) DEFAULT NULL,
   `kontak` varchar(45) DEFAULT NULL,
   `no_telp` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL,
@@ -115,10 +115,11 @@ CREATE TABLE `customer` (
 -- Dumping data for table `customer`
 --
 
-INSERT INTO `customer` (`kode_cust`, `nama_cust`, `type_cust`, `alm_1`, `alm_2`, `alm_3`, `kota`, `kontak`, `no_telp`, `email`, `kode_sales`) VALUES
-('07AM', '07AM BAKERS CLUB', 'BAKERY', 'JL. BUMBAK DAUH NO.88', 'KEROBOKAN, KUTA UTARA', 'BADUNG BALI', 'KEROBOKAN', 'AYU SUARTINI', '0812 37047789', '-', '16'),
-('104 BAR', '104 BAR AND GRILL', 'RESTAURANT WESTERN', 'JL. DANAU POSO 104', 'SANUR', 'DENPASAR, BALI', 'DENPASAR', 'BPK.HERMAN', '0819 1644 3136', '-', '18'),
-('88SUNARI', '88 SUNARI', 'MINI MARKET', 'BJ. DINAS BANYUALIT', 'KALIBUKBUK BULELENG', 'BALI', 'SINGARAJA', 'BPK. YOGA', '08193 6501871', NULL, '15');
+INSERT INTO `customer` (`kode_cust`, `nama_cust`, `alamat`, `kontak`, `no_telp`, `email`, `kode_sales`) VALUES
+('07AM', '07AM BAKERS CLUB', 'JL. BUMBAK DAUH NO.88, Denpasar Timur', 'AYU SUARTINI', '0812 37047789', '-', '16'),
+('104 BAR', '104 BAR AND GRILL', 'JL. DANAU POSO 104, Denpasar Barat', 'BPK.HERMAN', '0819 1644 3136', '-', '18'),
+('88SUNARI', '88 SUNARI', 'BJ. DINAS BANYUALIT, Singaraja', 'BPK. YOGA', '08193 6501871', NULL, '15'),
+('CS', 'COLD STONE', 'Jl. Pantai Kuta Beachwalk No. 105, Badung', 'PUTU', '081999665738', NULL, '15');
 
 -- --------------------------------------------------------
 
@@ -222,15 +223,15 @@ CREATE TABLE `invmaster` (
 --
 
 INSERT INTO `invmaster` (`id`, `kode_brg`, `nama_brg`, `kode_divisi`, `kode_jenis`, `kode_type`, `quantity`, `id_satuan`, `hrg_jual`, `kode_gudang`, `keterangan`) VALUES
-(72, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 25, 1, 47381, 'M', '-'),
-(73, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 25, 2, 26423.1, 'M', '-'),
+(72, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 25, 1, 46612.9, 'M', '-'),
+(73, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 32, 2, 27584.4, 'M', '-'),
 (74, 'A0023', 'Chirimen Jako 1KG', 'L', 'C', 'LCSF', 25, 2, 197973, 'K', '-'),
 (75, 'A0032F', 'Frz Salmon Fillet Import - T', 'W', 'C', 'SLMN', 27, 3, 167625, 'K', '-'),
 (76, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 'J', 'D', 'PTDR', 30, 1, 93918.8, 'M', '-'),
 (77, 'A005M', 'BULLDOG Worchestershire 1,8LTR', 'J', 'D', 'PTDR', 20, 1, 93918.8, 'M', '-'),
-(78, 'A0087', 'Dorry Fillet Frozen 1KG', 'J', 'C', 'JSFN', 29, 1, 48750, 'K', '-'),
-(80, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 20, 1, 47381, 'K', '-'),
-(81, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 10, 2, 26423.1, 'K', '-'),
+(78, 'A0087', 'Dorry Fillet Frozen 1KG', 'J', 'C', 'JSFN', 32, 1, 48750, 'K', '-'),
+(80, 'A0012M', 'Sanma L', 'J', 'F', 'JSFN', 30, 1, 46612.9, 'K', '-'),
+(81, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 'J', 'D', 'PTDR', 10, 2, 27584.4, 'K', '-'),
 (82, 'A0090M', 'BONE Salmon Tasman Headless', 'W', 'C', 'SLMN', 25, 3, 168000, 'K', '-');
 
 -- --------------------------------------------------------
@@ -273,7 +274,6 @@ CREATE TABLE `jual` (
   `tgl_lunas` varchar(45) NOT NULL,
   `status` varchar(45) NOT NULL,
   `tgl_terkirim` varchar(255) NOT NULL,
-  `create_time` varchar(45) DEFAULT NULL,
   `author` varchar(45) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -281,10 +281,12 @@ CREATE TABLE `jual` (
 -- Dumping data for table `jual`
 --
 
-INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `sub_total`, `persen_ppn`, `total`, `lunas`, `tgl_lunas`, `status`, `tgl_terkirim`, `create_time`, `author`) VALUES
-('JL24-00001', '19-06-2024', '19-07-2024', '104 BAR', '360000.00', 10, '396000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('JL24-00002', '19-06-2024', '19-07-2024', '88SUNARI', '1344188.00', 10, '1478606.80', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin'),
-('JL24-00003', '19-06-2024', '19-07-2024', '104 BAR', '1791000.00', 10, '1970100.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', '19-06-2024', 'Admin');
+INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `sub_total`, `persen_ppn`, `total`, `lunas`, `tgl_lunas`, `status`, `tgl_terkirim`, `author`) VALUES
+('JL24-00001', '19-06-2024', '19-07-2024', '104 BAR', '360000.00', 10, '396000.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('JL24-00002', '19-06-2024', '19-07-2024', '88SUNARI', '1398188.00', 10, '1538006.80', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('JL24-00003', '19-06-2024', '19-07-2024', '104 BAR', '1791000.00', 10, '1970100.00', 'Lunas', '19-06-2024', 'Sudah Terkirim', '19-06-2024', 'Admin'),
+('JL24-00004', '21-06-2024', '21-07-2024', '104 BAR', '470548.00', 10, '517602.80', 'Lunas', '21-06-2024', 'Sudah Terkirim', '21-06-2024', 'Admin'),
+('JL24-00005', '21-06-2024', '21-07-2024', '88SUNARI', '866894.50', 10, '953583.95', 'Lunas', '21-06-2024', 'Sudah Terkirim', '21-06-2024', 'Admin');
 
 -- --------------------------------------------------------
 
@@ -295,25 +297,24 @@ INSERT INTO `jual` (`no_bukti`, `tanggal`, `jatuh_tempo`, `kode_cust`, `sub_tota
 CREATE TABLE `jual_dtl` (
   `no_bukti` varchar(45) NOT NULL,
   `id_brg` int NOT NULL,
-  `kode_brg` varchar(45) DEFAULT NULL,
-  `nama_brg` varchar(255) DEFAULT NULL,
   `qty_order` int DEFAULT NULL,
-  `id_satuan` int NOT NULL,
   `hrg_per_unit` float DEFAULT NULL,
-  `hrg_total` float DEFAULT NULL,
-  `kode_gudang` varchar(45) NOT NULL
+  `hrg_total` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `jual_dtl`
 --
 
-INSERT INTO `jual_dtl` (`no_bukti`, `id_brg`, `kode_brg`, `nama_brg`, `qty_order`, `id_satuan`, `hrg_per_unit`, `hrg_total`, `kode_gudang`) VALUES
-('JL24-00001', 72, 'A0012M', 'Sanma L', 8, 1, 45000, 360000, 'M'),
-('JL24-00002', 73, 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 15, 2, 27000, 405000, 'M'),
-('JL24-00002', 76, 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 10, 1, 93918.8, 939188, 'M'),
-('JL24-00003', 72, 'A0012M', 'Sanma L', 10, 1, 45000, 450000, 'M'),
-('JL24-00003', 75, 'A0032F', 'Frz Salmon Fillet Import - T', 8, 3, 167625, 1341000, 'K');
+INSERT INTO `jual_dtl` (`no_bukti`, `id_brg`, `qty_order`, `hrg_per_unit`, `hrg_total`) VALUES
+('JL24-00001', 72, 8, 45000, 360000),
+('JL24-00002', 73, 17, 27000, 459000),
+('JL24-00002', 76, 10, 93918.8, 939188),
+('JL24-00003', 72, 10, 45000, 450000),
+('JL24-00003', 75, 8, 167625, 1341000),
+('JL24-00004', 72, 10, 47054.8, 470548),
+('JL24-00005', 72, 10, 47054.8, 470548),
+('JL24-00005', 73, 15, 26423.1, 396346);
 
 -- --------------------------------------------------------
 
@@ -369,21 +370,28 @@ INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, 
 (78, 'BL24-00002', '2024-06-19', 'A0032F', 'Frz Salmon Fillet Import - T', 3, 'K', 0, 35, 0, 0, 35),
 (79, 'BL24-00002', '2024-06-19', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 1, 'M', 0, 40, 0, 0, 40),
 (80, 'BL24-00003', '2024-06-19', 'A005M', 'BULLDOG Worchestershire 1,8LTR', 1, 'M', 0, 20, 0, 0, 20),
-(81, 'BL24-00003', '2024-06-19', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 0, 30, 0, 0, 30),
-(82, 'JL24-00002', '2024-06-19', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 42, 0, 15, 0, 27),
+(81, 'BL24-00003', '2024-06-19', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 0, 33, 0, 0, 33),
+(82, 'JL24-00002', '2024-06-19', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 42, 0, 17, 0, 25),
 (83, 'JL24-00002', '2024-06-19', 'A004M', 'BULLDOG Tonkatsu Sauce 1,8LTR', 1, 'M', 40, 0, 10, 0, 30),
 (84, '-', '2024-06-19', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 27, 0, 0, 1, 26),
 (85, 'JL24-00003', '2024-06-19', 'A0012M', 'Sanma L', 1, 'M', 20, 0, 10, 0, 10),
 (86, 'JL24-00003', '2024-06-19', 'A0032F', 'Frz Salmon Fillet Import - T', 3, 'K', 35, 0, 8, 0, 27),
 (87, 'BL24-00004', '2024-06-19', 'A0012M', 'Sanma L', 1, 'K', 0, 20, 0, 0, 20),
 (88, '-', '2024-06-20', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 26, 0, 0, 1, 25),
-(89, '-', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 27, 0, 0, 1, 26),
-(90, '-', '2024-06-20', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 30, 0, 0, 1, 29),
+(89, '-', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 25, 0, 0, 1, 24),
+(90, '-', '2024-06-20', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 33, 0, 0, 1, 32),
 (91, 'BL24-00005', '2024-06-20', 'A0012M', 'Sanma L', 1, 'M', 10, 10, 0, 0, 20),
 (92, 'BL24-00006', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'K', 0, 10, 0, 0, 10),
-(93, '-', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 26, 0, 0, 1, 25),
+(93, '-', '2024-06-20', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 24, 0, 0, 1, 23),
 (94, 'BL24-00007', '2024-06-20', 'A0090M', 'BONE Salmon Tasman Headless', 3, 'K', 0, 25, 0, 0, 25),
-(95, 'BL24-00007', '2024-06-20', 'A0012M', 'Sanma L', 1, 'M', 20, 5, 0, 0, 25);
+(95, 'BL24-00007', '2024-06-20', 'A0012M', 'Sanma L', 1, 'M', 20, 5, 0, 0, 25),
+(96, 'BL24-00008', '2024-06-20', 'A0012M', 'Sanma L', 1, 'K', 20, 10, 0, 0, 30),
+(97, '-', '2024-06-21', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 23, 0, 0, 1, 22),
+(98, 'JL24-00004', '2024-06-21', 'A0012M', 'Sanma L', 1, 'M', 25, 0, 10, 0, 15),
+(99, 'JL24-00005', '2024-06-21', 'A0012M', 'Sanma L', 1, 'M', 15, 0, 10, 0, 5),
+(100, 'JL24-00005', '2024-06-21', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 22, 0, 15, 0, 7),
+(101, 'BL24-00009', '2024-06-21', 'A0012M', 'Sanma L', 1, 'M', 5, 20, 0, 0, 25),
+(102, 'BL24-00009', '2024-06-21', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 7, 25, 0, 0, 32);
 
 -- --------------------------------------------------------
 
@@ -394,10 +402,7 @@ INSERT INTO `mutasi_stok` (`id`, `no_bukti`, `tanggal`, `kode_brg`, `nama_brg`, 
 CREATE TABLE `opname_stok` (
   `id` int NOT NULL,
   `tanggal` varchar(45) DEFAULT NULL,
-  `kode_brg` varchar(45) DEFAULT NULL,
-  `nama_brg` varchar(255) DEFAULT NULL,
-  `id_satuan` int NOT NULL,
-  `kode_gudang` varchar(45) NOT NULL,
+  `id_brg` int NOT NULL,
   `qty_sistem` int DEFAULT NULL,
   `qty_fisik` int DEFAULT NULL,
   `selisih` int DEFAULT NULL,
@@ -408,17 +413,9 @@ CREATE TABLE `opname_stok` (
 -- Dumping data for table `opname_stok`
 --
 
-INSERT INTO `opname_stok` (`id`, `tanggal`, `kode_brg`, `nama_brg`, `id_satuan`, `kode_gudang`, `qty_sistem`, `qty_fisik`, `selisih`, `keterangan`) VALUES
-(11, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 30, 28, -2, 'SALAH PENCATATAN'),
-(12, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 18, 19, 1, 'SALAH PENCATATAN'),
-(16, '19-06-2024', 'A0012M', 'Sanma L', 1, 'M', 19, 20, 1, 'SALAH PENCATATAN'),
-(17, '19-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 25, 24, -1, 'BARANG RUSAK'),
-(18, '20-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 24, 23, -1, 'BARANG RUSAK'),
-(19, '20-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 25, 24, -1, 'BARANG RUSAK'),
-(20, '20-06-2024', 'A0087', 'Dorry Fillet Frozen 1KG', 1, 'K', 30, 29, -1, 'BARANG RUSAK'),
-(21, '20-06-2024', 'A0023', 'Chirimen Jako 1KG', 2, 'K', 23, 25, 2, 'SALAH PENCATATAN'),
-(22, '20-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 24, 23, -1, 'BARANG EXPIRED'),
-(23, '20-06-2024', 'A001M', 'KIKKOMAN Shoyu 1,6LTR', 2, 'M', 23, 25, 2, 'SALAH PENCATATAN');
+INSERT INTO `opname_stok` (`id`, `tanggal`, `id_brg`, `qty_sistem`, `qty_fisik`, `selisih`, `keterangan`) VALUES
+(25, '21-06-2024', 73, 25, 24, -1, 'BARANG RUSAK'),
+(26, '21-06-2024', 73, 34, 32, -2, 'SALAH PENCATATAN');
 
 -- --------------------------------------------------------
 
@@ -440,20 +437,20 @@ CREATE TABLE `password_resets` (
 
 CREATE TABLE `sales_person` (
   `kode_sales` varchar(45) NOT NULL,
-  `nama_sales` varchar(45) DEFAULT NULL,
-  `divisi` varchar(45) DEFAULT NULL
+  `nama_sales` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `sales_person`
 --
 
-INSERT INTO `sales_person` (`kode_sales`, `nama_sales`, `divisi`) VALUES
-('12B', 'EKA', 'RETAIL'),
-('15', 'ULFA', 'RETAIL'),
-('16', 'DESAK', 'FOOD'),
-('17', 'ALDI', 'FOOD'),
-('18', 'AGUSTA FS', 'FOOD');
+INSERT INTO `sales_person` (`kode_sales`, `nama_sales`) VALUES
+('12B', 'EKA'),
+('15', 'ULFA'),
+('16', 'DESAK'),
+('17', 'ALDI'),
+('18', 'AGUSTA FS'),
+('19', 'DANI');
 
 -- --------------------------------------------------------
 
@@ -485,14 +482,8 @@ INSERT INTO `satuan` (`id`, `satuan`) VALUES
 CREATE TABLE `supplier` (
   `kode_supp` varchar(45) NOT NULL,
   `nama_supp` varchar(255) DEFAULT NULL,
-  `bank` varchar(45) NOT NULL,
-  `acc_bank` varchar(255) DEFAULT NULL,
-  `alm_1` varchar(255) DEFAULT NULL,
-  `alm_2` varchar(255) DEFAULT NULL,
-  `kota` varchar(45) DEFAULT NULL,
-  `negara` varchar(45) DEFAULT NULL,
+  `alamat` varchar(255) DEFAULT NULL,
   `kontak` varchar(45) DEFAULT NULL,
-  `jabatan` varchar(45) DEFAULT NULL,
   `no_telp` varchar(45) DEFAULT NULL,
   `email` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -501,10 +492,10 @@ CREATE TABLE `supplier` (
 -- Dumping data for table `supplier`
 --
 
-INSERT INTO `supplier` (`kode_supp`, `nama_supp`, `bank`, `acc_bank`, `alm_1`, `alm_2`, `kota`, `negara`, `kontak`, `jabatan`, `no_telp`, `email`) VALUES
-('AMBICO', 'AMBICO/PT', 'Permata', '4683801553', 'JL. DINOYO 35', 'SURABAYA, JAWA TIMUR 60265', 'SURABAYA', 'INDONESIA', 'IBU NATICA', '-', '0315675547', 'natica@ptambico.com'),
-('ANEKA', 'PT. ANEKA KONSUMSI SELERA INTERNASIONAL (Big Farm)', 'Permata', '0189977788', 'KOMPLEKS PERGUDANGAN DAN INDUSTRI SAFE N LOCK G NO. 1570-1571', 'RANGKAHKIDUL, SIDOARJO - JAWA TIMUR', 'SIDOARJO', 'INDONESIA', 'BENNY', '-', '-', 'benyfirman@kansasid.com'),
-('CLEANBEE', 'PT. PASTI KLIN INDONESIA', 'Permata', '4706558888', 'JALA KALIMAS BARAT NOMOR 57A RT.003 RW 009', 'KREMBANGAN UTARA, PABEAN CANTIAN', 'SURABAYA', 'INDONESIA', 'Pak Stanford', '-', '081999090333', 'pastiklin@gmail.com');
+INSERT INTO `supplier` (`kode_supp`, `nama_supp`, `alamat`, `kontak`, `no_telp`, `email`) VALUES
+('AMBICO', 'AMBICO/PT', 'JL. DINOYO 35, Sidoarjo', 'IBU NATICA', '0315675547', 'natica@ptambico.com'),
+('ANEKA', 'PT. ANEKA KONSUMSI SELERA INTERNASIONAL (Big Farm)', 'KOMPLEKS PERGUDANGAN DAN INDUSTRI SAFE N LOCK G NO. 1570-1571, Surabaya', 'BENNY', '081985634216', 'benyfirman@kansasid.com'),
+('CLEANBEE', 'PT. PASTI KLIN INDONESIA', 'JALA KALIMAS BARAT NOMOR 57A RT.003 RW 009, Surabaya Barat', 'Pak Stanford', '081999090333', 'pastiklin@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -612,8 +603,6 @@ ALTER TABLE `jual`
 --
 ALTER TABLE `jual_dtl`
   ADD KEY `fk_jual_dtl_jual1_idx` (`no_bukti`),
-  ADD KEY `fk_jual_dtl_satuan1_idx` (`id_satuan`),
-  ADD KEY `fk_jual_dtl_invgudang1_idx` (`kode_gudang`),
   ADD KEY `fk_jual_dtl_invmaster1_idx` (`id_brg`);
 
 --
@@ -635,8 +624,7 @@ ALTER TABLE `mutasi_stok`
 --
 ALTER TABLE `opname_stok`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_opname_stok_invgudang1_idx` (`kode_gudang`),
-  ADD KEY `fk_opname_stok_satuan1_idx` (`id_satuan`);
+  ADD KEY `fk_opname_stok_invmaster1_idx` (`id_brg`);
 
 --
 -- Indexes for table `password_resets`
@@ -695,13 +683,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT for table `mutasi_stok`
 --
 ALTER TABLE `mutasi_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=96;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 
 --
 -- AUTO_INCREMENT for table `opname_stok`
 --
 ALTER TABLE `opname_stok`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `satuan`
@@ -759,10 +747,8 @@ ALTER TABLE `jual`
 -- Constraints for table `jual_dtl`
 --
 ALTER TABLE `jual_dtl`
-  ADD CONSTRAINT `fk_jual_dtl_invgudang1` FOREIGN KEY (`kode_gudang`) REFERENCES `invgudang` (`kode`),
   ADD CONSTRAINT `fk_jual_dtl_invmaster1` FOREIGN KEY (`id_brg`) REFERENCES `invmaster` (`id`),
-  ADD CONSTRAINT `fk_jual_dtl_jual1` FOREIGN KEY (`no_bukti`) REFERENCES `jual` (`no_bukti`),
-  ADD CONSTRAINT `fk_jual_dtl_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
+  ADD CONSTRAINT `fk_jual_dtl_jual1` FOREIGN KEY (`no_bukti`) REFERENCES `jual` (`no_bukti`);
 
 --
 -- Constraints for table `mutasi_stok`
@@ -775,8 +761,7 @@ ALTER TABLE `mutasi_stok`
 -- Constraints for table `opname_stok`
 --
 ALTER TABLE `opname_stok`
-  ADD CONSTRAINT `fk_opname_stok_invgudang1` FOREIGN KEY (`kode_gudang`) REFERENCES `invgudang` (`kode`),
-  ADD CONSTRAINT `fk_opname_stok_satuan1` FOREIGN KEY (`id_satuan`) REFERENCES `satuan` (`id`);
+  ADD CONSTRAINT `fk_opname_stok_invmaster1` FOREIGN KEY (`id_brg`) REFERENCES `invmaster` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

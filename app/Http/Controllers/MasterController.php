@@ -172,8 +172,6 @@ class MasterController extends Controller
                 'keterangan' => $keterangan
             ]);
 
-            $keteranganArray = ["BARANG RUSAK", "BARANG EXPIRED", "SALAH PENCATATAN"];
-
             if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
                 $quantity = abs($quantity);
     
@@ -195,7 +193,6 @@ class MasterController extends Controller
                     ->where('kode_brg', $kode_brg)
                     ->where('nama_brg', $nama_brg)
                     ->where('kode_gudang', $kode_gudang)
-                    ->whereNotIn('keterangan', $keteranganArray)
                     ->decrement('quantity', $quantity);
         
             } else{
@@ -236,9 +233,7 @@ class MasterController extends Controller
 
                 } else{
                     DB::table('jual_dtl')->where('no_bukti', $no_bukti)
-                    ->where('kode_brg', $kode_brg)
-                    ->where('nama_brg', $nama_brg)
-                    ->where('kode_gudang', $kode_gudang)
+                    ->where('id_brg', $id_brg)
                     ->update([
                         'qty_order' => $qty_order,
                         'hrg_total' => $hrg_total
@@ -331,7 +326,6 @@ class MasterController extends Controller
                 ->where('kode_brg', $kode_brg)
                 ->where('nama_brg', $nama_brg)
                 ->where('kode_gudang', $kode_gudang)
-                ->whereNotIn('keterangan', $keteranganArray)
                 ->update([
                     'quantity' => $qty_fisik
                 ]);
@@ -352,7 +346,6 @@ class MasterController extends Controller
 
                 DB::table('invmaster')
                 ->where('kode_brg', $kode_brg)
-                ->whereNotIn('keterangan', $keteranganArray)
                 ->update(['hrg_jual' => $sellPrice]);
             }
             return response()->json(['success' => true]);
@@ -361,6 +354,7 @@ class MasterController extends Controller
 
     public function fetchNoBukti(Request $request){
         $selectedValue = $request->input('selectedValue');
+        $idBrg = $request->input('idBrg');
         $kodeBrg = $request->input('kodeBrg');
         $namaBrg = $request->input('namaBrg');
         $gudangBrg = $request->input('gudangBrg');
@@ -374,9 +368,7 @@ class MasterController extends Controller
 
             return response()->json($beliData);
         } else if($selectedValue == 'penjualan'){
-            $jualData = JualDetail::where('kode_brg', $kodeBrg)
-                ->where('nama_brg', $namaBrg)
-                ->where('kode_gudang', $gudangBrg)
+            $jualData = JualDetail::where('id_brg', $idBrg)
                 ->distinct()
                 ->get(['no_bukti']);
 
@@ -388,6 +380,7 @@ class MasterController extends Controller
     public function fetchTransData(Request $request){
         $transaction = $request->input('transaction');
         $noBukti = $request->input('noBukti');
+        $idBrg = $request->input('idBrg');
         $kodeBrg = $request->input('kodeBrg');
         $namaBrg = $request->input('namaBrg');
         $gudangBrg = $request->input('gudangBrg');
@@ -413,23 +406,22 @@ class MasterController extends Controller
             });
             return response()->json($beliData);
         } else if($transaction == 'penjualan'){
-            $jualData = JualDetail::where('no_bukti', $noBukti)
-                ->where('kode_brg', $kodeBrg)
-                ->where('nama_brg', $namaBrg)
-                ->where('kode_gudang', $gudangBrg)
-                ->get();
+            $jualData = JualDetail::query()
+                            ->select('jual_dtl.*', 'invmaster.kode_brg as kode_brg', 'invmaster.nama_brg as nama_brg','invmaster.id_satuan', 'invmaster.kode_gudang')
+                            ->join('invmaster', 'jual_dtl.id_brg', '=', 'invmaster.id')
+                            ->where('jual_dtl.no_bukti', $noBukti)
+                            ->where('jual_dtl.id_brg', $idBrg)->get();
             
             $jualData = $jualData->map(function ($item, $key) {
                 return [
                     'no_bukti' => $item->no_bukti,
-                    'id_brg' => $item->id_brg,
                     'kode_brg' => $item->kode_brg,
                     'nama_brg' => $item->nama_brg,
                     'qty_order' => $item->qty_order,
                     'id_satuan' => $item->id_satuan,
                     'hrg_per_unit' => $item->hrg_per_unit,
                     'hrg_total' => $item->hrg_total,
-                    'kode_gudang' => $item->kode_gudang,    
+                    'kode_gudang' => $item->kode_gudang,     
                 ];
             });
             return response()->json($jualData);
