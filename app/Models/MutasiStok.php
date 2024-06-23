@@ -16,7 +16,7 @@ class MutasiStok extends Model
 
     protected $keyType = 'integer';
 
-    protected $fillable = [
+    /*protected $fillable = [
         'no_bukti',
         'kode_brg',
         'tanggal',
@@ -28,13 +28,12 @@ class MutasiStok extends Model
         'qty_keluar',
         'qty_rusak_exp',
         'stok_akhir'
-    ];
+    ];*/
 
     public function gudang(){
         return $this->belongsTo(Gudang::class,'kode_gudang');
     }
-
-    public function satuan(){
-        return $this->belongsTo(Satuan::class,'id_satuan');
+    public function master(){
+        return $this->belongsTo(Master::class,'kode_brg');
     }
 }

@@ -75,7 +75,6 @@
    <table class="table">
     <thead>
       <tr>
-        <th scope="col" style="display: none;">ID Barang</th>
         <th scope="col">Kode Barang</th>
         <th scope="col">Nama Barang</th>
         <th scope="col">Quantity Order</th>
@@ -88,11 +87,6 @@
     </thead>
     <tbody>
       <tr>
-        <td style="display: none;">
-          <div class="form-group">
-            <input type="text" name="id_brg[]" id="id_brg" class="form-control" readonly>
-          </div>
-        </td>
         <td>
           <div class="form-group">
             <input list="kodeBarangList" class="form-control" id="kode_barang_input" placeholder="Masukkan Kode Barang" autocomplete="off">
@@ -330,7 +324,6 @@
 
           if(masterData){
             var row = $('#kode_barang_input', section).closest('tr');
-            row.find('input[name="id_brg[]"]').val(masterData.id);
             row.find('input[name="nama_brg[]"]').val(masterData.nama_brg);
             row.find('input[name="hrg_per_unit[]"]').val(masterData.hrg_jual);
 

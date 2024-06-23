@@ -12,9 +12,11 @@ class Master extends Model
     public $timestamps = false;
     protected $table = "inventory";
 
-    protected $primaryKey = 'id';
+    public $incrementing = false;
 
-    protected $keyType = 'integer';
+    protected $primaryKey = 'kode_brg';
+
+    protected $keyType = 'string';
 
     /*protected $fillable = [
         'kode_brg',
@@ -34,10 +36,6 @@ class Master extends Model
         return $this->belongsTo(Divisi::class,'kode_divisi');
     }
 
-    public function gudang(){
-        return $this->belongsTo(Gudang::class,'kode_gudang');
-    }
-
     public function jenis(){
         return $this->belongsTo(Jenis::class,'kode_jenis');
     }
@@ -50,9 +48,15 @@ class Master extends Model
         return $this->belongsTo(Satuan::class,'id_satuan');
     }
     public function jualDetail(){
-        return $this->hasMany(JualDetail::class,'id_brg');
+        return $this->hasMany(JualDetail::class,'kode_brg');
     }
     public function opnameStok(){
-        return $this->hasMany(OpnameStok::class,'id_brg');
+        return $this->hasMany(OpnameStok::class,'kode_brg');
+    }
+    public function mutasiStok(){
+        return $this->hasMany(MutasiStok::class,'kode_brg');
+    }
+    public function beliDetail(){
+        return $this->hasMany(BeliDetail::class,'kode_brg');
     }
 }

@@ -51,7 +51,13 @@
                 <td>{{$j->nama_satuan}}</td>
                 <td>Rp. {{number_format(floatval($j->hrg_per_unit), 2, ',', '.')}}</td>
                 <td>Rp. {{number_format(floatval($j->hrg_total), 2, ',', '.')}}</td>
-                <td>{{$j->nama_gudang}}</td>
+                <td>
+                @foreach($gudang as $g)
+                @if($g->kode == $j->kode_gudang)
+                    {{$g->nama}}
+                @endif
+                @endforeach
+                </td>
             </tr>
         @endforeach
     </tbody>

@@ -24,10 +24,10 @@ class MutasiStokController extends Controller
         $tglAkhirFormatted = $tglAkhir ? Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::max('tanggal'))->format('d-m-Y');        
 
         $query = MutasiStok::query()
-                    ->select('mutasi_stok.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 
+                    ->select('mutasi_stok.*', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 
                         'invgudang.nama as nama_gudang')
-                    ->join('inventory', 'mutasi_stok.id_brg', '=', 'inventory.id')
-                    ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                    ->join('inventory', 'mutasi_stok.kode_brg', '=', 'inventory.kode_brg')
+                    ->join('invgudang', 'mutasi_stok.kode_gudang', '=', 'invgudang.kode')
                     ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id')->orderBy('mutasi_stok.id', 'asc');
 
         if($selectedGudang && $selectedGudang != 'All'){
@@ -35,10 +35,8 @@ class MutasiStokController extends Controller
         }
     
         if($search){
-            $query->where(function ($query) use ($search){
-                $query->where('kode_brg', 'like', '%'.$search.'%')
-                      ->orWhere('nama_brg', 'like', '%'.$search.'%');
-            });
+            $query->where('mutasi_stok.kode_brg', 'like', '%'.$search.'%')
+                ->orWhere('inventory.nama_brg', 'like', '%'.$search.'%');
         }
 
         if($selectedTrans && $selectedTrans != 'All' && $selectedTrans != "-"){
@@ -79,10 +77,10 @@ class MutasiStokController extends Controller
         $tglAkhirFormatted = $tglAkhir ? Carbon::createFromFormat('d-m-Y', $tglAkhir)->endOfDay()->format('d-m-Y') : Carbon::createFromFormat('Y-m-d', MutasiStok::max('tanggal'))->format('d-m-Y');
 
         $query = MutasiStok::query()
-                    ->select('mutasi_stok.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 
+                    ->select('mutasi_stok.*', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 
                         'invgudang.nama as nama_gudang')
-                    ->join('inventory', 'mutasi_stok.id_brg', '=', 'inventory.id')
-                    ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                    ->join('inventory', 'mutasi_stok.kode_brg', '=', 'inventory.kode_brg')
+                    ->join('invgudang', 'mutasi_stok.kode_gudang', '=', 'invgudang.kode')
                     ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id')->orderBy('mutasi_stok.id', 'asc');
 
         if($selectedGudang && $selectedGudang != 'All'){
@@ -90,10 +88,8 @@ class MutasiStokController extends Controller
         }
 
         if($searchText){
-            $query->where(function ($query) use ($searchText){
-                $query->where('kode_brg', 'like', '%' . $searchText . '%')
-                    ->orWhere('nama_brg', 'like', '%' . $searchText . '%');
-            });
+            $query->where('mutasi_stok.kode_brg', 'like', '%' . $searchText . '%')
+                    ->orWhere('inventory.nama_brg', 'like', '%' . $searchText . '%');
         }
 
         if($selectedTrans && $selectedTrans != 'All' && $selectedTrans != "-"){

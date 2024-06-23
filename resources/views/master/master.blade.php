@@ -45,7 +45,7 @@
       <select id="filterJenis" class="form-control" style="width: 200px; display: inline-block;">
         <option value="All">All</option>
           @foreach($jenis as $jn)
-            <option value="{{$jn->jenis}}">{{$jn->jenis}}</option>
+            <option value="{{$jn->kode}}">{{$jn->jenis}}</option>
           @endforeach
       </select>
     </div>
@@ -88,14 +88,38 @@
     </thead>
     <tbody>
         @foreach($master as $m)
-            <tr id="tr_{{$m->id}}">
+            <tr id="tr_{{$m->kode_brg}}">
                 <td>{{$m->kode_brg}}</td>
                 <td>{{$m->nama_brg}}</td>
-                <td>{{$m->divisi ? $m->divisi->divisi : '-'}}</td>
-                <td>{{$m->jenis ? $m->jenis->jenis : '-'}}</td>
-                <td>{{$m->type ? $m->type->type : '-'}}</td>
+                <td>
+                @foreach($divisi as $d)
+                @if($d->kode == $m->kode_divisi)
+                    {{$d->divisi}}
+                @endif
+                @endforeach
+                </td>
+                <td>
+                @foreach($jenis as $j)
+                @if($j->kode == $m->kode_jenis)
+                    {{$j->jenis}}
+                @endif
+                @endforeach
+                </td>
+                <td>
+                @foreach($type as $t)
+                @if($t->kode == $m->kode_type)
+                    {{$t->type}}
+                @endif
+                @endforeach
+                </td>
                 <td>{{$m->quantity}}</td>
-                <td>{{$m->satuan->satuan}}</td>
+                <td>
+                @foreach($satuan as $s)
+                @if($s->id == $m->id_satuan)
+                    {{$s->satuan}}
+                @endif
+                @endforeach
+                </td>
                 <td>Rp. {{number_format(floatval($m->hrg_jual), 2, ',', '.')}}</td>
                 @if($selectedGudang != 'All')
                   <td>{{$m->gudang->nama}}</td>
@@ -109,7 +133,6 @@
                     @if($selectedGudang != 'All')
                       <button class='btn btn-danger btn-opname' 
                         data-toggle="modal"
-                        data-id="{{$m->id}}" 
                         data-kode="{{$m->kode_brg}}"
                         data-nama="{{$m->nama_brg}}"
                         data-quantity="{{$m->quantity}}"
@@ -295,13 +318,11 @@
 
     $(document).on('click', '.btn-opname', function(e) {
       e.preventDefault();
-      var idBrg = $(this).data('id');
       var kodeBrg = $(this).data('kode');
       var namaBrg = $(this).data('nama');
       var quantityBrg = $(this).data('quantity');
       var gudangBrg = $(this).data('gudang');
 
-      $('#id-barang').val(idBrg);
       $('#kode-barang').val(kodeBrg);
       $('#nama-barang').val(namaBrg);
       $('#kode-gudang').val(gudangBrg);
@@ -321,7 +342,7 @@
         $.ajax({
           url: "{{route('OpnameBarang')}}",
           type: 'GET',
-          data: {id_brg: idBrg, kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, 
+          data: {kode_brg: kodeBrg, nama_brg: namaBrg, quantity: selisih, qty_awal: quantity, qty_fisik: qtyFisik, 
             kode_gudang: gudangBrg, keterangan: keterangan, transaction: transaction, no_bukti: noBukti, qty_order: qtyOrder, hrg_total: hrgTotal},
           success: function(response) {
             $('#opnameModal').modal('hide');
@@ -361,7 +382,6 @@
     });
 
     function fetchTransaction(selectedValue) {
-      var idBrg = $('#id-barang').val();
       var kodeBrg = $('#kode-barang').val();
       var namaBrg = $('#nama-barang').val();
       var gudangBrg = $('#kode-gudang').val();
@@ -369,7 +389,7 @@
       $.ajax({
         url: "{{route('FetchNoBukti')}}",
         type: "GET",
-        data: {selectedValue: selectedValue, idBrg: idBrg, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
+        data: {selectedValue: selectedValue, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
         success: function(response) {
           var optionsHtml = '';
           if(response.length > 0) {
@@ -407,7 +427,6 @@
 
     function fetchTransactionData(noBukti){
       var transaction = $('input[name="transaksi"]:checked').val();
-      var idBrg = $('#id-barang').val();
       var kodeBrg = $('#kode-barang').val();
       var namaBrg = $('#nama-barang').val();
       var gudangBrg = $('#kode-gudang').val();
@@ -416,7 +435,7 @@
       $.ajax({
         url: "{{route('FetchTransData')}}",
         type: "GET",
-        data: {transaction: transaction, noBukti: noBukti, idBrg: idBrg, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
+        data: {transaction: transaction, noBukti: noBukti, kodeBrg: kodeBrg, namaBrg: namaBrg, gudangBrg: gudangBrg},
         success: function(response) {
           response.forEach(function(item) {
             $('#kode-barang-trans').val(item.kode_brg);
@@ -460,7 +479,6 @@
         </button>
       </div>
       <div class="modal-body">
-        <input style="display: none;" type="text" id="id-barang" class="form-control">
         <h5>Kode Barang:</h5>
         <input type="text" id="kode-barang" class="form-control" readonly><br>
         <h5>Nama Barang:</h5>

@@ -11,6 +11,7 @@ use App\Models\Satuan;
 use App\Models\BeliDetail;
 use App\Models\JualDetail;
 use App\Models\OpnameStok;
+use App\Models\MutasiStok;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use Dompdf\Dompdf;
@@ -24,31 +25,36 @@ class MasterController extends Controller
         $jenis = $request->get('jenis');
         $search = $request->get('search');
 
-        $query = Master::query();
+        $query = MutasiStok::whereIn('id', function ($query){
+                    $query->select(DB::raw('MAX(id)'))
+                        ->from('mutasi_stok')
+                        ->groupBy('kode_brg', 'kode_gudang');
+                    })->select('inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg', 'inventory.kode_divisi as kode_divisi',
+                        'inventory.kode_jenis as kode_jenis', 'inventory.kode_type as kode_type', 'mutasi_stok.stok_akhir as quantity',
+                        'inventory.id_satuan as id_satuan', 'inventory.hrg_jual as hrg_jual', 'inventory.keterangan as keterangan', 
+                        'mutasi_stok.kode_gudang as kode_gudang', 'invgudang.nama as nama_gudang')
+                    ->join('inventory', 'mutasi_stok.kode_brg', '=', 'inventory.kode_brg')
+                    ->join('invgudang', 'mutasi_stok.kode_gudang', '=', 'invgudang.kode');
 
         if($selectedGudang && $selectedGudang != 'All'){
-            $query->whereHas('gudang', function ($q) use ($selectedGudang) {
-                $q->where('nama', $selectedGudang);
-            });
+            $query->where('invgudang.nama', $selectedGudang);
         }
 
         if($selectedGudang == 'All'){
-            $query->select('kode_brg', 'nama_brg', 'kode_divisi', 'kode_jenis', 'kode_type', 'id_satuan', 'hrg_jual', 'keterangan')
-                  ->selectRaw('SUM(quantity) as quantity')
-                  ->groupBy('kode_brg', 'nama_brg', 'kode_divisi', 'kode_jenis', 'kode_type', 'id_satuan', 'hrg_jual', 'keterangan');
+            $query->select('inventory.kode_brg', 'inventory.nama_brg', 'inventory.kode_divisi', 'inventory.kode_jenis', 
+                    'inventory.kode_type', 'inventory.id_satuan', 'inventory.hrg_jual', 'inventory.keterangan')
+                ->selectRaw('SUM(mutasi_stok.stok_akhir) as quantity')
+                ->groupBy('inventory.kode_brg', 'inventory.nama_brg', 'inventory.kode_divisi', 'inventory.kode_jenis', 
+                    'inventory.kode_type', 'inventory.id_satuan', 'inventory.hrg_jual', 'inventory.keterangan');
         }
 
         if($jenis && $jenis != 'All'){
-            $query->whereHas('jenis', function ($j) use ($jenis){
-                $j->where('jenis',$jenis);
-            });
+            $query->where('inventory.kode_jenis',$jenis);
         }
 
         if($search){
-            $query->where(function ($query) use ($search) {
-                $query->where('nama_brg', 'like', '%'.$search.'%')
-                      ->orWhere('kode_brg', 'like', '%'.$search.'%');
-            });
+                $query->where('inventory.nama_brg', 'like', '%'.$search.'%')
+                      ->orWhere('inventory.kode_brg', 'like', '%'.$search.'%');
         }
 
         $master = $query->paginate(10);
@@ -137,17 +143,22 @@ class MasterController extends Controller
 
     public function welcome()
     {
-        $totalProducts = Master::select('kode_brg')
-                            ->distinct()
-                            ->count('kode_brg');
+        $totalProducts = Master::select('kode_brg')->count('kode_brg');
 
-        $totalPrice = Master::sum(DB::raw('hrg_jual * quantity'));
+        $totalPriceValue = MutasiStok::whereIn('id', function ($query){
+                        $query->select(DB::raw('MAX(id)'))
+                            ->from('mutasi_stok')
+                            ->groupBy('kode_brg');
+                        })->selectRaw('SUM(inventory.hrg_jual * mutasi_stok.stok_akhir) as total_price')
+                        ->join('inventory', 'mutasi_stok.kode_brg', '=', 'inventory.kode_brg')
+                        ->first();
+                        
+        $totalPrice = $totalPriceValue->total_price;
 
         return view('welcome', compact('totalProducts', 'totalPrice'));
     }
 
     public function opnameBarang(Request $request){
-        $id_brg = $request->input('id_brg');
         $kode_brg = $request->input('kode_brg');
         $nama_brg = $request->input('nama_brg');
         $quantity = $request->input('quantity');
@@ -164,7 +175,8 @@ class MasterController extends Controller
         if($quantity != 0){
             DB::table('opname_stok')->insert([
                 'tanggal' => Carbon::now()->format('d-m-Y'),
-                'id_brg' => $id_brg,
+                'kode_brg' => $kode_brg,
+                'kode_gudang' => $kode_gudang,
                 'qty_sistem' => $qty_awal, 
                 'qty_fisik' => $qty_fisik,
                 'selisih' => $qty_fisik - $qty_awal,
@@ -173,15 +185,12 @@ class MasterController extends Controller
 
             if($keterangan == "BARANG RUSAK" || $keterangan == "BARANG EXPIRED"){
                 $quantity = abs($quantity);
-             
-                DB::table('inventory')
-                    ->where('id', $id_brg)
-                    ->decrement('quantity', $quantity);
 
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => "-",
                     'tanggal' => Carbon::now()->format('Y-m-d'),
-                    'id_brg' => $id_brg,
+                    'kode_brg' => $kode_brg,
+                    'kode_gudang' => $kode_gudang,
                     'stok_awal' => $qty_awal, 
                     'qty_masuk' => 0,
                     'qty_keluar' => 0,
@@ -217,7 +226,8 @@ class MasterController extends Controller
 
                     DB::table('mutasi_stok')
                     ->where('no_bukti', $no_bukti)
-                    ->where('id_brg', $id_brg)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('kode_gudang', $kode_gudang)
                     ->update([
                         'qty_masuk' => $qty_order,
                         'stok_akhir' => DB::raw('stok_awal + ' . $qty_order)
@@ -225,7 +235,8 @@ class MasterController extends Controller
 
                 } else{
                     DB::table('jual_dtl')->where('no_bukti', $no_bukti)
-                    ->where('id_brg', $id_brg)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('kode_gudang', $kode_gudang)
                     ->update([
                         'qty_order' => $qty_order,
                         'hrg_total' => $hrg_total
@@ -248,7 +259,8 @@ class MasterController extends Controller
                 
                     DB::table('mutasi_stok')
                     ->where('no_bukti', $no_bukti)
-                    ->where('id_brg', $id_brg)
+                    ->where('kode_brg', $kode_brg)
+                    ->where('kode_gudang', $kode_gudang)
                     ->update([
                         'qty_keluar' => $qty_order,
                         'stok_akhir' => DB::raw('stok_awal - ' . $qty_order)
@@ -256,7 +268,8 @@ class MasterController extends Controller
                 }
                 $dataRow = DB::table('mutasi_stok')
                 ->where('no_bukti', $no_bukti)
-                ->where('id_brg', $id_brg)
+                ->where('kode_brg', $kode_brg)
+                ->where('kode_gudang', $kode_gudang)
                 ->get(['id', 'stok_akhir']);
                 
                 foreach($dataRow as $row){
@@ -265,7 +278,8 @@ class MasterController extends Controller
                 }
     
                 $rowsToUpdate = DB::table('mutasi_stok')
-                ->where('id_brg', $id_brg)
+                ->where('kode_brg', $kode_brg)
+                ->where('kode_gudang', $kode_gudang)
                 ->where('id', '>', $rowId)
                 ->orderBy('id')
                 ->get();
@@ -308,11 +322,6 @@ class MasterController extends Controller
                         $rowStokAkhir = $stokAkhir;
                     }
                 }
-                DB::table('inventory')
-                ->where('id', $id_brg)
-                ->update([
-                    'quantity' => $qty_fisik
-                ]);
 
                 $transactions = DB::table('beli_dtl')
                 ->where('kode_brg', $kode_brg)
@@ -338,7 +347,6 @@ class MasterController extends Controller
 
     public function fetchNoBukti(Request $request){
         $selectedValue = $request->input('selectedValue');
-        $idBrg = $request->input('idBrg');
         $kodeBrg = $request->input('kodeBrg');
         $namaBrg = $request->input('namaBrg');
         $gudangBrg = $request->input('gudangBrg');
@@ -352,7 +360,8 @@ class MasterController extends Controller
 
             return response()->json($beliData);
         } else if($selectedValue == 'penjualan'){
-            $jualData = JualDetail::where('id_brg', $idBrg)
+            $jualData = JualDetail::where('kode_brg', $kodeBrg)
+                ->where('kode_gudang', $gudangBrg)
                 ->distinct()
                 ->get(['no_bukti']);
 
@@ -364,7 +373,6 @@ class MasterController extends Controller
     public function fetchTransData(Request $request){
         $transaction = $request->input('transaction');
         $noBukti = $request->input('noBukti');
-        $idBrg = $request->input('idBrg');
         $kodeBrg = $request->input('kodeBrg');
         $namaBrg = $request->input('namaBrg');
         $gudangBrg = $request->input('gudangBrg');
@@ -391,10 +399,10 @@ class MasterController extends Controller
             return response()->json($beliData);
         } else if($transaction == 'penjualan'){
             $jualData = JualDetail::query()
-                            ->select('jual_dtl.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','inventory.id_satuan', 'inventory.kode_gudang')
-                            ->join('inventory', 'jual_dtl.id_brg', '=', 'inventory.id')
+                            ->select('jual_dtl.*', 'inventory.nama_brg as nama_brg','inventory.id_satuan')
+                            ->join('inventory', 'jual_dtl.kode_brg', '=', 'inventory.kode_brg')
                             ->where('jual_dtl.no_bukti', $noBukti)
-                            ->where('jual_dtl.id_brg', $idBrg)->get();
+                            ->where('jual_dtl.kode_brg', $kodeBrg)->get();
             
             $jualData = $jualData->map(function ($item, $key) {
                 return [
@@ -418,9 +426,9 @@ class MasterController extends Controller
         $selectedTanggal = $request->get('selectedTanggal');
 
         $query = OpnameStok::query()
-                    ->select('opname_stok.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
-                    ->join('inventory', 'opname_stok.id_brg', '=', 'inventory.id')
-                    ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                    ->select('opname_stok.*', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
+                    ->join('inventory', 'opname_stok.kode_brg', '=', 'inventory.kode_brg')
+                    ->join('invgudang', 'invgudang.kode', '=', 'opname_stok.kode_gudang')
                     ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id');
 
         if($selectedGudang && $selectedGudang != 'All'){
@@ -433,8 +441,9 @@ class MasterController extends Controller
 
         $opname = $query->get();
         $data = $opname;
+        $gudang = Gudang::all();
  
-        $view = View::make('master.opnamepdf', ['data'=>$data, 'selectedGudang'=>$selectedGudang, 'selectedTanggal'=>$selectedTanggal]);
+        $view = View::make('master.opnamepdf', ['data'=>$data, 'selectedGudang'=>$selectedGudang, 'selectedTanggal'=>$selectedTanggal, 'gudang'=>$gudang]);
         $pdf = new Dompdf();
         $pdf->loadHtml($view->render());
         $pdf->setPaper('A4', 'portrait');

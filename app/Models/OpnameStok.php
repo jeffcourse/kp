@@ -29,6 +29,9 @@ class OpnameStok extends Model
     ];*/
 
     public function master(){
-        return $this->belongsTo(Master::class,'id_brg');
+        return $this->belongsTo(Master::class,'kode_brg');
+    }
+    public function gudang(){
+        return $this->belongsTo(Gudang::class,'kode_gudang');
     }
 }

@@ -20,10 +20,6 @@ class Gudang extends Model
 
     // Indicate that the primary key is not an integer
     protected $keyType = 'string';
-    
-    public function master(){
-        return $this->hasMany(Master::class,'kode_gudang');
-    }
 
     public function beliDetail(){
         return $this->hasMany(BeliDetail::class,'kirim_gudang');

@@ -40,7 +40,16 @@ class JualController extends Controller
         $newNoBuktiNum = $lastNoBuktiNum + 1;
         $newNoBukti = 'JL24-' . str_pad($newNoBuktiNum, 5, '0', STR_PAD_LEFT);
 
-        $master = Master::all();
+        $masterData = MutasiStok::whereIn('id', function ($query){
+                    $query->select(DB::raw('MAX(id)'))
+                        ->from('mutasi_stok')
+                        ->groupBy('kode_brg', 'kode_gudang');
+                    })->select('inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg', 'inventory.id_satuan as id_satuan', 
+                        'inventory.hrg_jual as hrg_jual', 'mutasi_stok.stok_akhir as quantity', 'mutasi_stok.kode_gudang as kode_gudang')
+                    ->join('inventory', 'mutasi_stok.kode_brg', '=', 'inventory.kode_brg')
+                    ->get();
+        //$master = Master::all();
+        $master = $masterData;
         $customer = Customer::all();
         $satuan = Satuan::all();
         $gudang = Gudang::all();
@@ -66,18 +75,20 @@ class JualController extends Controller
         $data->tgl_terkirim = '-';
         $data->save();
 
-        $id_brg = $request->get('id_brg');
+        $kode_brg = $request->get('kode_brg');
         $qty_order = $request->get('qty_order');
         $hrg_per_unit = $request->get('hrg_per_unit');
         $hrg_total = $request->get('hrg_total');
+        $kode_gudang = $request->get('select_gudang');
 
-        foreach($id_brg as $key => $value){
+        foreach($kode_brg as $key => $value){
             $detail = new JualDetail();
             $detail->no_bukti = $data->no_bukti;
-            $detail->id_brg = $id_brg[$key];
+            $detail->kode_brg = $kode_brg[$key];
             $detail->qty_order = $qty_order[$key];
             $detail->hrg_per_unit = $hrg_per_unit[$key];
             $detail->hrg_total = $hrg_total[$key];
+            $detail->kode_gudang = $kode_gudang[$key];
             $detail->save();
         }
 
@@ -175,29 +186,29 @@ class JualController extends Controller
         $jual->tgl_terkirim = $tgl_terkirim;
         $jual->save();
 
-        $jualDetail = JualDetail::query()
-                        ->select('jual_dtl.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','inventory.id_satuan', 
-                            'inventory.kode_gudang')
-                        ->join('inventory', 'jual_dtl.id_brg', '=', 'inventory.id')
-                        ->where('jual_dtl.no_bukti', $no_bukti)->get();
+        $jualDetail = JualDetail::where('no_bukti', $no_bukti)->get();
 
-        foreach ($jualDetail as $detail) {
-            $master = Master::find($detail->id_brg);
+        foreach ($jualDetail as $detail){
+            $master = DB::table('mutasi_stok')
+                ->where('kode_brg', $detail->kode_brg)
+                ->where('kode_gudang', $detail->kode_gudang)
+                ->orderBy('id', 'desc')
+                ->first();
 
-            if ($master) {
+            if ($master){
+                $stok_awal = $master->stok_akhir;
+
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => $no_bukti,
                     'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
-                    'id_brg' => $detail->id_brg,
-                    'stok_awal' => $master->quantity,
+                    'kode_brg' => $detail->kode_brg,
+                    'kode_gudang' => $detail->kode_gudang,
+                    'stok_awal' => $stok_awal,
                     'qty_masuk' => 0,
                     'qty_keluar' => $detail->qty_order,
                     'qty_rusak_exp' => 0,
-                    'stok_akhir' => $master->quantity - $detail->qty_order
+                    'stok_akhir' => $stok_awal - $detail->qty_order
                 ]);
-
-                $master->quantity -= $detail->qty_order;
-                $master->save();
             }
         }
 
@@ -206,13 +217,14 @@ class JualController extends Controller
 
     public function showDetail($no_bukti){
         $jualDetail = JualDetail::query()
-            ->select('jual_dtl.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
-            ->join('inventory', 'jual_dtl.id_brg', '=', 'inventory.id')
-            ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+            ->select('jual_dtl.*', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan')
+            ->join('inventory', 'jual_dtl.kode_brg', '=', 'inventory.kode_brg')
             ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id')
             ->where('jual_dtl.no_bukti', $no_bukti)->get();
 
-        return view('transaksi.jualdetail', compact('jualDetail','no_bukti'));
+        $gudang = Gudang::all();
+
+        return view('transaksi.jualdetail', compact('jualDetail','no_bukti','gudang'));
     }
 
     public function welcomeJual(){
@@ -244,9 +256,8 @@ class JualController extends Controller
     {
         $jual = Jual::find($no_bukti);
         $jualDetail = JualDetail::query()
-                        ->select('jual_dtl.*', 'inventory.kode_brg as kode_brg', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan', 'invgudang.nama as nama_gudang')
-                        ->join('inventory', 'jual_dtl.id_brg', '=', 'inventory.id')
-                        ->join('invgudang', 'inventory.kode_gudang', '=', 'invgudang.kode')
+                        ->select('jual_dtl.*', 'inventory.nama_brg as nama_brg','satuan.satuan as nama_satuan')
+                        ->join('inventory', 'jual_dtl.kode_brg', '=', 'inventory.kode_brg')
                         ->join('satuan', 'inventory.id_satuan', '=', 'satuan.id')
                         ->where('jual_dtl.no_bukti', $no_bukti)->get();
         $customer = Customer::all();

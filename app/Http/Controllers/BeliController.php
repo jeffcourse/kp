@@ -42,7 +42,7 @@ class BeliController extends Controller
         $newNoBuktiNum = $lastNoBuktiNum + 1;
         $newNoBukti = 'BL24-' . str_pad($newNoBuktiNum, 5, '0', STR_PAD_LEFT);
 
-        $master = Master::select('kode_brg','nama_brg','id_satuan')->distinct('kode_brg')->get();
+        $master = Master::select('kode_brg','nama_brg','id_satuan')->get();
         $supplier = Supplier::all();
         $gudang = Gudang::all();
         $satuan = Satuan::all();
@@ -52,7 +52,6 @@ class BeliController extends Controller
 
     public function store(Request $request)
     {
-        //
         $data = new Beli();
         $data->no_bukti = $request->get('no_bukti');
         $data->tanggal = $request->get('datepicker');
@@ -77,6 +76,17 @@ class BeliController extends Controller
         $kirim_gudang = $request->get('select_gudang');
 
         foreach($kode_brg as $key => $value) {
+            $master = DB::table('inventory')->where('kode_brg', $kode_brg[$key])->first();
+
+            if(!$master){
+                DB::table('inventory')->insert([
+                    'kode_brg' => $kode_brg[$key],
+                    'nama_brg' => $nama_brg[$key],
+                    'id_satuan' => $id_satuan[$key],
+                    'keterangan' => '-',
+                ]);
+            }
+
             $detail = new BeliDetail();
             $detail->no_bukti = $data->no_bukti;
             $detail->kode_brg = $kode_brg[$key];
@@ -188,21 +198,14 @@ class BeliController extends Controller
         $beliDetail = BeliDetail::where('no_bukti', $no_bukti)->get();
 
         foreach ($beliDetail as $detail) {
-            $master = DB::table('inventory')
+            $master = DB::table('mutasi_stok')
                 ->where('kode_brg', $detail->kode_brg)
-                ->where('nama_brg', $detail->nama_brg)
                 ->where('kode_gudang', $detail->kirim_gudang)
+                ->orderBy('id', 'desc')
                 ->first();
 
-            if ($master) {
-                $id_brg = $master->id;
-                $stok_awal = $master->quantity;
-
-                DB::table('inventory')
-                    ->where('kode_brg', $detail->kode_brg)
-                    ->where('nama_brg', $detail->nama_brg)
-                    ->where('kode_gudang', $detail->kirim_gudang)
-                    ->increment('quantity', $detail->qty_order);
+            if($master){
+                $stok_awal = $master->stok_akhir;
                 
                 $transactions = DB::table('beli_dtl')
                     ->where('kode_brg', $detail->kode_brg)
@@ -225,7 +228,8 @@ class BeliController extends Controller
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => $no_bukti,
                     'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
-                    'id_brg' => $id_brg,
+                    'kode_brg' => $detail->kode_brg,
+                    'kode_gudang' => $detail->kirim_gudang,
                     'stok_awal' => $stok_awal,
                     'qty_masuk' => $detail->qty_order,
                     'qty_keluar' => 0,
@@ -234,38 +238,6 @@ class BeliController extends Controller
                 ]);
 
             } else {
-                $masterDetail = DB::table('inventory')
-                    ->select('kode_divisi', 'kode_jenis', 'kode_type')
-                    ->where('kode_brg', $detail->kode_brg)
-                    ->first();
-
-                if($masterDetail){
-                    $kodeDivisi = $masterDetail->kode_divisi;
-                    $kodeJenis = $masterDetail->kode_jenis;
-                    $kodeType = $masterDetail->kode_type;
-
-                    DB::table('inventory')->insert([
-                        'kode_brg' => $detail->kode_brg,
-                        'nama_brg' => $detail->nama_brg,
-                        'kode_divisi' => $kodeDivisi,
-                        'kode_jenis' => $kodeJenis,
-                        'kode_type' => $kodeType,
-                        'quantity' => $detail->qty_order,
-                        'id_satuan' => $detail->id_satuan,
-                        'kode_gudang' => $detail->kirim_gudang,
-                        'keterangan' => '-',
-                    ]);
-
-                } else{
-                    DB::table('inventory')->insert([
-                        'kode_brg' => $detail->kode_brg,
-                        'nama_brg' => $detail->nama_brg,
-                        'quantity' => $detail->qty_order,
-                        'id_satuan' => $detail->id_satuan,
-                        'kode_gudang' => $detail->kirim_gudang,
-                        'keterangan' => '-',
-                    ]);
-                }
 
                 $transactions = DB::table('beli_dtl')
                     ->where('kode_brg', $detail->kode_brg)
@@ -285,15 +257,11 @@ class BeliController extends Controller
                     ->where('kode_brg', $detail->kode_brg)
                     ->update(['hrg_jual' => $sellPrice]);
 
-                $id = DB::table('inventory')
-                    ->where('kode_brg', $detail->kode_brg)
-                    ->where('kode_gudang', $detail->kirim_gudang)
-                    ->select('id')->first();
-
                 DB::table('mutasi_stok')->insert([
                     'no_bukti' => $no_bukti,
                     'tanggal' => Carbon::parse($tgl_terkirim)->format('Y-m-d'),
-                    'id_brg' => $id->id,
+                    'kode_brg' => $detail->kode_brg,
+                    'kode_gudang' => $detail->kirim_gudang,
                     'stok_awal' => 0,
                     'qty_masuk' => $detail->qty_order,
                     'qty_keluar' => 0,

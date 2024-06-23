@@ -25,12 +25,8 @@ class JualDetail extends Model
         return $this->belongsTo(Jual::class,'no_bukti');
     }
 
-    public function satuan(){
-        return $this->belongsTo(Satuan::class,'id_satuan');
-    }
-
     public function master(){
-        return $this->belongsTo(Master::class,'id_brg');
+        return $this->belongsTo(Master::class,'kode_brg');
     }
 
     public function gudang(){

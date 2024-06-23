@@ -32,4 +32,8 @@ class BeliDetail extends Model
     public function gudang(){
         return $this->belongsTo(Gudang::class,'kirim_gudang');
     }
+
+    public function master(){
+        return $this->belongsTo(Master::class,'kode_brg');
+    }
 }
