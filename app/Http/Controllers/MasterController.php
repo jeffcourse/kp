@@ -148,7 +148,7 @@ class MasterController extends Controller
         $totalPriceValue = MutasiStok::whereIn('id', function ($query){
                         $query->select(DB::raw('MAX(id)'))
                             ->from('mutasi_stok')
-                            ->groupBy('kode_brg');
+                            ->groupBy('kode_brg','kode_gudang');
                         })->selectRaw('SUM(inventory.hrg_jual * mutasi_stok.stok_akhir) as total_price')
                         ->join('inventory', 'mutasi_stok.kode_brg', '=', 'inventory.kode_brg')
                         ->first();
